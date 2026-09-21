@@ -354,7 +354,11 @@ img {
    ========================================================= */
 
 .auth-layout {
-  min-height: 100vh;
+  /* zoom shrinks rendering but not vh (vh is always real-viewport-relative),
+     so the pre-zoom height must be inflated by 1/0.9 to land on exactly
+     100vh once rendered — otherwise min-height: 100vh renders at 90vh and
+     leaves a blank gap below. */
+  min-height: calc(100vh / 0.9);
 
   display: grid;
 
@@ -365,6 +369,8 @@ img {
   --auth-copy-top: clamp(170px, 24vh, 310px);
 
   background: white;
+
+  zoom: 0.9;
 }
 
 

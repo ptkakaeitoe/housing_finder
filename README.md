@@ -2,6 +2,8 @@
 
 Next.js App Router app with Supabase data and Google Maps. The live flow is: register as a landlord, add a listing with coordinates, find it in Explore and on the map, register as a student, save it, and request a viewing. Landlords can accept or decline requests.
 
+Listings can be browsed and filtered by proximity to six major Thai universities — Chulalongkorn University, Thammasat University (Rangsit Campus), Kasetsart University, Mahidol University (Salaya Campus), Chiang Mai University, and Rangsit University — defined in `supabase/migrations/20260921000000_universities.sql` and mirrored in `src/lib/universities.js`. A listing's "nearest university" is either the campus its landlord tagged when creating it, or, if untagged, whichever of the six is geographically closest.
+
 ## Local setup
 
 ```bash
@@ -28,7 +30,8 @@ npm run build
 - Email registration, login, password reset, profile editing, and sign out via Supabase Auth.
 - Landlord listing creation, editing, deletion, and image upload to Supabase Storage.
 - Explore filters by text, property type, and maximum rent. `/search` redirects to `/explore`.
-- Five fictional sample homes around Rangsit University appear in Explore and Map alongside live listings. Their photos are generated examples, map pins are approximate, and saving or requesting a viewing is disabled for them. They are kept in `src/lib/mockListings.js`, not inserted into Supabase.
+- Six fictional sample homes, one near each supported university, appear in Explore and Map alongside live listings. Their photos are generated examples, map pins are approximate, and saving or requesting a viewing is disabled for them. They are kept in `src/lib/mockListings.js`, not inserted into Supabase.
+- Explore and Map can be filtered to a single university; landlords can tag a listing with its nearest campus when creating or editing it, and listing cards and the room detail page show distance to that campus.
 - Listing details, saved homes, viewing requests, and landlord accept/decline actions.
 - Google Maps markers for published listings, with a list fallback if the Maps key is missing.
 - Private landlord verification document uploads and admin approval or rejection. Admins can review listings, users, and viewing activity.

@@ -83,7 +83,7 @@ export default function RegisterPage() {
                 </strong>
 
                 <p>
-                  Browse rooms near Rangsit University.
+                  Browse rooms near 6 universities across Thailand.
                 </p>
               </div>
             </div>
