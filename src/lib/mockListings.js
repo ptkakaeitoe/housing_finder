@@ -1,0 +1,73 @@
+// Fictional examples for exploring the UI. Coordinates are approximate and
+// must not be treated as available properties or exact building locations.
+export const mockListings = [
+  {
+    id: "sample-muang-ake-studio",
+    is_mock: true,
+    title: "Muang Ake Garden Studio",
+    property_type: "room",
+    monthly_rent: 5900,
+    address: "Muang Ake, Lak Hok, Pathum Thani",
+    latitude: 13.9644,
+    longitude: 100.5818,
+    description: "Example furnished studio with a double bed, study desk, wardrobe, air conditioning and a private bathroom. The location shown is approximate. This is sample data, not an available rental.",
+    image_path: "/images/listings/muang-ake-studio.jpg",
+    status: "published",
+  },
+  {
+    id: "sample-campus-condo",
+    is_mock: true,
+    title: "Campus Lane One-Bedroom Condo",
+    property_type: "condo",
+    monthly_rent: 8200,
+    address: "Near Rangsit University, Lak Hok, Pathum Thani",
+    latitude: 13.9613,
+    longitude: 100.5892,
+    description: "Example one-bedroom condo with a separate sleeping area, compact kitchen, balcony and living space. The location shown is approximate. This is sample data, not an available rental.",
+    image_path: "/images/listings/muang-ake-condo.jpg",
+    status: "published",
+  },
+  {
+    id: "sample-lak-hok-room",
+    is_mock: true,
+    title: "Lak Hok Study Room",
+    property_type: "room",
+    monthly_rent: 4200,
+    address: "Lak Hok, Mueang Pathum Thani",
+    latitude: 13.9683,
+    longitude: 100.591,
+    description: "Example budget student room with a single bed, desk, wardrobe and air conditioning. The location shown is approximate. This is sample data, not an available rental.",
+    image_path: "/images/listings/lak-hok-room.jpg",
+    status: "published",
+  },
+  {
+    id: "sample-station-studio",
+    is_mock: true,
+    title: "Station Link Studio",
+    property_type: "apartment",
+    monthly_rent: 6800,
+    address: "Near Lak Hok Station, Pathum Thani",
+    latitude: 13.9658,
+    longitude: 100.6023,
+    description: "Example furnished studio with a kitchenette, double bed, balcony and work area near the Lak Hok transit corridor. The location shown is approximate. This is sample data, not an available rental.",
+    image_path: "/images/listings/station-studio.jpg",
+    status: "published",
+  },
+  {
+    id: "sample-shared-apartment",
+    is_mock: true,
+    title: "Muang Ake Two-Bedroom Share",
+    property_type: "apartment",
+    monthly_rent: 11500,
+    address: "Muang Ake, Lak Hok, Pathum Thani",
+    latitude: 13.9597,
+    longitude: 100.5789,
+    description: "Example two-bedroom apartment suitable for sharing, with a living room, dining area, balcony and kitchenette. The rent shown is for the whole apartment. The location shown is approximate. This is sample data, not an available rental.",
+    image_path: "/images/listings/shared-apartment.jpg",
+    status: "published",
+  },
+];
+
+export function getMockListing(id) {
+  return mockListings.find((listing) => listing.id === id) ?? null;
+}
