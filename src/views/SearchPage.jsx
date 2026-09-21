@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import Link from "next/link";
+import { publicContainerClassName } from "../components/layoutStyles";
 import { useRouter } from "next/navigation";
 import HousingCard from "../components/HousingCard";
 import FilterBar from "../components/FilterBar";
@@ -37,7 +38,7 @@ export default function ExplorePage() {
     toggle(id);
   }
 
-  return <><main className="mx-auto max-w-7xl px-5 py-10 sm:px-8 lg:px-12">
+  return <><main className={`${publicContainerClassName} py-10`}>
     <div className="flex flex-wrap items-center justify-between gap-4">
       <h1 className="text-2xl font-semibold tracking-tight text-ink">Homes near {selectedUniversity ? selectedUniversity.shortName : "your university"}</h1>
       <Link href="/map" className="text-sm font-semibold text-ink underline decoration-line underline-offset-4 hover:text-accent">View map ↗</Link>

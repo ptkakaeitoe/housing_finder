@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { publicContainerClassName } from "./layoutStyles";
 import { usePathname } from "next/navigation";
 import ThemeToggle from "./ThemeToggle";
 import { supabase } from "../lib/supabase";
@@ -35,35 +36,45 @@ const navigation = {
 };
 
 const account = {
-  student: { href: "/profile", initials: "ST" },
-  landlord: { href: "/landlord-profile", initials: "LD" },
-  admin: { href: "/admin", initials: "AD" },
+  student: { href: "/profile" },
+  landlord: { href: "/landlord-profile" },
+  admin: { href: "/admin" },
 };
 
+function initialsFor(name, email, role) {
+  const fromName = name?.trim().split(/\s+/).filter(Boolean).slice(0, 2).map((part) => part[0]).join("").toUpperCase();
+  return fromName || email?.[0]?.toUpperCase() || role?.slice(0, 2).toUpperCase() || "?";
+}
+
 let cachedAccountRole = null;
+let cachedAccountInitials = null;
 
 export default function Navbar() {
   const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
   const [accountRole, setAccountRole] = useState(cachedAccountRole);
+  const [accountInitials, setAccountInitials] = useState(cachedAccountInitials);
   useEffect(() => {
     if (!supabase) return;
     let active = true;
     async function loadAccount() {
       const { data: { user } } = await supabase.auth.getUser();
       if (!active) return;
-      if (!user) { cachedAccountRole = null; setAccountRole(null); return; }
-      const { data } = await supabase.from("profiles").select("role").eq("id", user.id).single();
+      if (!user) { cachedAccountRole = null; cachedAccountInitials = null; setAccountRole(null); setAccountInitials(null); return; }
+      const { data } = await supabase.from("profiles").select("full_name,role").eq("id", user.id).single();
       if (active) {
         cachedAccountRole = data?.role ?? "student";
+        cachedAccountInitials = initialsFor(data?.full_name, user.email, cachedAccountRole);
         setAccountRole(cachedAccountRole);
+        setAccountInitials(cachedAccountInitials);
       }
     }
     loadAccount();
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event) => {
       if (event === "SIGNED_OUT") {
         cachedAccountRole = null;
-        if (active) setAccountRole(null);
+        cachedAccountInitials = null;
+        if (active) { setAccountRole(null); setAccountInitials(null); }
       }
     });
     return () => { active = false; subscription.unsubscribe(); };
@@ -75,7 +86,7 @@ export default function Navbar() {
 
   return (
     <header className="sticky top-0 z-50 border-b border-line bg-surface/95 backdrop-blur-xl">
-      <nav aria-label="Primary navigation" className="relative mx-auto flex min-h-18 w-full max-w-7xl items-center gap-4 px-5 sm:px-8 lg:grid lg:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] lg:px-12">
+      <nav aria-label="Primary navigation" className={`${publicContainerClassName} relative flex min-h-18 items-center gap-4 lg:grid lg:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)]`}>
         <Link href={logoHref} className="shrink-0 text-xl font-extrabold tracking-[-.055em] text-ink" onClick={() => setMenuOpen(false)}>
           HousingFinder<span className="text-accent">.</span>
         </Link>
@@ -93,7 +104,7 @@ export default function Navbar() {
         <div className="ml-auto flex shrink-0 items-center gap-2 lg:ml-0 lg:justify-self-end">
           <ThemeToggle />
           <div className="flex w-11 justify-end sm:w-24">
-            {accountRole && account[accountRole] ? <Link href={account[accountRole].href} aria-label="Account" className="flex size-11 items-center justify-center rounded-full border border-line bg-surface-muted text-xs font-bold text-ink">{account[accountRole].initials}</Link> : <Link href="/login" className="hidden rounded-full bg-ink px-5 py-2.5 text-sm font-semibold text-canvas hover:bg-accent sm:inline-flex">Sign in</Link>}
+            {accountRole && account[accountRole] ? <Link href={account[accountRole].href} aria-label="Account" className="flex size-11 items-center justify-center rounded-full border border-line bg-surface-muted text-xs font-bold text-ink">{accountInitials}</Link> : <Link href="/login" className="hidden rounded-full bg-ink px-5 py-2.5 text-sm font-semibold text-canvas hover:bg-accent sm:inline-flex">Sign in</Link>}
           </div>
           <button type="button" className="inline-flex size-11 items-center justify-center rounded-full border border-line bg-surface text-xl text-ink lg:hidden"
             aria-label="Toggle navigation" aria-expanded={menuOpen} aria-controls="primary-navigation"
