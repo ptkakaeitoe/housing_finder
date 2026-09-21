@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { authHeadingClassName, authInputClassName } from "./authStyles";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { requireSupabase } from "../lib/supabase";
@@ -36,7 +37,7 @@ export default function RegisterPage() {
   };
 
   return (
-    <main className="auth-layout">
+    <main className="grid h-[calc(100dvh/0.9)] grid-cols-1 overflow-y-auto bg-white [zoom:0.9] [--auth-copy-top:clamp(120px,14vh,180px)] min-[1001px]:grid-cols-[minmax(420px,0.92fr)_minmax(550px,1.08fr)] min-[1001px]:grid-rows-[minmax(min-content,1fr)]">
       {/* =========================
           LEFT SIDE
           ========================= */}
@@ -128,28 +129,18 @@ export default function RegisterPage() {
           ========================= */}
 
       <section
-        className="
-          auth-form-panel
-          auth-form-scroll
-        "
+        className="register-form-panel flex min-h-0 items-center justify-center px-[8%] py-6 min-[1001px]:items-start min-[1001px]:px-[9%] min-[1001px]:pt-[var(--auth-copy-top)]"
       >
         <div
-          className="
-            auth-form-container
-            register-container
-          "
+          className="w-full max-w-[560px]"
         >
-          <p className="form-eyebrow">
+          <p className="mb-2 text-xs font-bold tracking-[.12em] text-accent">
             CREATE ACCOUNT
           </p>
 
-          <h2>
+          <h2 className={authHeadingClassName}>
             Sign up for HousingFinder
           </h2>
-
-          <p className="form-description">
-            Choose how you’ll use HousingFinder.
-          </p>
 
           {/* =========================
               REGISTER FORM
@@ -160,12 +151,12 @@ export default function RegisterPage() {
             {message && <p role="status" className="mb-4 text-sm text-muted">{message}</p>}
             {/* FULL NAME */}
 
-            <div className="auth-input-group">
-              <label>
+            <div className="mb-3">
+              <label className="mb-1.5 block text-[13px] font-bold">
                 Full name
               </label>
 
-              <div className="auth-input-wrapper">
+              <div className={authInputClassName}>
                 <UserIcon />
 
                 <input
@@ -180,12 +171,12 @@ export default function RegisterPage() {
 
             {/* EMAIL */}
 
-            <div className="auth-input-group">
-              <label>
+            <div className="mb-3">
+              <label className="mb-1.5 block text-[13px] font-bold">
                 Email address
               </label>
 
-              <div className="auth-input-wrapper">
+              <div className={authInputClassName}>
                 <EmailIcon />
 
                 <input
@@ -200,19 +191,19 @@ export default function RegisterPage() {
 
             {/* ACCOUNT TYPE */}
 
-            <fieldset className="auth-input-group">
+            <fieldset className="mb-3">
               <legend className="mb-2 text-[13px] font-extrabold text-[#171b20]">Account type</legend>
               <div className="grid grid-cols-2 gap-3">
                 <label className="group cursor-pointer">
                   <input type="radio" name="role" value="student" required className="peer sr-only" />
-                  <span className="auth-role-card relative flex min-h-20 flex-col justify-center rounded-xl border border-[#d8dee9] bg-[#fafbfc] px-4 transition-colors group-hover:border-[#8996a3] peer-checked:border-[#1c252e] peer-checked:bg-[#f0f3f5] peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-[#1c252e]">
+                  <span className="auth-role-card relative flex min-h-16 flex-col justify-center rounded-xl border border-[#d8dee9] bg-[#fafbfc] px-4 transition-colors group-hover:border-[#8996a3] peer-checked:border-[#1c252e] peer-checked:bg-[#f0f3f5] peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-[#1c252e]">
                     <strong className="text-sm text-[#171b20]">Student</strong>
                     <small className="mt-1 text-xs text-[#647078]">Find a home</small>
                   </span>
                 </label>
                 <label className="group cursor-pointer">
                   <input type="radio" name="role" value="landlord" className="peer sr-only" />
-                  <span className="auth-role-card relative flex min-h-20 flex-col justify-center rounded-xl border border-[#d8dee9] bg-[#fafbfc] px-4 transition-colors group-hover:border-[#8996a3] peer-checked:border-[#1c252e] peer-checked:bg-[#f0f3f5] peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-[#1c252e]">
+                  <span className="auth-role-card relative flex min-h-16 flex-col justify-center rounded-xl border border-[#d8dee9] bg-[#fafbfc] px-4 transition-colors group-hover:border-[#8996a3] peer-checked:border-[#1c252e] peer-checked:bg-[#f0f3f5] peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-[#1c252e]">
                     <strong className="text-sm text-[#171b20]">Landlord</strong>
                     <small className="mt-1 text-xs text-[#647078]">List a property</small>
                   </span>
@@ -222,12 +213,12 @@ export default function RegisterPage() {
 
             {/* PASSWORD */}
 
-            <div className="auth-input-group">
-              <label>
+            <div className="mb-3">
+              <label className="mb-1.5 block text-[13px] font-bold">
                 Password
               </label>
 
-              <div className="auth-input-wrapper">
+              <div className={authInputClassName}>
                 <LockIcon />
 
                 <input
@@ -267,12 +258,12 @@ export default function RegisterPage() {
 
             {/* CONFIRM PASSWORD */}
 
-            <div className="auth-input-group">
-              <label>
+            <div className="mb-3">
+              <label className="mb-1.5 block text-[13px] font-bold">
                 Confirm password
               </label>
 
-              <div className="auth-input-wrapper">
+              <div className={authInputClassName}>
                 <LockIcon />
 
                 <input
@@ -330,13 +321,13 @@ export default function RegisterPage() {
             <button
               type="submit"
               disabled={busy}
-              className="auth-submit register-submit"
+              className="flex min-h-[58px] w-full items-center justify-center rounded-xl bg-accent text-[15px] font-black text-white transition hover:brightness-95 disabled:cursor-wait disabled:opacity-60"
             >
               Create Account
             </button>
           </form>
 
-          <p className="auth-switch-plain">
+          <p className="mt-4 text-center text-sm text-[#647078] [&>a]:font-bold [&>a]:text-accent [&>a]:underline [&>a]:underline-offset-4">
             Already have an account? <Link href="/login">Sign in</Link>
           </p>
         </div>

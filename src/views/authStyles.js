@@ -1,0 +1,4 @@
+// Shared Tailwind styles keep sign-in and registration visually consistent.
+export const authHeadingClassName = "mb-[13px] text-[clamp(35px,3vw,48px)] font-normal leading-normal tracking-[-1.5px] text-[#171b20] max-[600px]:mb-2 max-[600px]:text-[clamp(1.75rem,7vw,2.15rem)] max-[600px]:leading-[1.15] max-[600px]:tracking-[-.04em]";
+
+export const authInputClassName = "flex min-h-11 items-center rounded-xl border border-[#e1e5e4] bg-[#fafbfc] scheme-light transition focus-within:border-accent focus-within:ring-2 focus-within:ring-accent/10 [&>input]:min-w-0 [&>input]:flex-1 [&>input]:border-0 [&>input]:bg-transparent [&>input]:py-2.5 [&>input]:pr-3 [&>input]:text-sm [&>input]:outline-none [&>input]:text-[#171b20] [&>input]:caret-[#171b20] [&>input:is(:autofill,:-webkit-autofill)]:[box-shadow:inset_0_0_0_1000px_#fafbfc] [&>input:is(:autofill,:-webkit-autofill)]:[-webkit-text-fill-color:#171b20] [&>input]:placeholder:text-[13px] [&>input]:placeholder:text-[#647078]";

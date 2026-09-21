@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { authHeadingClassName, authInputClassName } from "./authStyles";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { requireSupabase } from "../lib/supabase";
@@ -27,7 +28,7 @@ export default function LoginPage() {
   };
 
   return (
-    <main className="auth-layout">
+    <main className="auth-layout [--auth-copy-top:clamp(146px,calc(24vh-24px),286px)]">
       {/* =========================
           LEFT SIDE
           ========================= */}
@@ -124,7 +125,7 @@ export default function LoginPage() {
             WELCOME BACK
           </p>
 
-          <h2>
+          <h2 className={authHeadingClassName}>
             Sign in to HousingFinder
           </h2>
 
@@ -168,7 +169,7 @@ export default function LoginPage() {
                 Email address
               </label>
 
-              <div className="auth-input-wrapper">
+              <div className={authInputClassName}>
                 <EmailIcon />
 
                 <input
@@ -194,7 +195,7 @@ export default function LoginPage() {
                 </Link>
               </div>
 
-              <div className="auth-input-wrapper">
+              <div className={authInputClassName}>
                 <LockIcon />
 
                 <input

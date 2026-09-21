@@ -366,8 +366,6 @@ img {
     minmax(420px, 0.92fr)
     minmax(550px, 1.08fr);
 
-  --auth-copy-top: clamp(170px, 24vh, 310px);
-
   background: white;
 
   zoom: 0.9;
@@ -601,20 +599,10 @@ img {
   color: var(--text-dark);
 }
 
-.auth-form-scroll {
-  align-items: flex-start;
-
-  overflow-y: auto;
-}
-
 .auth-form-container {
   width: 100%;
 
   max-width: 620px;
-}
-
-.register-container {
-  margin: 0;
 }
 
 .form-eyebrow {
@@ -628,16 +616,6 @@ img {
   letter-spacing: 3px;
 }
 
-.auth-form-container h2 {
-  margin-bottom: 13px;
-
-  color: var(--text-dark);
-
-  font-size:
-    clamp(35px, 3vw, 48px);
-
-  letter-spacing: -1.5px;
-}
 
 .form-description {
   margin-bottom: 34px;
@@ -2883,9 +2861,6 @@ img {
     padding: 50px 22px;
   }
 
-  .auth-form-container h2 {
-    font-size: 34px;
-  }
 
   .simple-auth-card {
     padding: 30px 22px;
@@ -3076,7 +3051,10 @@ img {
 }
 body { background: var(--navy); color: var(--ink); font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; line-height: 1.5; }
 ::selection { background: var(--pink-soft); color: var(--ink); }
-:focus-visible { outline: 3px solid var(--pink); outline-offset: 3px; }
+/* Base keyboard focus remains available; component utilities can customize it. */
+@layer base {
+  :focus-visible { outline: 3px solid var(--pink); outline-offset: 3px; }
+}
 .navbar { min-height: 76px; gap: 32px; padding-inline: clamp(20px, 5vw, 72px); background: color-mix(in srgb, var(--navy-card) 92%, transparent); border-color: var(--dark-border); }
 .logo-icon, .auth-logo-icon, .sidebar-logo { background: var(--ink); color: var(--navy); box-shadow: none; border-radius: 13px; }
 .logo-text strong, .nav-links a, .sidebar-title span, .sidebar-links a { color: var(--ink); }
@@ -3108,7 +3086,8 @@ body { background: var(--navy); color: var(--ink); font-family: Inter, ui-sans-s
 .sidebar { box-shadow: none; }
 .simple-auth-page { background: var(--navy); color: var(--ink); }
 .auth-layout { background: #fff; }
-.auth-form-panel {
+.auth-form-panel,
+.register-form-panel {
   --ink: #171b20;
   --text-dark: #171b20;
   --text-gray: #647078;
@@ -3121,9 +3100,10 @@ body { background: var(--navy); color: var(--ink); font-family: Inter, ui-sans-s
 }
 .auth-brand-panel { background: linear-gradient(145deg, #1c2630, #10151b 65%, #1d1420); color: #fff; }
 .auth-brand-panel .auth-logo, .auth-brand-panel h1, .auth-brand-panel .auth-feature strong { color: #fff; }
-.auth-form-container h2, .simple-auth-card h1 { color: var(--ink); }
+.simple-auth-card h1 { color: var(--ink); }
 .google-button, .auth-input-wrapper, .simple-auth-card { background: var(--navy-card); color: var(--ink); border-color: var(--dark-border); }
-.auth-form-panel .auth-input-wrapper { background: #fafbfc; }
+.auth-form-panel .auth-input-wrapper,
+.register-form-panel .auth-input-wrapper { background: #fafbfc; }
 .auth-brand-panel .auth-feature-list { gap: 22px; }
 .auth-brand-panel .auth-feature { align-items: center; gap: 14px; }
 .auth-brand-panel .feature-check {
@@ -3260,7 +3240,6 @@ input:checked + .auth-role-card::after { opacity: 1; transform: scale(1); }
   .auth-form-panel { min-height: 0; padding: 30px 22px max(64px, env(safe-area-inset-bottom)); }
   .auth-form-container { max-width: 480px; }
   .form-eyebrow { margin-bottom: 10px; }
-  .auth-form-container h2 { margin-bottom: 8px; font-size: clamp(1.75rem, 7vw, 2.15rem); line-height: 1.15; letter-spacing: -.04em; }
   .form-description { margin-bottom: 24px; font-size: 14px; }
   .auth-divider { margin: 23px 0; }
   .auth-input-group { margin-bottom: 18px; }
