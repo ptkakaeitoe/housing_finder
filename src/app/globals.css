@@ -3240,7 +3240,10 @@ input:checked + .auth-role-card::after { opacity: 1; transform: scale(1); }
      column, so it's reset here in favor of plain dvh sizing. */
   .auth-layout { display: block; min-height: 100dvh; zoom: 1; }
   .auth-brand-panel { display: none; }
-  .auth-form-panel { min-height: 100dvh; align-items: center; padding: 24px 22px max(64px, env(safe-area-inset-bottom)); }
+  /* "safe" keeps the form centered when it fits, but falls back to top
+     alignment when it is taller than the screen — plain "center" would
+     overflow in both directions and clip the heading out of reach. */
+  .auth-form-panel { min-height: 100dvh; align-items: center; align-items: safe center; padding: 24px 22px max(64px, env(safe-area-inset-bottom)); }
   .auth-form-container { max-width: 480px; }
   .form-eyebrow { margin-bottom: 10px; }
   .form-description { margin-bottom: 24px; font-size: 14px; }
