@@ -69,7 +69,7 @@ export default function ListingForm({ edit = false }) {
       const { data: profile } = await client.from("profiles").select("role").eq("id", user.id).single();
       if (profile?.role !== "landlord") throw new Error(t("listingForm.signInLandlord"));
       const payload = {
-        ...listingCostPayload(form),
+        ...listingCostPayload(form, t),
         landlord_id: user.id,
         title: String(form.get("title")).trim(),
         property_type: form.get("property_type"),

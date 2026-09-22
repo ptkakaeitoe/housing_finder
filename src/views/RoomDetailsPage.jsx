@@ -121,7 +121,7 @@ export default function RoomDetailsPage() {
             </dl>
             <p className="mt-4 text-sm text-muted">{t("roomDetails.minimumLeaseInline", { lease })}</p>
             <dl className="mt-5 grid gap-3 border-t border-line pt-5 sm:grid-cols-3">
-              {utilities.map(utility => <div key={utility.key} className="rounded-xl border border-line p-4"><dt className="flex items-center gap-2 text-sm text-muted"><span className="text-accent"><ListingIcon name={utility.key} /></span>{utility.label}</dt><dd className="mt-3 text-sm font-semibold">{utilitySummary(listing, utility)}</dd></div>)}
+              {utilities.map(utility => <div key={utility.key} className="rounded-xl border border-line p-4"><dt className="flex items-center gap-2 text-sm text-muted"><span className="text-accent"><ListingIcon name={utility.key} /></span>{t(`common.utility.${utility.key}`)}</dt><dd className="mt-3 text-sm font-semibold">{utilitySummary(listing, utility, t)}</dd></div>)}
             </dl>
           </section>
           <section className="mt-5 rounded-2xl border border-line bg-surface p-5 sm:p-6" aria-labelledby="campus-transport">

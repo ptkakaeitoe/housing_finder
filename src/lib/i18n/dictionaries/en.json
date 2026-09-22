@@ -16,6 +16,21 @@
       "apartment": "Apartment",
       "condo": "Condo"
     },
+    "utility": {
+      "electricity": "Electricity",
+      "water": "Water",
+      "internet": "Internet"
+    },
+    "billing": {
+      "unspecified": "Not specified",
+      "included": "Included in rent",
+      "metered": "Per unit",
+      "monthly": "Monthly fee",
+      "provider": "Billed by provider",
+      "unavailable": "Not provided"
+    },
+    "month": "month",
+    "rateNotSpecified": "Rate not specified",
     "listingStatus": {
       "draft": "Draft",
       "published": "Published"
@@ -25,7 +40,22 @@
       "pending": "Pending",
       "accepted": "Accepted",
       "declined": "Declined"
-    }
+    },
+    "verificationStatus": {
+      "pending": "Pending",
+      "approved": "Approved",
+      "rejected": "Rejected"
+    },
+    "role": {
+      "student": "Student",
+      "landlord": "Landlord",
+      "admin": "Admin"
+    },
+    "accountStatus": {
+      "active": "Active",
+      "suspended": "Suspended"
+    },
+    "adminRequired": "Admin access required."
   },
   "nav": {
     "brand": "HousingFinder",
@@ -111,9 +141,7 @@
     "emailAddress": "Email address",
     "emailPlaceholder": "Enter your email",
     "accountType": "Account type",
-    "student": "Student",
     "studentHint": "Find a home",
-    "landlord": "Landlord",
     "landlordHint": "List a property",
     "password": "Password",
     "createPasswordPlaceholder": "Create password",
@@ -126,22 +154,230 @@
     "alreadyHaveAccount": "Already have an account?",
     "passwordsNoMatch": "Passwords do not match.",
     "accountCreatedCheckEmail": "Account created. Check your email to confirm it, then sign in.",
+    "loginTagline": "YOUR HOUSING COMMUNITY",
+    "loginHeadingLine1": "Find your",
+    "loginHeadingLine2": "student home,",
+    "loginHeadingAccent": "all in one place.",
+    "loginDescription": "Search around campus, compare rent, and arrange a visit.",
+    "loginFeature1Title": "Homes near campus",
+    "loginFeature1Body": "Rooms, apartments and condos.",
+    "loginFeature2Title": "Compare rent",
+    "loginFeature2Body": "See monthly prices before you visit.",
+    "loginFeature3Title": "Request a viewing",
+    "loginFeature3Body": "Ask to see a home in person.",
+    "welcomeBack": "WELCOME BACK",
     "signInHeading": "Sign in to HousingFinder",
-    "signInEyebrow": "WELCOME BACK",
-    "loginHeadingLine1": "Welcome",
-    "loginHeadingLine2": "back",
-    "loginHeadingAccent": "home.",
-    "loginDescription": "Sign in to manage your saved homes and viewings.",
-    "loginFeature1Title": "Pick up where you left off",
-    "loginFeature1Body": "Your saved homes and requests are waiting.",
-    "loginFeature2Title": "Message landlords directly",
-    "loginFeature2Body": "Arrange viewings without leaving the app.",
+    "continueWithGoogle": "Continue with Google",
+    "orContinueWithEmail": "or continue with email",
     "passwordPlaceholder": "Enter your password",
     "forgotPassword": "Forgot password?",
     "rememberMe": "Remember me",
-    "signInButton": "Sign in",
-    "noAccount": "Don't have an account?",
-    "createOne": "Create one"
+    "signInButton": "Sign In",
+    "newToHousingFinder": "New to HousingFinder?",
+    "createAccount": "Create account"
+  },
+  "theme": {
+    "switchToLight": "Switch to light mode",
+    "switchToDark": "Switch to dark mode",
+    "lightMode": "Light mode",
+    "darkMode": "Dark mode"
+  },
+  "listingTrust": {
+    "listedByAria": "Listed by and verification",
+    "listedBy": "Listed by",
+    "loadingLandlord": "Loading landlord…",
+    "landlordNameUnavailable": "Landlord name unavailable",
+    "checkingVerification": "Checking verification…",
+    "verificationUnavailable": "Verification unavailable",
+    "identityVerified": "Identity verified",
+    "identityNotVerified": "Identity not verified",
+    "checkingListingReview": "Checking listing review…",
+    "listingReviewUnavailable": "Listing review unavailable",
+    "listingVerifiedByAdmin": "Listing verified by admin",
+    "listingNotApproved": "Listing not approved by admin",
+    "listingAwaitingReview": "Listing awaiting admin review",
+    "separateChecksNote": "Identity verification and property review are separate checks.",
+    "reviewedOn": " Reviewed {{date}}."
+  },
+  "locationPicker": {
+    "missingKey": "Add a Maps key and Map ID to click a location on the map. You can enter coordinates above for now.",
+    "clickHint": "Click the property location on the map."
+  },
+  "listingCostsForm": {
+    "heading": "Costs & campus transport",
+    "subheading": "Help students understand what they will pay and how they can reach campus.",
+    "securityDeposit": "Security deposit (THB)",
+    "securityDepositPlaceholder": "e.g. 10000",
+    "securityDepositHint": "Total deposit amount. Enter 0 for no deposit; leave blank if undecided.",
+    "vanServiceToUniversity": "Van service to university",
+    "routeScheduleFare": "Route, schedule & fare",
+    "routePlaceholder": "e.g. Rangsit University main gate, weekdays 07:00–18:00, every 30 minutes. 20 THB per trip.",
+    "routeHint": "Include the destination campus, pickup point, operating times and any extra charge."
+  },
+  "costsErrors": {
+    "amountRange": "Enter an amount between 0 and 99,999,999.99 THB.",
+    "invalidBilling": "Choose a valid utility billing option.",
+    "utilityRateRequired": "Enter the {{utility}} rate.",
+    "invalidVanService": "Choose a valid van service option.",
+    "vanDetailsTooLong": "Keep van service details within 1,000 characters."
+  },
+  "notFound": {
+    "heading": "Page not found.",
+    "exploreHomes": "Explore homes →"
+  },
+  "forgotPassword": {
+    "backLink": "← HousingFinder",
+    "heading": "Reset your password",
+    "subheading": "We’ll email you a reset link.",
+    "resetLinkSent": "If this account exists, a reset link is on its way.",
+    "sendResetLink": "Send reset link"
+  },
+  "adminDashboard": {
+    "heading": "Admin overview",
+    "landlordVerifications": "Landlord verifications",
+    "viewingRequests": "Viewing requests",
+    "view": "View →"
+  },
+  "myListings": {
+    "heading": "My listings",
+    "loadingTotal": "Loading total…",
+    "countUnavailable": "Listing count unavailable",
+    "summary": { "one": "{{count}} total listing · {{published}} published · {{drafts}} drafts", "other": "{{count}} total listings · {{published}} published · {{drafts}} drafts" },
+    "addListing": "+ Add listing",
+    "loadingListings": "Loading listings…",
+    "editListing": "Edit listing",
+    "noneYet": "No listings yet.",
+    "addHome": "Add a home →",
+    "confirmDelete": "Delete this listing?"
+  },
+  "student": {
+    "savedHomes": "Saved homes",
+    "exploreHomes": "Explore homes ↗",
+    "signInToSave": "Sign in to save homes.",
+    "signInArrow": "Sign in →",
+    "savedLabel": "saved",
+    "viewingRequestsSuffix": { "one": "viewing request ↗", "other": "viewing requests ↗" },
+    "nothingSaved": "Nothing saved yet.",
+    "browseHomes": "Browse homes →"
+  },
+  "adminVerifications": {
+    "heading": "Verification queue",
+    "noneYet": "No verification requests.",
+    "phoneAndDate": "{{phone}} · {{date}}",
+    "statusArrow": "{{status}} →"
+  },
+  "verificationDetail": {
+    "backToQueue": "← Verification queue",
+    "heading": "Identity review",
+    "name": "Name",
+    "phone": "Phone",
+    "submitted": "Submitted {{date}} · {{status}}",
+    "openDocument": "Open private document ↗",
+    "approve": "Approve",
+    "reject": "Reject"
+  },
+  "users": {
+    "heading": "Users",
+    "subheading": "Manage student and landlord accounts. Administrator accounts are protected.",
+    "signInAgainError": "Sign in again before managing accounts.",
+    "actionFailedError": "Account action failed.",
+    "accountDeleted": "Account deleted.",
+    "accountSuspended": "Account suspended.",
+    "accountReactivated": "Account reactivated.",
+    "dialogTitle": "{{action}} account: {{name}}",
+    "actionLabel": {
+      "suspend": "Suspend",
+      "delete": "Delete",
+      "reactivate": "Reactivate"
+    },
+    "unnamedUser": "Unnamed user",
+    "deleteWarning": "Permanently delete this account, its listings, uploaded files and related viewing/saved records. This cannot be undone.",
+    "suspendWarning": "Block sign-in and account activity. Existing listings stay published. You can reactivate this account later.",
+    "reactivateWarning": "Allow this user to sign in and use their account again.",
+    "typeDeleteConfirm": "Type DELETE to confirm",
+    "processing": "Processing…",
+    "deleteAccount": "Delete account",
+    "suspendAccount": "Suspend account",
+    "reactivateAccount": "Reactivate account",
+    "loadingUsers": "Loading users…",
+    "noneYet": "No users yet.",
+    "joined": "Joined {{date}}",
+    "reactivate": "Reactivate",
+    "suspend": "Suspend",
+    "delete": "Delete"
+  },
+  "viewingPicker": {
+    "heading": "When would you like to visit?",
+    "chooseDateAria": "Choose a preferred date",
+    "preferredDate": "Preferred date",
+    "previousMonth": "Previous month",
+    "nextMonth": "Next month",
+    "preferredTime": "Preferred time",
+    "timeZoneNote": "24-hour time · {{zone}}. Suggest a time; the landlord will confirm availability.",
+    "hour": "Hour",
+    "minute": "Minute",
+    "chooseHour": "Choose hour",
+    "chooseMinute": "Choose minute",
+    "quickSuggestions": "Quick suggestions",
+    "chooseTimeToComplete": "Choose a time to complete your request",
+    "choosePreferred": "Choose your preferred date and time",
+    "timePassed": "This time has passed. Please choose a future time.",
+    "confirmedNote": "Your viewing is confirmed only after the landlord accepts."
+  },
+  "verification": {
+    "title": "Identity verification",
+    "manageDescription": "Manage your documents and review status",
+    "viewDescription": "View status or submit a document",
+    "visibilityNote": "Your document is visible only to you and administrators.",
+    "submitted": "Submitted {{date}}",
+    "submitDocument": "Submit a document",
+    "whatToInclude": "What should I include?",
+    "requirementsHeading": "Verification requirements",
+    "nameLabel": "Name:",
+    "nameHint": "enter the full name shown on your document (2–120 characters).",
+    "phoneLabel": "Phone:",
+    "phoneHint": "include the country code where applicable, for example +66 81 234 5678 (6–30 characters).",
+    "documentLabel": "Document:",
+    "documentHint": "a clear image or scan of an identity document, such as an ID card or passport. Keep the full name and photo readable, with the document edges visible.",
+    "fileLabel": "File:",
+    "fileHint": "upload one PDF, JPG/JPEG, or PNG, up to 10 MB. Combine multiple pages into one PDF. HEIC, Word documents and ZIP files are not supported.",
+    "demoLabel": "University demo:",
+    "demoHint": "use a fictional document marked “SAMPLE” with a matching fictional name and phone number. No real identity information is needed.",
+    "reviewNote": "An administrator reviews your submission. Its status will appear above this form.",
+    "legalName": "Legal name",
+    "legalNamePlaceholder": "Full name as shown on the document",
+    "phoneNumber": "Phone number",
+    "phoneNumberPlaceholder": "e.g. +66 81 234 5678",
+    "identityDocument": "Identity document",
+    "fileHelp": "One PDF, JPG/JPEG, or PNG · Maximum 10 MB. Use a fictional sample document for this university demo.",
+    "submitting": "Submitting…",
+    "submitForReview": "Submit for review",
+    "uploadError": "Upload one PDF, JPG/JPEG, or PNG file, up to 10 MB.",
+    "signInLandlordFirst": "Sign in as a landlord first."
+  },
+  "profile": {
+    "yourAccount": "Your account",
+    "heading": "Profile",
+    "loadingProfile": "Loading your profile…",
+    "signInHeading": "Sign in to your account",
+    "signInBody": "Manage your personal details here.",
+    "accountDetailsAria": "Account details",
+    "yourProfileFallback": "Your profile",
+    "personalDetails": "Personal details",
+    "edit": "Edit",
+    "fullName": "Full name",
+    "accountType": "Account type",
+    "unavailable": "Unavailable",
+    "saving": "Saving…",
+    "saveChanges": "Save changes",
+    "cancel": "Cancel",
+    "preferences": "Preferences",
+    "language": "Language",
+    "signingOut": "Signing out…",
+    "signOut": "Sign out",
+    "accountUnavailableError": "Account details are currently unavailable.",
+    "enterFullNameError": "Enter your full name.",
+    "nameUpdated": "Your name has been updated."
   },
   "listingForm": {
     "editHeading": "Edit your listing",
@@ -184,7 +420,6 @@
   },
   "manageListings": {
     "heading": "Listings",
-    "adminRequired": "Admin access required.",
     "confirmDelete": "Delete this listing permanently?",
     "noneYet": "No listings yet."
   },
@@ -219,7 +454,6 @@
   },
   "reports": {
     "heading": "Viewing activity",
-    "adminRequired": "Admin access required.",
     "noneYet": "No viewing requests yet.",
     "requested": "Requested {{date}} · Visit {{time}}"
   },

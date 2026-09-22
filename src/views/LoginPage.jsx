@@ -5,8 +5,10 @@ import { authHeadingClassName, authInputClassName } from "./authStyles";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { requireSupabase } from "../lib/supabase";
+import { useLocale } from "../lib/i18n/LocaleContext";
 
 export default function LoginPage() {
+  const { t } = useLocale();
   const [showPassword, setShowPassword] =
     useState(false);
   const [error, setError] = useState("");
@@ -39,28 +41,28 @@ export default function LoginPage() {
             href="/"
             className="inline-flex items-center text-[clamp(1.9rem,2.2vw,2.4rem)] font-extrabold tracking-[-.07em] text-white"
           >
-            HousingFinder<span className="text-accent">.</span>
+            {t("nav.brand")}<span className="text-accent">.</span>
           </Link>
         </div>
 
         <div className="auth-brand-content">
           <p className="auth-small-title">
-            YOUR HOUSING COMMUNITY
+            {t("auth.loginTagline")}
           </p>
 
           <h1>
-            Find your
+            {t("auth.loginHeadingLine1")}
             <br />
-            student home,
+            {t("auth.loginHeadingLine2")}
             <br />
 
             <span>
-              all in one place.
+              {t("auth.loginHeadingAccent")}
             </span>
           </h1>
 
           <p className="auth-brand-description">
-            Search around campus, compare rent, and arrange a visit.
+            {t("auth.loginDescription")}
           </p>
 
           <div className="auth-feature-list">
@@ -71,11 +73,11 @@ export default function LoginPage() {
 
               <div>
                 <strong>
-                  Homes near campus
+                  {t("auth.loginFeature1Title")}
                 </strong>
 
                 <p>
-                  Rooms, apartments and condos.
+                  {t("auth.loginFeature1Body")}
                 </p>
               </div>
             </div>
@@ -87,11 +89,11 @@ export default function LoginPage() {
 
               <div>
                 <strong>
-                  Compare rent
+                  {t("auth.loginFeature2Title")}
                 </strong>
 
                 <p>
-                  See monthly prices before you visit.
+                  {t("auth.loginFeature2Body")}
                 </p>
               </div>
             </div>
@@ -103,11 +105,11 @@ export default function LoginPage() {
 
               <div>
                 <strong>
-                  Request a viewing
+                  {t("auth.loginFeature3Title")}
                 </strong>
 
                 <p>
-                  Ask to see a home in person.
+                  {t("auth.loginFeature3Body")}
                 </p>
               </div>
             </div>
@@ -122,11 +124,11 @@ export default function LoginPage() {
       <section className="auth-form-panel">
         <div className="auth-form-container">
           <p className="form-eyebrow">
-            WELCOME BACK
+            {t("auth.welcomeBack")}
           </p>
 
           <h2 className={authHeadingClassName}>
-            Sign in to HousingFinder
+            {t("auth.signInHeading")}
           </h2>
 
 
@@ -140,7 +142,7 @@ export default function LoginPage() {
             <GoogleIcon />
 
             <span>
-              Continue with Google
+              {t("auth.continueWithGoogle")}
             </span>
           </button>
 
@@ -150,7 +152,7 @@ export default function LoginPage() {
             <span />
 
             <p>
-              or continue with email
+              {t("auth.orContinueWithEmail")}
             </p>
 
             <span />
@@ -166,7 +168,7 @@ export default function LoginPage() {
 
             <div className="auth-input-group">
               <label>
-                Email address
+                {t("auth.emailAddress")}
               </label>
 
               <div className={authInputClassName}>
@@ -175,7 +177,7 @@ export default function LoginPage() {
                 <input
                   type="email"
                   name="email"
-                  placeholder="Enter your email"
+                  placeholder={t("auth.emailPlaceholder")}
                   autoComplete="email"
                   required
                 />
@@ -187,11 +189,11 @@ export default function LoginPage() {
             <div className="auth-input-group">
               <div className="password-label">
                 <label>
-                  Password
+                  {t("auth.password")}
                 </label>
 
                 <Link href="/forgot-password">
-                  Forgot password?
+                  {t("auth.forgotPassword")}
                 </Link>
               </div>
 
@@ -205,7 +207,7 @@ export default function LoginPage() {
                       : "password"
                   }
                   name="password"
-                  placeholder="Enter your password"
+                  placeholder={t("auth.passwordPlaceholder")}
                   autoComplete="current-password"
                   required
                 />
@@ -215,8 +217,8 @@ export default function LoginPage() {
                   className="eye-button"
                   aria-label={
                     showPassword
-                      ? "Hide password"
-                      : "Show password"
+                      ? t("auth.hidePassword")
+                      : t("auth.showPassword")
                   }
                   onClick={() =>
                     setShowPassword(
@@ -242,7 +244,7 @@ export default function LoginPage() {
               />
 
               <span>
-                Remember me
+                {t("auth.rememberMe")}
               </span>
             </label>
 
@@ -253,12 +255,12 @@ export default function LoginPage() {
               disabled={busy}
               className="auth-submit"
             >
-              Sign In
+              {t("auth.signInButton")}
             </button>
           </form>
 
           <p className="auth-switch-plain">
-            New to HousingFinder? <Link href="/register">Create account</Link>
+            {t("auth.newToHousingFinder")} <Link href="/register">{t("auth.createAccount")}</Link>
           </p>
         </div>
       </section>

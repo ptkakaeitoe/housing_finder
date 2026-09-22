@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState } from 'react';
 import { supabase } from '../lib/supabase';
+import { useLocale } from '../lib/i18n/LocaleContext';
 
 export function VerificationBadge({ verified, children }) {
   return <span className={`inline-flex items-center gap-1.5 text-xs font-semibold ${verified ? 'text-accent' : 'text-muted'}`}>
@@ -8,6 +9,7 @@ export function VerificationBadge({ verified, children }) {
   </span>;
 }
 export default function ListingTrust({ listingId }) {
+  const { t } = useLocale();
   const [info, setInfo] = useState(null);
   useEffect(() => {
     let active = true;
@@ -21,9 +23,9 @@ export default function ListingTrust({ listingId }) {
     });
     return () => { active = false; };
   }, [listingId]);
-  return <section aria-label="Listed by and verification" className="mt-5 rounded-2xl border border-line bg-surface p-5 sm:p-6">
-    <p className="text-xs font-semibold uppercase tracking-wide text-muted">Listed by</p>
-    <div className="mt-3 flex items-center gap-3"><span className="flex size-11 shrink-0 items-center justify-center rounded-full bg-surface-muted text-lg font-semibold" aria-hidden="true">{info?.poster?.full_name?.trim()?.[0]?.toUpperCase() || 'L'}</span><div className="min-w-0"><h2 className="break-words text-base font-semibold">{!info ? 'Loading landlord…' : info.poster?.full_name || 'Landlord name unavailable'}</h2><div className="mt-1"><VerificationBadge verified={Boolean(info?.poster?.verified)}>{!info ? 'Checking verification…' : !info.poster ? 'Verification unavailable' : info.poster.verified ? 'Identity verified' : 'Identity not verified'}</VerificationBadge></div></div></div>
-    <div className="mt-4 border-t border-line pt-4"><VerificationBadge verified={info?.review?.status === 'approved'}>{!info ? 'Checking listing review…' : info.reviewError ? 'Listing review unavailable' : info.review?.status === 'approved' ? 'Listing verified by admin' : info.review?.status === 'rejected' ? 'Listing not approved by admin' : 'Listing awaiting admin review'}</VerificationBadge><p className="mt-2 text-xs leading-5 text-muted">Identity verification and property review are separate checks.{info?.review?.reviewed_at ? ` Reviewed ${new Date(info.review.reviewed_at).toLocaleDateString()}.` : ''}</p></div>
+  return <section aria-label={t("listingTrust.listedByAria")} className="mt-5 rounded-2xl border border-line bg-surface p-5 sm:p-6">
+    <p className="text-xs font-semibold uppercase tracking-wide text-muted">{t("listingTrust.listedBy")}</p>
+    <div className="mt-3 flex items-center gap-3"><span className="flex size-11 shrink-0 items-center justify-center rounded-full bg-surface-muted text-lg font-semibold" aria-hidden="true">{info?.poster?.full_name?.trim()?.[0]?.toUpperCase() || 'L'}</span><div className="min-w-0"><h2 className="break-words text-base font-semibold">{!info ? t("listingTrust.loadingLandlord") : info.poster?.full_name || t("listingTrust.landlordNameUnavailable")}</h2><div className="mt-1"><VerificationBadge verified={Boolean(info?.poster?.verified)}>{!info ? t("listingTrust.checkingVerification") : !info.poster ? t("listingTrust.verificationUnavailable") : info.poster.verified ? t("listingTrust.identityVerified") : t("listingTrust.identityNotVerified")}</VerificationBadge></div></div></div>
+    <div className="mt-4 border-t border-line pt-4"><VerificationBadge verified={info?.review?.status === 'approved'}>{!info ? t("listingTrust.checkingListingReview") : info.reviewError ? t("listingTrust.listingReviewUnavailable") : info.review?.status === 'approved' ? t("listingTrust.listingVerifiedByAdmin") : info.review?.status === 'rejected' ? t("listingTrust.listingNotApproved") : t("listingTrust.listingAwaitingReview")}</VerificationBadge><p className="mt-2 text-xs leading-5 text-muted">{t("listingTrust.separateChecksNote")}{info?.review?.reviewed_at ? t("listingTrust.reviewedOn", { date: new Date(info.review.reviewed_at).toLocaleDateString() }) : ''}</p></div>
   </section>;
 }

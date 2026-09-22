@@ -50,7 +50,7 @@ export default function RegisterPage() {
             href="/"
             className="inline-flex items-center text-[clamp(1.9rem,2.2vw,2.4rem)] font-extrabold tracking-[-.07em] text-white"
           >
-            HousingFinder<span className="text-accent">.</span>
+            {t("nav.brand")}<span className="text-accent">.</span>
           </Link>
         </div>
 
@@ -137,11 +137,11 @@ export default function RegisterPage() {
           className="w-full max-w-[560px]"
         >
           <p className="mb-2 text-xs font-bold tracking-[.12em] text-accent">
-            CREATE ACCOUNT
+            {t("auth.createAccountEyebrow")}
           </p>
 
           <h2 className={authHeadingClassName}>
-            Sign up for HousingFinder
+            {t("auth.signUpHeading")}
           </h2>
 
           {/* =========================
@@ -155,7 +155,7 @@ export default function RegisterPage() {
 
             <div className="mb-3">
               <label className="mb-1.5 block text-[13px] font-bold">
-                Full name
+                {t("auth.fullName")}
               </label>
 
               <div className={authInputClassName}>
@@ -164,7 +164,7 @@ export default function RegisterPage() {
                 <input
                   type="text"
                   name="fullName"
-                  placeholder="Enter your full name"
+                  placeholder={t("auth.fullNamePlaceholder")}
                   autoComplete="name"
                   required
                 />
@@ -175,7 +175,7 @@ export default function RegisterPage() {
 
             <div className="mb-3">
               <label className="mb-1.5 block text-[13px] font-bold">
-                Email address
+                {t("auth.emailAddress")}
               </label>
 
               <div className={authInputClassName}>
@@ -184,7 +184,7 @@ export default function RegisterPage() {
                 <input
                   type="email"
                   name="email"
-                  placeholder="Enter your email"
+                  placeholder={t("auth.emailPlaceholder")}
                   autoComplete="email"
                   required
                 />
@@ -194,20 +194,20 @@ export default function RegisterPage() {
             {/* ACCOUNT TYPE */}
 
             <fieldset className="mb-3">
-              <legend className="mb-2 text-[13px] font-extrabold text-[#171b20]">Account type</legend>
+              <legend className="mb-2 text-[13px] font-extrabold text-[#171b20]">{t("auth.accountType")}</legend>
               <div className="grid grid-cols-2 gap-3">
                 <label className="group cursor-pointer">
                   <input type="radio" name="role" value="student" required className="peer sr-only" />
                   <span className="auth-role-card relative flex min-h-16 flex-col justify-center rounded-xl border border-[#d8dee9] bg-[#fafbfc] px-4 transition-colors group-hover:border-[#8996a3] peer-checked:border-[#1c252e] peer-checked:bg-[#f0f3f5] peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-[#1c252e]">
-                    <strong className="text-sm text-[#171b20]">Student</strong>
-                    <small className="mt-1 text-xs text-[#647078]">Find a home</small>
+                    <strong className="text-sm text-[#171b20]">{t("common.role.student")}</strong>
+                    <small className="mt-1 text-xs text-[#647078]">{t("auth.studentHint")}</small>
                   </span>
                 </label>
                 <label className="group cursor-pointer">
                   <input type="radio" name="role" value="landlord" className="peer sr-only" />
                   <span className="auth-role-card relative flex min-h-16 flex-col justify-center rounded-xl border border-[#d8dee9] bg-[#fafbfc] px-4 transition-colors group-hover:border-[#8996a3] peer-checked:border-[#1c252e] peer-checked:bg-[#f0f3f5] peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-[#1c252e]">
-                    <strong className="text-sm text-[#171b20]">Landlord</strong>
-                    <small className="mt-1 text-xs text-[#647078]">List a property</small>
+                    <strong className="text-sm text-[#171b20]">{t("common.role.landlord")}</strong>
+                    <small className="mt-1 text-xs text-[#647078]">{t("auth.landlordHint")}</small>
                   </span>
                 </label>
               </div>
@@ -217,7 +217,7 @@ export default function RegisterPage() {
 
             <div className="mb-3">
               <label className="mb-1.5 block text-[13px] font-bold">
-                Password
+                {t("auth.password")}
               </label>
 
               <div className={authInputClassName}>
@@ -230,7 +230,7 @@ export default function RegisterPage() {
                       : "password"
                   }
                   name="password"
-                  placeholder="Create password"
+                  placeholder={t("auth.createPasswordPlaceholder")}
                   autoComplete="new-password"
                   required
                 />
@@ -240,8 +240,8 @@ export default function RegisterPage() {
                   className="eye-button"
                   aria-label={
                     showPassword
-                      ? "Hide password"
-                      : "Show password"
+                      ? t("auth.hidePassword")
+                      : t("auth.showPassword")
                   }
                   onClick={() =>
                     setShowPassword(
@@ -262,7 +262,7 @@ export default function RegisterPage() {
 
             <div className="mb-3">
               <label className="mb-1.5 block text-[13px] font-bold">
-                Confirm password
+                {t("auth.confirmPassword")}
               </label>
 
               <div className={authInputClassName}>
@@ -275,7 +275,7 @@ export default function RegisterPage() {
                       : "password"
                   }
                   name="confirmPassword"
-                  placeholder="Confirm password"
+                  placeholder={t("auth.confirmPasswordPlaceholder")}
                   autoComplete="new-password"
                   required
                 />
@@ -285,8 +285,8 @@ export default function RegisterPage() {
                   className="eye-button"
                   aria-label={
                     showConfirmPassword
-                      ? "Hide password"
-                      : "Show password"
+                      ? t("auth.hidePassword")
+                      : t("auth.showPassword")
                   }
                   onClick={() =>
                     setShowConfirmPassword(
@@ -314,7 +314,7 @@ export default function RegisterPage() {
               <span className="auth-checkmark" aria-hidden="true">✓</span>
 
               <span>
-                I agree to the Terms of Service and Privacy Policy.
+                {t("auth.agreeTerms")}
               </span>
             </label>
 
@@ -325,12 +325,12 @@ export default function RegisterPage() {
               disabled={busy}
               className="flex min-h-[58px] w-full items-center justify-center rounded-xl bg-accent text-[15px] font-black text-white transition hover:brightness-95 disabled:cursor-wait disabled:opacity-60"
             >
-              Create Account
+              {t("auth.createAccountButton")}
             </button>
           </form>
 
           <p className="mt-4 text-center text-sm text-[#647078] [&>a]:font-bold [&>a]:text-accent [&>a]:underline [&>a]:underline-offset-4">
-            Already have an account? <Link href="/login">Sign in</Link>
+            {t("auth.alreadyHaveAccount")} <Link href="/login">{t("common.signIn")}</Link>
           </p>
         </div>
       </section>

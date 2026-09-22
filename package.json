@@ -7,7 +7,8 @@
     "build": "next build --webpack",
     "start": "next start",
     "setup:demo": "node --env-file=.env.local scripts/setup-demo.mjs",
-    "verify:demo": "node --env-file=.env.local scripts/verify-demo.mjs"
+    "verify:demo": "node --env-file=.env.local scripts/verify-demo.mjs",
+    "translate:dictionaries": "node --env-file=.env.local scripts/translate-dictionary.mjs"
   },
   "dependencies": {
     "@googlemaps/js-api-loader": "^2.1.1",

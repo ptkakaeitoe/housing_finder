@@ -12,6 +12,13 @@ export function isLocale(value) {
   return LOCALES.includes(value);
 }
 
+export const INTL_LOCALES = {
+  en: "en",
+  th: "th",
+  my: "my",
+  zh: "zh-CN",
+};
+
 export function matchBrowserLocale(languages) {
   for (const tag of languages ?? []) {
     const base = tag.toLowerCase().split("-")[0];
