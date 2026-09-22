@@ -23,7 +23,6 @@ const navigation = {
     { label: "Dashboard", href: "/landlord" },
     { label: "My Listings", href: "/listings" },
     { label: "Appointments", href: "/landlord-appointments" },
-    { label: "Verification", href: "/landlord-verification" },
   ],
   admin: [
     { label: "Explore", href: "/" },

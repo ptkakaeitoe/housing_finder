@@ -1,10 +1,8 @@
-// Fictional examples for exploring the UI, one near each supported
-// university. Coordinates are approximate and must not be treated as
-// available properties or exact building locations.
-export const mockListings = [
+// Fictional seed data for the university project. Imported only by the setup script.
+// Fixed IDs keep repeated setup runs from duplicating homes.
+export const demoListings = [
   {
-    id: "sample-chula-studio",
-    is_mock: true,
+    id: "d30a0000-0000-4000-8000-000000000001",
     university_id: "e956675d-085e-4716-940c-02424174c782",
     title: "Siam Square Studio",
     property_type: "room",
@@ -17,8 +15,7 @@ export const mockListings = [
     status: "published",
   },
   {
-    id: "sample-thammasat-condo",
-    is_mock: true,
+    id: "d30a0000-0000-4000-8000-000000000002",
     university_id: "1c731019-d77a-4533-aea4-1c63c7f951d0",
     title: "Rangsit Campus Lane Condo",
     property_type: "condo",
@@ -31,8 +28,7 @@ export const mockListings = [
     status: "published",
   },
   {
-    id: "sample-kasetsart-room",
-    is_mock: true,
+    id: "d30a0000-0000-4000-8000-000000000003",
     university_id: "91e61342-49ef-4b9c-b23e-2694744aee80",
     title: "Ladyao Study Room",
     property_type: "room",
@@ -45,8 +41,7 @@ export const mockListings = [
     status: "published",
   },
   {
-    id: "sample-mahidol-studio",
-    is_mock: true,
+    id: "d30a0000-0000-4000-8000-000000000004",
     university_id: "01c42f18-6683-475a-b970-f963f6469ac8",
     title: "Salaya Riverside Studio",
     property_type: "apartment",
@@ -59,8 +54,7 @@ export const mockListings = [
     status: "published",
   },
   {
-    id: "sample-chiangmai-apartment",
-    is_mock: true,
+    id: "d30a0000-0000-4000-8000-000000000005",
     university_id: "044680d9-498a-4f58-b937-f74459d39c7d",
     title: "Nimman Two-Bedroom Share",
     property_type: "apartment",
@@ -73,8 +67,7 @@ export const mockListings = [
     status: "published",
   },
   {
-    id: "sample-rangsit-studio",
-    is_mock: true,
+    id: "d30a0000-0000-4000-8000-000000000006",
     university_id: "10ffe474-15b6-470f-9073-9f5a71c122b1",
     title: "Muang Ake Garden Studio",
     property_type: "room",
@@ -87,7 +80,3 @@ export const mockListings = [
     status: "published",
   },
 ];
-
-export function getMockListing(id) {
-  return mockListings.find((listing) => listing.id === id) ?? null;
-}

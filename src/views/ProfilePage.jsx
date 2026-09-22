@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { supabase, requireSupabase } from "../lib/supabase";
 import { publicContainerClassName } from "../components/layoutStyles";
+import LandlordVerificationSection from "../components/LandlordVerificationSection";
 import { Picker } from "../components/Picker";
 
 const LANGUAGES = [
@@ -18,6 +19,7 @@ const LANGUAGE_STORAGE_KEY = "rsu-language";
 export default function ProfilePage() {
   const router = useRouter();
   const [user, setUser] = useState(null);
+  const [editingName, setEditingName] = useState(false);
   const [name, setName] = useState("");
   const [savedName, setSavedName] = useState("");
   const [role, setRole] = useState("");
@@ -66,7 +68,7 @@ export default function ProfilePage() {
   async function save(event) {
     event.preventDefault();
     const nextName = name.trim();
-    if (!user || !profileLoaded || busy || nextName === savedName) return;
+    if (!editingName || !user || !profileLoaded || busy || nextName === savedName) return;
     if (!nextName) { setError("Enter your full name."); return; }
     setBusy("save"); setError(""); setMessage("");
     try {
@@ -74,6 +76,7 @@ export default function ProfilePage() {
       if (saveError) throw saveError;
       setName(data.full_name); setSavedName(data.full_name);
       setMessage("Your name has been updated.");
+      setEditingName(false);
     } catch (cause) { setError(cause.message); }
     finally { setBusy(""); }
   }
@@ -122,21 +125,30 @@ export default function ProfilePage() {
           </div>
         </div>
         <form onSubmit={save} className="p-5 sm:p-7">
-          <h3 className="text-base font-semibold">Personal details</h3>
+          <div className="flex items-center justify-between gap-3">
+            <h3 className="text-base font-semibold">Personal details</h3>
+            {!editingName && <button type="button" disabled={!profileLoaded || Boolean(busy)} onClick={() => { setName(savedName); setEditingName(true); setError(""); setMessage(""); }} className="inline-flex min-h-11 items-center gap-2 rounded-full border border-line px-4 text-sm font-semibold hover:border-accent hover:text-accent disabled:opacity-50">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" className="size-4" aria-hidden="true"><path d="m16 3 5 5M4 15 15 4a2 2 0 0 1 3 0l2 2a2 2 0 0 1 0 3L9 20l-6 1 1-6Z" /></svg>
+              Edit
+            </button>}
+          </div>
           <div className="mt-5">
+            {editingName ? <>
             <label htmlFor="profile-name" className="mb-2 block text-sm font-semibold">Full name</label>
-            <input id="profile-name" name="fullName" autoComplete="name" required disabled={!profileLoaded || Boolean(busy)} value={name} onChange={(event) => { setName(event.target.value); setMessage(""); }} className="min-h-12 w-full rounded-xl border border-line bg-canvas px-4 text-ink outline-none transition focus:border-accent focus:ring-2 focus:ring-accent/15 disabled:opacity-60" />
+            <input id="profile-name" autoFocus name="fullName" autoComplete="name" required disabled={!profileLoaded || Boolean(busy)} value={name} onChange={(event) => { setName(event.target.value); setMessage(""); }} className="min-h-12 w-full rounded-xl border border-line bg-canvas px-4 text-ink outline-none transition focus:border-accent focus:ring-2 focus:ring-accent/15 disabled:opacity-60" />
+            </> : <dl><dt className="text-sm font-semibold">Full name</dt><dd className="mt-2 break-words text-sm text-muted">{savedName || "Not specified"}</dd></dl>}
           </div>
           <dl className="mt-5 grid gap-5 sm:grid-cols-2">
             <div><dt className="text-sm font-semibold">Email address</dt><dd className="mt-2 break-all text-sm text-muted">{user.email}</dd></div>
             <div><dt className="text-sm font-semibold">Account type</dt><dd className="mt-2 text-sm capitalize text-muted">{role || "Unavailable"}</dd></div>
           </dl>
-          <div className="mt-7 flex flex-wrap items-center gap-3 border-t border-line pt-5">
+          {editingName && <div className="mt-7 flex flex-wrap items-center gap-3 border-t border-line pt-5">
             <button type="submit" disabled={!profileLoaded || !changed || !name.trim() || Boolean(busy)} className="min-h-11 rounded-full bg-ink px-6 text-canvas transition-colors enabled:hover:bg-accent disabled:cursor-not-allowed disabled:opacity-40"><span className="text-sm font-semibold">{busy === "save" ? "Saving…" : "Save changes"}</span></button>
-            {changed && <button type="button" disabled={Boolean(busy)} onClick={() => { setName(savedName); setError(""); setMessage(""); }} className="min-h-11 rounded-full px-4 text-muted hover:bg-surface-muted disabled:opacity-50"><span className="text-sm font-semibold">Cancel</span></button>}
-            <p role="status" className="text-sm text-muted">{message}</p>
-          </div>
+            <button type="button" disabled={Boolean(busy)} onClick={() => { setName(savedName); setEditingName(false); setError(""); setMessage(""); }} className="min-h-11 rounded-full px-4 text-muted hover:bg-surface-muted disabled:opacity-50"><span className="text-sm font-semibold">Cancel</span></button>
+          </div>}
+          <p role="status" className={message ? "mt-4 text-sm text-muted" : "sr-only"}>{message}</p>
         </form>
+        {profileLoaded && role === "landlord" && <LandlordVerificationSection />}
         <div className="border-t border-line p-5 sm:p-7">
           <h3 className="text-base font-semibold">Preferences</h3>
           <div className="mt-5 max-w-xs">

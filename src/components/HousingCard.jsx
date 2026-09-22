@@ -12,9 +12,9 @@ function HeartIcon({ filled }) {
   );
 }
 
-export default function HousingCard({ listing, saved = false, onToggleSave, action }) {
+export default function HousingCard({ listing, saved = false, onToggleSave, action, isOwner = false }) {
   const nearest = listingUniversity(listing);
-  const canSave = Boolean(onToggleSave) && !listing.is_mock;
+  const canSave = Boolean(onToggleSave) && !isOwner;
 
   function handleHeart(event) {
     event.preventDefault();
@@ -28,8 +28,8 @@ export default function HousingCard({ listing, saved = false, onToggleSave, acti
         <img src={listingImageUrl(listing.image_path)} alt={listing.title} className="h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.06]" />
         <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/15 via-transparent to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
         <div className="absolute left-3 top-3 flex flex-col items-start gap-1.5">
+          {isOwner && <span className="rounded-full bg-ink px-2.5 py-1 text-[11px] font-semibold text-canvas shadow-sm">Listed by you</span>}
           <span className="rounded-full bg-white/95 px-2.5 py-1 text-[11px] font-semibold capitalize text-[#171b20] shadow-sm">{listing.property_type}</span>
-          {listing.is_mock && <span className="rounded-full bg-black/75 px-2.5 py-1 text-[11px] font-semibold text-white backdrop-blur">Sample</span>}
         </div>
 
       </div>

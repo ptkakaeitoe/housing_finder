@@ -40,7 +40,7 @@ function infoWindowContent(item) {
   row.append(name, price);
   const meta = document.createElement("p");
   meta.className = "mt-1 text-xs text-[#647078]";
-  meta.textContent = item.is_mock ? "Sample · approximate location" : item.address;
+  meta.textContent = item.address;
   const link = document.createElement("a");
   link.href = `/rooms/${item.id}`;
   link.textContent = "View home →";
@@ -252,7 +252,7 @@ function MapContent() {
               <div className="flex gap-3">
                 <img src={listingImageUrl(item.image_path)} alt="" loading="lazy" className="h-24 w-24 shrink-0 rounded-xl bg-surface-muted object-cover" />
                 <div className="min-w-0 flex-1">
-                  <p className="text-[11px] capitalize text-muted">{item.property_type}{item.is_mock ? " · Sample" : ""}</p>
+                  <p className="text-[11px] capitalize text-muted">{item.property_type}</p>
                   <h3 className="mt-1 line-clamp-2 text-sm font-semibold leading-5 text-ink"><Link href={`/rooms/${item.id}`} className="hover:text-accent">{item.title}</Link></h3>
                   <p className="mt-1 truncate text-xs text-muted">{nearest ? `${nearest.distanceKm.toFixed(1)} km · ${nearest.university.shortName || nearest.university.name}` : item.address}</p>
                   <p className="mt-2 text-sm font-bold tabular-nums text-ink">{pinLabel(item)} <span className="text-xs font-normal text-muted">/ month</span></p>
@@ -261,7 +261,7 @@ function MapContent() {
               <div className="mt-3 flex flex-wrap items-center gap-2">
                 <button type="button" disabled={!mapLoaded} aria-pressed={active} onClick={() => setSelectedId(item.id)} className={`min-h-9 rounded-full border px-3 disabled:opacity-40 ${active ? "border-ink bg-ink text-canvas" : "border-line text-ink hover:border-accent"}`}><span className="text-xs font-semibold">{active ? "Selected on map" : "Show on map"}</span></button>
                 <Link href={`/rooms/${item.id}`} className="inline-flex min-h-9 items-center px-1 text-xs font-semibold text-accent">View details ↗</Link>
-                {!item.is_mock && <button type="button" aria-label={savedIds.has(item.id) ? "Unsave home" : "Save home"} aria-pressed={savedIds.has(item.id)} onClick={() => handleToggleSave(item.id)} className="ml-auto flex size-9 items-center justify-center rounded-full border border-line text-accent hover:bg-surface-muted">{savedIds.has(item.id) ? "♥" : "♡"}</button>}
+                <button type="button" aria-label={savedIds.has(item.id) ? "Unsave home" : "Save home"} aria-pressed={savedIds.has(item.id)} onClick={() => handleToggleSave(item.id)} className="ml-auto flex size-9 items-center justify-center rounded-full border border-line text-accent hover:bg-surface-muted">{savedIds.has(item.id) ? "♥" : "♡"}</button>
               </div>
             </article>;
           })}

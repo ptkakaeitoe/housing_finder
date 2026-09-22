@@ -1,5 +1,5 @@
-import LandlordVerificationPage from "../../views/LandlordVerificationPage";
+import { redirect } from "next/navigation";
 
 export default function Page() {
-  return <LandlordVerificationPage />;
+  redirect("/landlord-profile#verification");
 }

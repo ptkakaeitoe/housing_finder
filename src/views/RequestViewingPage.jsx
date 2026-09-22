@@ -1,9 +1,9 @@
 "use client";
 import { useEffect, useState, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
+import ViewingDateTimePicker from "../components/ViewingDateTimePicker";
 import Link from "next/link";
 import { supabase, requireSupabase } from "../lib/supabase";
-import { getMockListing } from "../lib/mockListings";
 
 function RequestForm() {
   const params = useSearchParams();
@@ -12,7 +12,9 @@ function RequestForm() {
   const [listing, setListing] = useState(null);
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
-  useEffect(() => { if (getMockListing(id)) return; if (supabase && id) supabase.from("listings").select("id,title,address").eq("id", id).single().then(({ data }) => setListing(data)); }, [id]);
+  const [date, setDate] = useState("");
+  const [time, setTime] = useState("");
+  useEffect(() => { if (supabase && id) supabase.from("listings").select("id,title,address").eq("id", id).single().then(({ data }) => setListing(data)); }, [id]);
   async function submit(event) {
     event.preventDefault(); setBusy(true); setError("");
     const form = new FormData(event.currentTarget);
@@ -20,15 +22,16 @@ function RequestForm() {
       const client = requireSupabase();
       const { data: { user } } = await client.auth.getUser();
       if (!user) { router.push("/login"); return; }
-      const preferredAt = new Date(`${form.get("date")}T${form.get("time")}`);
-      if (preferredAt <= new Date()) throw new Error("Choose a future date and time.");
+      if (!date || !time) throw new Error("Choose a date and time for your viewing.");
+      const preferredAt = new Date(`${date}T${time}`);
+      if (!Number.isFinite(preferredAt.getTime()) || preferredAt <= new Date()) throw new Error("Choose a future date and time.");
       const { error: saveError } = await client.from("viewing_requests").insert({ listing_id: id, student_id: user.id, preferred_at: preferredAt.toISOString(), message: String(form.get("message") ?? "") });
       if (saveError) throw saveError;
       router.push("/appointments");
     } catch (cause) { setError(cause.message); } finally { setBusy(false); }
   }
-  return <><main className="mx-auto max-w-2xl px-5 py-10 sm:px-8"><Link href={id ? `/rooms/${id}` : "/explore"} className="text-sm font-semibold text-accent">← Back</Link><h1 className="mt-6 text-4xl font-extrabold text-ink">Request a viewing</h1><p className="mt-2 text-muted">{getMockListing(id) ? "This is a sample listing, so viewings are unavailable." : listing ? `${listing.title} · ${listing.address}` : "Choose a home from Explore before requesting a viewing."}</p>
-    {listing && <form onSubmit={submit} className="mt-8 grid gap-5 border-t border-line pt-6"><label className="text-sm font-semibold text-ink">Preferred date<input name="date" type="date" required min={new Date().toISOString().slice(0,10)} className="mt-2 min-h-12 w-full rounded-xl border border-line bg-canvas px-4 text-base" /></label><label className="text-sm font-semibold text-ink">Preferred time<input name="time" type="time" required className="mt-2 min-h-12 w-full rounded-xl border border-line bg-canvas px-4 text-base" /></label><label className="text-sm font-semibold text-ink">Message<textarea name="message" maxLength="1000" placeholder="Anything the landlord should know?" className="mt-2 min-h-28 w-full rounded-xl border border-line bg-canvas p-4 text-base" /></label>{error && <p role="alert" className="text-sm text-accent">{error}</p>}<button disabled={busy} className="min-h-12 rounded-full bg-ink font-bold text-canvas disabled:opacity-50">{busy ? "Sending…" : "Send request"}</button></form>}
+  return <><main className="mx-auto max-w-2xl px-5 py-10 sm:px-8"><Link href={id ? `/rooms/${id}` : "/explore"} className="text-sm font-semibold text-accent">← Back</Link><h1 className="mt-6 text-4xl font-extrabold text-ink">Request a viewing</h1><p className="mt-2 text-muted">{listing ? `${listing.title} · ${listing.address}` : "Choose a home from Explore before requesting a viewing."}</p>
+    {listing && <form onSubmit={submit} className="mt-8 grid gap-5 border-t border-line pt-6"><ViewingDateTimePicker date={date} time={time} onDateChange={setDate} onTimeChange={setTime} disabled={busy} /><label className="text-sm font-semibold text-ink">Message<textarea name="message" maxLength="1000" placeholder="Anything the landlord should know?" className="mt-2 min-h-28 w-full rounded-xl border border-line bg-canvas p-4 text-base" /></label>{error && <p role="alert" className="text-sm text-accent">{error}</p>}<button disabled={busy || !date || !time} className="min-h-12 rounded-full bg-ink font-bold text-canvas disabled:opacity-50">{busy ? "Sending…" : "Send request"}</button></form>}
   </main></>;
 }
 export default function RequestViewingPage() { return <Suspense fallback={<p className="p-8">Loading…</p>}><RequestForm /></Suspense>; }

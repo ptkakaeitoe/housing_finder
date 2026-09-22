@@ -14,7 +14,7 @@ import { universities, listingUniversity } from "../lib/universities";
 export default function ExplorePage() {
   const router = useRouter();
   const { listings, loading, error } = useListings();
-  const { savedIds, toggle, signedIn } = useSavedListings();
+  const { savedIds, toggle, signedIn, userId } = useSavedListings();
   const [search, setSearch] = useState("");
   const [type, setType] = useState("");
   const [minRent, setMinRent] = useState("");
@@ -55,6 +55,6 @@ export default function ExplorePage() {
     <div className="mt-9 flex items-baseline justify-between"><span className="text-sm text-muted">{loading ? "Loading…" : `${visible.length} ${visible.length === 1 ? "place" : "places"}`}</span></div>
     {error && <p role="alert" className="mt-4 text-accent">{error}</p>}
     {!isSupabaseConfigured && <p className="mt-4 text-sm text-muted">Live listings are unavailable. Sample homes are shown below.</p>}
-    {!loading && visible.length ? <div className="mt-5 grid gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">{visible.map((listing) => <HousingCard key={listing.id} listing={listing} saved={savedIds.has(listing.id)} onToggleSave={handleToggleSave} />)}</div> : !loading && isSupabaseConfigured && <p className="mt-8 text-muted">No matches. Try a different area or budget.</p>}
+    {!loading && visible.length ? <div className="mt-5 grid gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">{visible.map((listing) => <HousingCard key={listing.id} listing={listing} isOwner={Boolean(userId && listing.landlord_id === userId)} saved={savedIds.has(listing.id)} onToggleSave={handleToggleSave} />)}</div> : !loading && isSupabaseConfigured && <p className="mt-8 text-muted">No matches. Try a different area or budget.</p>}
   </main></>;
 }

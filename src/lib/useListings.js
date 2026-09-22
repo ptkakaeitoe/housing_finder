@@ -2,10 +2,9 @@
 
 import { useEffect, useState } from "react";
 import { supabase, isSupabaseConfigured } from "./supabase";
-import { mockListings } from "./mockListings";
 
 export function useListings({ owner = false } = {}) {
-  const [listings, setListings] = useState(owner ? [] : mockListings);
+  const [listings, setListings] = useState([]);
   const [loading, setLoading] = useState(isSupabaseConfigured);
   const [error, setError] = useState("");
   async function refresh() {
@@ -18,7 +17,7 @@ export function useListings({ owner = false } = {}) {
       query = query.eq("landlord_id", user.id);
     } else query = query.eq("status", "published");
     const { data, error: queryError } = await query;
-    setListings(owner ? (data ?? []) : [...(data ?? []), ...mockListings]);
+    setListings(data ?? []);
     setError(queryError?.message ?? "");
     setLoading(false);
   }

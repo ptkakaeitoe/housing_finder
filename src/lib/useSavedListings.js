@@ -40,5 +40,5 @@ export function useSavedListings() {
     });
   }, [savedIds, userId]);
 
-  return { savedIds, toggle, ready, signedIn: Boolean(userId) };
+  return { savedIds, toggle, ready, userId, signedIn: Boolean(userId) };
 }
