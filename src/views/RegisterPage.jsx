@@ -5,8 +5,10 @@ import { authHeadingClassName, authInputClassName } from "./authStyles";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { requireSupabase } from "../lib/supabase";
+import { useLocale } from "../lib/i18n/LocaleContext";
 
 export default function RegisterPage() {
+  const { t } = useLocale();
   const [showPassword, setShowPassword] =
     useState(false);
 
@@ -23,7 +25,7 @@ export default function RegisterPage() {
     event.preventDefault();
     setError(""); setMessage("");
     const form = new FormData(event.currentTarget);
-    if (form.get("password") !== form.get("confirmPassword")) { setError("Passwords do not match."); return; }
+    if (form.get("password") !== form.get("confirmPassword")) { setError(t("auth.passwordsNoMatch")); return; }
     setBusy(true);
     try {
       const { data, error: authError } = await requireSupabase().auth.signUp({
@@ -32,7 +34,7 @@ export default function RegisterPage() {
       });
       if (authError) throw authError;
       if (data.session) router.push(form.get("role") === "landlord" ? "/landlord" : "/");
-      else setMessage("Account created. Check your email to confirm it, then sign in.");
+      else setMessage(t("auth.accountCreatedCheckEmail"));
     } catch (cause) { setError(cause.message); } finally { setBusy(false); }
   };
 
@@ -54,22 +56,22 @@ export default function RegisterPage() {
 
         <div className="auth-brand-content">
           <p className="auth-small-title">
-            FIND YOUR NEW HOME
+            {t("auth.tagline")}
           </p>
 
           <h1>
-            Student housing,
+            {t("auth.registerHeadingLine1")}
             <br />
-            made
+            {t("auth.registerHeadingLine2")}
             <br />
 
             <span>
-              simple.
+              {t("auth.registerHeadingAccent")}
             </span>
           </h1>
 
           <p className="auth-brand-description">
-            Save homes and contact landlords around campus.
+            {t("auth.registerDescription")}
           </p>
 
           <div className="auth-feature-list">
@@ -80,11 +82,11 @@ export default function RegisterPage() {
 
               <div>
                 <strong>
-                  Explore available homes
+                  {t("auth.feature1Title")}
                 </strong>
 
                 <p>
-                  Browse rooms near 6 universities across Thailand.
+                  {t("auth.feature1Body")}
                 </p>
               </div>
             </div>
@@ -96,11 +98,11 @@ export default function RegisterPage() {
 
               <div>
                 <strong>
-                  See the true monthly cost
+                  {t("auth.feature2Title")}
                 </strong>
 
                 <p>
-                  Compare monthly rent in one place.
+                  {t("auth.feature2Body")}
                 </p>
               </div>
             </div>
@@ -112,11 +114,11 @@ export default function RegisterPage() {
 
               <div>
                 <strong>
-                  Connect with landlords
+                  {t("auth.feature3Title")}
                 </strong>
 
                 <p>
-                  Request a visit when you find a fit.
+                  {t("auth.feature3Body")}
                 </p>
               </div>
             </div>

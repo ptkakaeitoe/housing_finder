@@ -3259,3 +3259,12 @@ input:checked + .auth-role-card::after { opacity: 1; transform: scale(1); }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; transition-duration: .01ms !important; }
 }
+
+/* =========================================================
+   LOCALE FONT STACKS
+   Thai/Myanmar/Chinese script coverage via Google Fonts;
+   English keeps the existing system-font stack.
+   ========================================================= */
+:root[data-locale="th"] body { font-family: "Noto Sans Thai", Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+:root[data-locale="my"] body { font-family: "Noto Sans Myanmar", Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+:root[data-locale="zh"] body { font-family: "Noto Sans SC", Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }

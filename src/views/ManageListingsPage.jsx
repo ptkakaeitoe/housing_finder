@@ -4,7 +4,9 @@ import AdminListingActions from "../components/AdminListingActions";
 import HousingCard from "../components/HousingCard";
 import { supabase } from "../lib/supabase";
 import { useAdmin } from "../lib/useAdmin";
+import { useLocale } from "../lib/i18n/LocaleContext";
 export default function ManageListingsPage() {
+  const { t } = useLocale();
   const admin = useAdmin();
   const [listings, setListings] = useState([]);
   const [reviews, setReviews] = useState({});
@@ -29,6 +31,6 @@ export default function ManageListingsPage() {
     finally { setReviewBusy(null); }
   }
   async function changeStatus(id, status) { const { error: updateError } = await supabase.from("listings").update({ status }).eq("id", id); if (updateError) setError(updateError.message); else refresh(); }
-  async function remove(id) { if (!window.confirm("Delete this listing permanently?")) return; const { error: deleteError } = await supabase.from("listings").delete().eq("id", id); if (deleteError) setError(deleteError.message); else refresh(); }
-  return <main className="mx-auto max-w-7xl px-5 py-10 sm:px-8 lg:px-12"><h1 className="text-4xl font-semibold tracking-tight text-ink">Listings</h1>{admin === false && <p className="mt-8 text-muted">Admin access required.</p>}{error && <p role="alert" className="mt-5 text-accent">{error}</p>}{admin && (listings.length ? <div className="mt-8 grid gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">{listings.map((listing) => <HousingCard key={listing.id} listing={listing} action={<AdminListingActions listing={listing} review={reviews[listing.id]} ready={reviewReady} busy={reviewBusy !== null} onReview={reviewListing} onVisibility={changeStatus} onDelete={remove} />} />)}</div> : <p className="mt-8 border-t border-line py-8 text-muted">No listings yet.</p>)}</main>;
+  async function remove(id) { if (!window.confirm(t("manageListings.confirmDelete"))) return; const { error: deleteError } = await supabase.from("listings").delete().eq("id", id); if (deleteError) setError(deleteError.message); else refresh(); }
+  return <main className="mx-auto max-w-7xl px-5 py-10 sm:px-8 lg:px-12"><h1 className="text-4xl font-semibold tracking-tight text-ink">{t("manageListings.heading")}</h1>{admin === false && <p className="mt-8 text-muted">{t("manageListings.adminRequired")}</p>}{error && <p role="alert" className="mt-5 text-accent">{error}</p>}{admin && (listings.length ? <div className="mt-8 grid gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">{listings.map((listing) => <HousingCard key={listing.id} listing={listing} action={<AdminListingActions listing={listing} review={reviews[listing.id]} ready={reviewReady} busy={reviewBusy !== null} onReview={reviewListing} onVisibility={changeStatus} onDelete={remove} />} />)}</div> : <p className="mt-8 border-t border-line py-8 text-muted">{t("manageListings.noneYet")}</p>)}</main>;
 }
