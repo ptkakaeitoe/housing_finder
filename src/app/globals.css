@@ -3240,10 +3240,17 @@ input:checked + .auth-role-card::after { opacity: 1; transform: scale(1); }
      column, so it's reset here in favor of plain dvh sizing. */
   .auth-layout { display: block; min-height: 100dvh; zoom: 1; }
   .auth-brand-panel { display: none; }
-  /* "safe" keeps the form centered when it fits, but falls back to top
-     alignment when it is taller than the screen — plain "center" would
-     overflow in both directions and clip the heading out of reach. */
-  .auth-form-panel { min-height: 100dvh; align-items: center; align-items: safe center; padding: 24px 22px max(64px, env(safe-area-inset-bottom)); }
+  /* svh (not dvh) is the height with browser chrome expanded, so it never
+     changes while scrolling — dvh resizes the panel as the address bar
+     collapses, which makes the page feel shaky. The white .auth-layout
+     above still uses dvh so no dark background peeks out underneath.
+     "safe" keeps the form centered when it fits but falls back to top
+     alignment when it is taller than the screen, so nothing gets clipped. */
+  .auth-form-panel { min-height: 100svh; align-items: center; align-items: safe center; padding: 20px 22px max(20px, env(safe-area-inset-bottom)); }
+  /* Registration has the most fields, so it gets the tightest spacing to
+     stay within one screen. Sign-in keeps its existing proportions. */
+  .register-form-panel .terms-row-refined { margin: 4px 0 12px; }
+  .register-form-panel .auth-input-group { margin-bottom: 12px; }
   .auth-form-container { max-width: 480px; }
   .form-eyebrow { margin-bottom: 10px; }
   .form-description { margin-bottom: 24px; font-size: 14px; }

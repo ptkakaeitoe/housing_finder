@@ -131,7 +131,7 @@ export default function RegisterPage() {
           ========================= */}
 
       <section
-        className="register-form-panel flex min-h-0 items-center justify-center px-[8%] py-6 min-[1001px]:items-start min-[1001px]:px-[9%] min-[1001px]:pt-[var(--auth-copy-top)]"
+        className="register-form-panel flex min-h-0 items-center justify-center px-[8%] py-6 max-[600px]:min-h-svh max-[600px]:py-4 max-[600px]:[align-items:safe_center] min-[1001px]:items-start min-[1001px]:px-[9%] min-[1001px]:pt-[var(--auth-copy-top)]"
       >
         <div
           className="w-full max-w-[560px]"
@@ -153,7 +153,7 @@ export default function RegisterPage() {
             {message && <p role="status" className="mb-4 text-sm text-muted">{message}</p>}
             {/* FULL NAME */}
 
-            <div className="mb-3">
+            <div className="mb-3 max-[600px]:mb-2">
               <label className="mb-1.5 block text-[13px] font-bold">
                 {t("auth.fullName")}
               </label>
@@ -173,7 +173,7 @@ export default function RegisterPage() {
 
             {/* EMAIL */}
 
-            <div className="mb-3">
+            <div className="mb-3 max-[600px]:mb-2">
               <label className="mb-1.5 block text-[13px] font-bold">
                 {t("auth.emailAddress")}
               </label>
@@ -193,19 +193,19 @@ export default function RegisterPage() {
 
             {/* ACCOUNT TYPE */}
 
-            <fieldset className="mb-3">
+            <fieldset className="mb-3 max-[600px]:mb-2">
               <legend className="mb-2 text-[13px] font-extrabold text-[#171b20]">{t("auth.accountType")}</legend>
               <div className="grid grid-cols-2 gap-3">
                 <label className="group cursor-pointer">
                   <input type="radio" name="role" value="student" required className="peer sr-only" />
-                  <span className="auth-role-card relative flex min-h-16 flex-col justify-center rounded-xl border border-[#d8dee9] bg-[#fafbfc] px-4 transition-colors group-hover:border-[#8996a3] peer-checked:border-[#1c252e] peer-checked:bg-[#f0f3f5] peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-[#1c252e]">
+                  <span className="auth-role-card relative flex min-h-16 max-[600px]:min-h-13 flex-col justify-center rounded-xl border border-[#d8dee9] bg-[#fafbfc] px-4 transition-colors group-hover:border-[#8996a3] peer-checked:border-[#1c252e] peer-checked:bg-[#f0f3f5] peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-[#1c252e]">
                     <strong className="text-sm text-[#171b20]">{t("common.role.student")}</strong>
                     <small className="mt-1 text-xs text-[#647078]">{t("auth.studentHint")}</small>
                   </span>
                 </label>
                 <label className="group cursor-pointer">
                   <input type="radio" name="role" value="landlord" className="peer sr-only" />
-                  <span className="auth-role-card relative flex min-h-16 flex-col justify-center rounded-xl border border-[#d8dee9] bg-[#fafbfc] px-4 transition-colors group-hover:border-[#8996a3] peer-checked:border-[#1c252e] peer-checked:bg-[#f0f3f5] peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-[#1c252e]">
+                  <span className="auth-role-card relative flex min-h-16 max-[600px]:min-h-13 flex-col justify-center rounded-xl border border-[#d8dee9] bg-[#fafbfc] px-4 transition-colors group-hover:border-[#8996a3] peer-checked:border-[#1c252e] peer-checked:bg-[#f0f3f5] peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-[#1c252e]">
                     <strong className="text-sm text-[#171b20]">{t("common.role.landlord")}</strong>
                     <small className="mt-1 text-xs text-[#647078]">{t("auth.landlordHint")}</small>
                   </span>
@@ -215,7 +215,7 @@ export default function RegisterPage() {
 
             {/* PASSWORD */}
 
-            <div className="mb-3">
+            <div className="mb-3 max-[600px]:mb-2">
               <label className="mb-1.5 block text-[13px] font-bold">
                 {t("auth.password")}
               </label>
@@ -260,7 +260,7 @@ export default function RegisterPage() {
 
             {/* CONFIRM PASSWORD */}
 
-            <div className="mb-3">
+            <div className="mb-3 max-[600px]:mb-2">
               <label className="mb-1.5 block text-[13px] font-bold">
                 {t("auth.confirmPassword")}
               </label>
@@ -323,13 +323,13 @@ export default function RegisterPage() {
             <button
               type="submit"
               disabled={busy}
-              className="flex min-h-[58px] w-full items-center justify-center rounded-xl bg-accent text-[15px] font-black text-white transition hover:brightness-95 disabled:cursor-wait disabled:opacity-60"
+              className="flex min-h-[58px] max-[600px]:min-h-[50px] w-full items-center justify-center rounded-xl bg-accent text-[15px] font-black text-white transition hover:brightness-95 disabled:cursor-wait disabled:opacity-60"
             >
               {t("auth.createAccountButton")}
             </button>
           </form>
 
-          <p className="mt-4 text-center text-sm text-[#647078] [&>a]:font-bold [&>a]:text-accent [&>a]:underline [&>a]:underline-offset-4">
+          <p className="mt-4 max-[600px]:mt-3 text-center text-sm text-[#647078] [&>a]:font-bold [&>a]:text-accent [&>a]:underline [&>a]:underline-offset-4">
             {t("auth.alreadyHaveAccount")} <Link href="/login">{t("common.signIn")}</Link>
           </p>
         </div>
