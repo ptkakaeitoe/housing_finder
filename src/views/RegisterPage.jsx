@@ -39,7 +39,7 @@ export default function RegisterPage() {
   };
 
   return (
-    <main className="grid h-[calc(100dvh/0.9)] grid-cols-1 overflow-y-auto bg-white [zoom:0.9] [--auth-copy-top:clamp(120px,14vh,180px)] min-[1001px]:grid-cols-[minmax(420px,0.92fr)_minmax(550px,1.08fr)] min-[1001px]:grid-rows-[minmax(min-content,1fr)]">
+    <main className="grid min-h-dvh grid-cols-1 overflow-y-auto bg-white [--auth-copy-top:clamp(120px,14vh,180px)] min-[1001px]:h-[calc(100dvh/0.9)] min-[1001px]:[zoom:0.9] min-[1001px]:grid-cols-[minmax(420px,0.92fr)_minmax(550px,1.08fr)] min-[1001px]:grid-rows-[minmax(min-content,1fr)]">
       {/* =========================
           LEFT SIDE
           ========================= */}

@@ -3230,7 +3230,11 @@ input:checked + .auth-role-card::after { opacity: 1; transform: scale(1); }
   .search-panel { padding: 14px; }
   .filter-row > * { flex: 1 1 100%; }
   .map-placeholder { min-height: 320px; }
-  .auth-layout { display: block; }
+  /* The desktop split layout uses zoom:0.9 + a compensated min-height
+     (see the comment on the base .auth-layout rule) to make the two-column
+     grid fit; that math doesn't apply once we drop to a single stacked
+     column, so it's reset here in favor of plain dvh sizing. */
+  .auth-layout { display: block; min-height: 100dvh; zoom: 1; }
   .auth-brand-panel { display: none; }
   .auth-form-panel { min-height: 100dvh; align-items: center; padding: 24px 22px max(64px, env(safe-area-inset-bottom)); }
   .auth-form-container { max-width: 480px; }
