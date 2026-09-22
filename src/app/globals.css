@@ -58,7 +58,10 @@ html {
 }
 
 body {
+  /* dvh tracks the visible viewport as mobile browser chrome shows/hides;
+     the vh line above it is the fallback for browsers without dvh support. */
   min-height: 100vh;
+  min-height: 100dvh;
 
   background: var(--navy);
 
@@ -931,6 +934,7 @@ img {
 
 .simple-auth-page {
   min-height: 100vh;
+  min-height: 100dvh;
 
   display: flex;
 
