@@ -177,7 +177,8 @@
     "rememberMe": "记住账号",
     "signInButton": "登入",
     "newToHousingFinder": "首次使用 HousingFinder？",
-    "createAccount": "创建账户"
+    "createAccount": "创建账户",
+    "exploreAsGuest": "以访客身份探索"
   },
   "theme": {
     "switchToLight": "切换到浅色模式",
@@ -600,5 +601,9 @@
     "saveThisHome": "♡ 保存此房源",
     "studentOnly": "学生账户可以申请观看权限。",
     "seeOnMap": "查看地图↗"
+  },
+  "updatePassword": {
+    "heading": "新密码",
+    "save": "保存密码"
   }
 }

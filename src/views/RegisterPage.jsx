@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { authHeadingClassName, authInputClassName } from "./authStyles";
+import { authGuestLinkClassName, authGuestRowClassName, authHeadingClassName, authInputClassName } from "./authStyles";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { requireSupabase } from "../lib/supabase";
@@ -331,6 +331,13 @@ export default function RegisterPage() {
 
           <p className="mt-4 max-[600px]:mt-3 text-center text-sm text-[#647078] [&>a]:font-bold [&>a]:text-accent [&>a]:underline [&>a]:underline-offset-4">
             {t("auth.alreadyHaveAccount")} <Link href="/login">{t("common.signIn")}</Link>
+          </p>
+
+          <p className={authGuestRowClassName}>
+            <Link href="/" className={authGuestLinkClassName}>
+              {t("auth.exploreAsGuest")}
+              <span aria-hidden="true">→</span>
+            </Link>
           </p>
         </div>
       </section>

@@ -152,6 +152,7 @@
     "agreeTerms": "I agree to the Terms of Service and Privacy Policy.",
     "createAccountButton": "Create Account",
     "alreadyHaveAccount": "Already have an account?",
+    "exploreAsGuest": "Explore as guest",
     "passwordsNoMatch": "Passwords do not match.",
     "accountCreatedCheckEmail": "Account created. Check your email to confirm it, then sign in.",
     "loginTagline": "YOUR HOUSING COMMUNITY",
@@ -224,6 +225,10 @@
   "notFound": {
     "heading": "Page not found.",
     "exploreHomes": "Explore homes →"
+  },
+  "updatePassword": {
+    "heading": "New password",
+    "save": "Save password"
   },
   "forgotPassword": {
     "backLink": "← HousingFinder",

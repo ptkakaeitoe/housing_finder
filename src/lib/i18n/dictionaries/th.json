@@ -177,7 +177,8 @@
     "rememberMe": "จำฉันไว้ด้วยนะ",
     "signInButton": "เข้าสู่ระบบ",
     "newToHousingFinder": "เพิ่งเคยใช้ HousingFinder ใช่ไหม?",
-    "createAccount": "สร้างบัญชี"
+    "createAccount": "สร้างบัญชี",
+    "exploreAsGuest": "สำรวจในฐานะแขก"
   },
   "theme": {
     "switchToLight": "เปลี่ยนเป็นโหมดสว่าง",
@@ -600,5 +601,9 @@
     "saveThisHome": "♡ บันทึกบ้านหลังนี้",
     "studentOnly": "นักเรียนสามารถขอรับชมภาพยนตร์ผ่านบัญชีของตนเองได้",
     "seeOnMap": "ดูบนแผนที่ ↗"
+  },
+  "updatePassword": {
+    "heading": "รหัสผ่านใหม่",
+    "save": "บันทึกรหัสผ่าน"
   }
 }
