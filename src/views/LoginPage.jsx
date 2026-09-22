@@ -137,7 +137,9 @@ export default function LoginPage() {
           <button
             type="button"
             className="google-button"
-            onClick={async () => { try { const { error: authError } = await requireSupabase().auth.signInWithOAuth({ provider: "google", options: { redirectTo: `${location.origin}/profile` } }); if (authError) throw authError; } catch (cause) { setError(cause.message); } }}
+            disabled
+            aria-disabled="true"
+            style={{ opacity: 0.5, cursor: "not-allowed" }}
           >
             <GoogleIcon />
 
