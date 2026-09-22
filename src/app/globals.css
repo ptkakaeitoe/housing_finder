@@ -3231,13 +3231,8 @@ input:checked + .auth-role-card::after { opacity: 1; transform: scale(1); }
   .filter-row > * { flex: 1 1 100%; }
   .map-placeholder { min-height: 320px; }
   .auth-layout { display: block; }
-  .auth-brand-panel { min-height: 0; padding: 24px 22px 28px; }
-  .auth-brand-top a { font-size: 1.85rem; }
-  .auth-brand-content { max-width: none; margin: 30px 0 0; }
-  .auth-small-title { margin-bottom: 10px; font-size: 12px; letter-spacing: .1em; }
-  .auth-brand-content h1 { max-width: 420px; margin-bottom: 0; font-size: clamp(1.85rem, 8vw, 2.55rem); line-height: 1.12; letter-spacing: -.045em; }
-  .auth-brand-description, .auth-feature-list { display: none; }
-  .auth-form-panel { min-height: 0; padding: 30px 22px max(64px, env(safe-area-inset-bottom)); }
+  .auth-brand-panel { display: none; }
+  .auth-form-panel { min-height: 100dvh; align-items: center; padding: 24px 22px max(64px, env(safe-area-inset-bottom)); }
   .auth-form-container { max-width: 480px; }
   .form-eyebrow { margin-bottom: 10px; }
   .form-description { margin-bottom: 24px; font-size: 14px; }
