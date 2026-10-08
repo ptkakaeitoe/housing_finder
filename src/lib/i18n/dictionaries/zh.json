@@ -237,6 +237,7 @@
     "sendResetLink": "发送重置链接"
   },
   "adminDashboard": {
+    "countError": "无法加载此数量，请刷新重试。",
     "heading": "管理员概览",
     "landlordVerifications": "房东核实",
     "viewingRequests": "查看请求",

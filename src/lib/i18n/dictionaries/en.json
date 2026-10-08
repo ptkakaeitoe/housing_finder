@@ -238,6 +238,7 @@
     "sendResetLink": "Send reset link"
   },
   "adminDashboard": {
+    "countError": "Could not load this count. Refresh to try again.",
     "heading": "Admin overview",
     "landlordVerifications": "Landlord verifications",
     "viewingRequests": "Viewing requests",

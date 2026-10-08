@@ -237,6 +237,7 @@
     "sendResetLink": "ส่งลิงก์รีเซ็ต"
   },
   "adminDashboard": {
+    "countError": "ไม่สามารถโหลดจำนวนนี้ได้ โปรดรีเฟรชเพื่อลองอีกครั้ง",
     "heading": "ภาพรวมผู้ดูแลระบบ",
     "landlordVerifications": "การตรวจสอบข้อมูลเจ้าของบ้าน",
     "viewingRequests": "คำขอรับชม",
