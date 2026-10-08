@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import CostCalculator from "./CostCalculator";
 import { listingImageUrl } from "../lib/supabase";
 import { listingUniversity } from "../lib/universities";
 import { getLocalizedTitle } from "../lib/listingFields";
@@ -52,6 +53,7 @@ export default function HousingCard({ listing, saved = false, onToggleSave, acti
         >
           <span className={saved ? "text-accent" : "text-[#171b20]"}><HeartIcon filled={saved} /></span>
         </button>}
+    <div className="px-3.5 pb-3.5"><CostCalculator listing={listing} /></div>
     {action && <div className="mx-4 border-t border-line py-3">{action}</div>}
   </article>;
 }

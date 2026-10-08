@@ -1,4 +1,22 @@
 {
+  "calculator": {
+    "button": "True Money Calculator",
+    "close": "Close calculator",
+    "description": "Sample usage, not an average. Add estimates for unknown bills.",
+    "presets": "Sample usage:",
+    "preset0": "Low",
+    "preset1": "Medium",
+    "preset2": "High",
+    "usage": "Monthly usage",
+    "rate": "Rate per unit",
+    "monthlyAmount": "Monthly estimate",
+    "extra": "Other costs",
+    "rent": "Monthly rent",
+    "total": "Monthly estimate",
+    "deposit": "Security deposit:",
+    "depositNote": "Not included in monthly total.",
+    "reset": "Reset estimates"
+},
   "language": {
     "label": "Language",
     "en": "English",

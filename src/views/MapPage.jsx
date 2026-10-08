@@ -2,6 +2,7 @@
 import { useEffect, useMemo, useRef, useState, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import Link from "next/link";
+import CostCalculator from "../components/CostCalculator";
 import { publicContainerClassName } from "../components/layoutStyles";
 import { useListings } from "../lib/useListings";
 import { useSavedListings } from "../lib/useSavedListings";
@@ -263,6 +264,7 @@ function MapContent() {
               </div>
               <div className="mt-3 flex flex-wrap items-center gap-2">
                 <button type="button" disabled={!mapLoaded} aria-pressed={active} onClick={() => setSelectedId(item.id)} className={`min-h-9 rounded-full border px-3 disabled:opacity-40 ${active ? "border-ink bg-ink text-canvas" : "border-line text-ink hover:border-accent"}`}><span className="text-xs font-semibold">{active ? t("map.selectedOnMap") : t("map.showOnMap")}</span></button>
+                <CostCalculator listing={item} />
                 <Link href={`/rooms/${item.id}`} className="inline-flex min-h-9 items-center px-1 text-xs font-semibold text-accent">{t("map.viewDetails")}</Link>
                 <button type="button" aria-label={savedIds.has(item.id) ? t("map.unsaveHome") : t("listingCard.save")} aria-pressed={savedIds.has(item.id)} onClick={() => handleToggleSave(item.id)} className="ml-auto flex size-9 items-center justify-center rounded-full border border-line text-accent hover:bg-surface-muted">{savedIds.has(item.id) ? "♥" : "♡"}</button>
               </div>

@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
+import CostCalculator from "../components/CostCalculator";
 import { publicContainerClassName } from "../components/layoutStyles";
 import { supabase, listingImageUrl } from "../lib/supabase";
 import { listingPhotos } from "../lib/listingPhotos";
@@ -124,6 +125,7 @@ export default function RoomDetailsPage() {
               {utilities.map(utility => <div key={utility.key} className="rounded-xl border border-line p-4"><dt className="flex items-center gap-2 text-sm text-muted"><span className="text-accent"><ListingIcon name={utility.key} /></span>{t(`common.utility.${utility.key}`)}</dt><dd className="mt-3 text-sm font-semibold">{utilitySummary(listing, utility, t)}</dd></div>)}
             </dl>
           </section>
+          <div className="mt-3"><CostCalculator listing={listing} /></div>
           <section className="mt-5 rounded-2xl border border-line bg-surface p-5 sm:p-6" aria-labelledby="campus-transport">
             <div className="flex items-center gap-3"><span className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-surface-muted text-accent"><ListingIcon name="van" className="size-6" /></span><div><h2 id="campus-transport" className="text-xl font-semibold tracking-tight">{t("roomDetails.vanServiceHeading")}</h2><p className="mt-1 text-sm text-muted">{{ included: t("roomDetails.vanIncluded"), paid: t("roomDetails.vanPaid"), unavailable: t("roomDetails.vanUnavailable"), unspecified: t("common.notSpecified") }[listing.van_service || 'unspecified']}</p></div></div>
             {['included', 'paid'].includes(listing.van_service) && <p className="mt-4 whitespace-pre-line break-words border-t border-line pt-4 text-sm leading-7 text-muted">{listing.van_details || t("roomDetails.vanDefaultDetails")}</p>}

@@ -4,6 +4,8 @@ This project was developed for a Software Engineering class.
 
 HousingFinder helps students find housing, compare properties, and arrange viewings with landlords.
 
+Each listing includes a **True Money Calculator** to estimate monthly rent, utilities, and other costs. Adjust sample usage or enter your own estimates; the deposit is shown separately.
+
 ## How it works
 
 - **Students** can explore listings, filter by university and budget, view homes on a map, save favorites, and request a viewing for a future date and time. They can track whether the landlord accepts or declines their request.
