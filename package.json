@@ -6,6 +6,7 @@
     "dev": "next dev",
     "build": "next build --webpack",
     "start": "next start",
+    "reset:demo:clear": "node --env-file=.env.local scripts/clear-demo-project.mjs",
     "setup:demo": "node --env-file=.env.local scripts/setup-demo.mjs",
     "verify:demo": "node --env-file=.env.local scripts/verify-demo.mjs",
     "translate:dictionaries": "node --env-file=.env.local scripts/translate-dictionary.mjs"
