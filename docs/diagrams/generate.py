@@ -83,85 +83,104 @@ add('01-structure-chart','System functional structure','Structure chart','Five m
  'This is a logical function hierarchy. Shared functions can be called by more than one workspace.'
 ],['src/components/Navbar.jsx','src/views/SearchPage.jsx','src/views/LandlordDashboardPage.jsx','src/views/AdminDashboardPage.jsx','README.md'])
 
-# 2. DFD Level 1. Repeated external entities and stores avoid crossing data flows.
-s=SVG(1680,2515,'HousingFinder — Level 1 data flow diagram','Six Level 1 processes exchange labeled data with human actors, external map/translation services, and six logical data stores. Repeated store identifiers refer to the same store.')
-s.text(30,36,'HousingFinder · Level 1 DFD',28,600)
-s.text(30,72,'Boundary: application + Supabase Auth, PostgreSQL and Storage. Google services are external.',19,fill=MUTED)
-s.text(30,102,'Entity/store symbols repeat by identifier to keep flows readable. Arrows name data, not control steps.',18,fill=MUTED)
-
-def pair(x1,x2,y,outbound,inbound):
-    s.path([(x1,y-12),(x2,y-12)],True)
-    s.label((x1+x2)/2,y-24,outbound,16)
-    s.path([(x2,y+18),(x1,y+18)],True)
-    s.label((x1+x2)/2,y+45,inbound,16)
-def store(x,y,identifier,title,subtitle):
-    s.rect(x,y,330,75,r=0)
-    s.path([(x+47,y),(x+47,y+75)],color=LINE)
-    s.text(x+23,y+43,identifier,17,600,anchor='middle')
-    s.text(x+62,y+30,title,18,600)
-    s.text(x+62,y+56,subtitle,15,fill=MUTED)
-def entity(x,y,title,sub):
-    s.rect(x,y,292,85,r=0)
-    s.text(x+146,y+34,title,19,600,anchor='middle')
-    s.text(x+146,y+62,sub,16,fill=MUTED,anchor='middle')
-def lane(top,height,num,title,subtitle,actors,targets):
-    s.path([(30,top-16),(1650,top-16)],color='#e5e7ea',width=1)
-    s.rect(644,top+8,330,height-32,SOFT,LINE,r=22)
-    s.text(809,top+height/2-26,f'{num}.0',20,600,ACCENT,anchor='middle')
-    s.text(809,top+height/2+7,title,22,600,anchor='middle')
-    s.text(809,top+height/2+42,subtitle,16,fill=MUTED,anchor='middle',lineheight=23)
-    for offset,name,role,outgoing,incoming in actors:
-        cy=top+offset;entity(28,cy-42,name,role)
-        pair(320,644,cy,outgoing,incoming)
-    for offset,typ,ident,name,sub,outgoing,incoming in targets:
-        cy=top+offset
-        if typ=='store': store(1320,cy-37,ident,name,sub)
-        else: entity(1358,cy-42,name,sub)
-        end=1320 if typ=='store' else 1358
-        if outgoing and incoming: pair(974,end,cy,outgoing,incoming)
-        elif outgoing:
-            s.path([(974,cy),(end,cy)],True);s.label((974+end)/2,cy-12,outgoing,16)
-        else:
-            s.path([(end,cy),(974,cy)],True);s.label((974+end)/2,cy-12,incoming,16)
-
-lane(148,235,1,'Account & access',['Authenticate, recover,','read/update own profile'],[
- (105,'E1–E3 · All users','Visitor, student, landlord, admin','Credentials / profile edits','Session / profile / auth result')],[
- (105,'store','D1','Accounts & profiles','Auth records + profiles','Account/profile changes','Identity, role, account status')])
-lane(413,340,2,'Discover & estimate',['Filter homes, show details,','map and monthly estimates'],[
- (150,'E1–E3 · All users','Public browsing allowed','Search criteria / usage estimates','Homes / details / cost estimate')],[
- (55,'store','D2','Housing reference','listings + universities',None,'Published homes / campuses'),
- (155,'store','D6','File storage','Public listing photographs',None,'Listing image content'),
- (255,'external','E4','Google Maps','Maps / geocoding service','Coordinates / map queries','Map / geocoding results')])
-lane(783,350,3,'Saves & viewings',['Maintain saved homes,','request/answer a viewing'],[
- (85,'E1 · Student','Typical student workflow','Save choice / preferred time','Saved homes / viewing status'),
- (245,'E2 · Landlord','Own listing requests','Accept / decline decision','Pending requests / result')],[
- (55,'store','D2','Housing reference','Listing + owner information',None,'Listing visibility / ownership'),
- (160,'store','D3','Saved homes','saved_listings','Favorite insert / removal','Saved-home records'),
- (265,'store','D4','Viewing requests','viewing_requests','New request / status update','Viewing request records')])
-lane(1163,450,4,'Manage listings',['Create/edit/publish, photos,','costs and best-effort translations'],[
- (205,'E2 · Landlord','Own listings','Property edits / image uploads','Saved listing / upload result')],[
- (55,'store','D2','Housing reference','listings + universities','Listing + translated text','Existing listing / universities'),
- (165,'store','D6','File storage','listing-images bucket','Uploaded photograph files','Paths / image content'),
- (275,'external','E5','Cloud Translation','Optional translation service','English title / description','Thai / Burmese / Chinese text'),
- (385,'store','D5','Trust records','listing_reviews','Edited-content review removal',None)])
-lane(1643,350,5,'Verification & reviews',['Receive identity submissions;','review identity and properties'],[
- (85,'E2 · Landlord','Identity verification','Identity form / private document','Own verification status'),
- (245,'E3 · Admin','Active admin account','Review decision / document query','Queues / document link / result')],[
- (55,'store','D5','Trust records','verification_requests + reviews','Submission / review outcome','Requests / review records'),
- (160,'store','D6','File storage','verification-documents bucket','Private document upload','Own/admin authorized file link'),
- (265,'store','D2','Housing reference','Listing information',None,'Property details for review')])
-lane(2023,450,6,'Moderate & monitor',['Server-checked account actions,','listing visibility and activity'],[
- (200,'E3 · Admin','Active admin account','Moderation action / report query','Action result / viewing activity')],[
- (55,'store','D1','Accounts & profiles','Auth + account status','Suspend / reactivate / delete','Account / role / status records'),
- (165,'store','D2','Housing reference','Listing moderation','Visibility change / deletion','Listing records'),
- (275,'store','D4','Viewing requests','Viewing activity',None,'Viewing records for reports'),
- (385,'store','D6','File storage','Account deletion cleanup','Owned-file removal',None)])
-add('02-dfd-level-1','System data flows','DFD · Level 1','Six processes show where requests, records, files, and service responses move.',s,[
- 'D1 = Supabase Auth records and public.profiles; D2 = listings and universities; D3 = saved_listings; D4 = viewing_requests; D5 = verification_requests and listing_reviews; D6 = the two Storage buckets.',
- 'Repeated E/D identifiers denote the same entity or logical store. D1–D6 are logical groupings, not six new database tables. Authenticated requests carry session information; row-level policies and server checks apply.',
- 'P2 calculates monthly estimates locally. Estimates and device geolocation are not saved in a dedicated store. Maps may use optional browser location permission.',
- 'Listing translation is best effort at write time. English remains the source of truth. Listing review removal on content edits is performed by a database trigger.',
- 'Identity documents are private. Admin review opens a short-lived signed URL. Listing images are public. P6 deletes owned files through Storage before deleting an Auth account.'
+# 2. Level 1 DFD in Gane–Sarson notation, matching the supplied reference.
+s=SVG(2000,2200,'HousingFinder — Level 1 data flow diagram','Five numbered processes connect external users and Google services with shared accounts, housing, saved-home, viewing, trust and file data stores. Yellow rectangles denote external entities; numbered rounded boxes denote processes; D-prefixed boxes denote data stores.')
+s.text(40,38,'HousingFinder · Level 1 Data Flow Diagram',27,600)
+YELLOW, BORDER = '#f6e89e', '#555b62'
+def flow(points,label,x,y):
+    s.path(points,True,color=BORDER,width=1.8)
+    if label: s.label(x,y,label,18)
+def process(x,y,number,title):
+    s.rect(x,y,320,130,YELLOW,BORDER,r=18)
+    s.rect(x,y+30,320,78,'white','none',r=0)
+    s.path([(x,y+30),(x+320,y+30)],color=BORDER)
+    s.path([(x,y+108),(x+320,y+108)],color=BORDER)
+    s.path([(x+54,y),(x+54,y+30)],color=BORDER)
+    s.text(x+27,y+22,number,18,600,anchor='middle')
+    lines=title.split('\n');s.text(x+160,y+73-(len(lines)-1)*13,lines,23,500,anchor='middle',lineheight=27)
+def external(x,y,w,identifier,title):
+    s.rect(x,y,w,80,YELLOW,BORDER,r=0)
+    s.text(x+w/2,y+27,identifier,15,fill=MUTED,anchor='middle')
+    s.text(x+w/2,y+56,title,21,500,anchor='middle')
+def data_store(x,y,w,identifier,title):
+    s.rect(x,y,w,80,YELLOW,BORDER,r=0)
+    s.rect(x,y,58,80,'#e4e4e4',BORDER,r=0)
+    s.text(x+29,y+47,identifier,19,600,anchor='middle')
+    s.text(x+58+(w-58)/2,y+47,title,20,500,anchor='middle')
+# Directed, individually named data flows; line crossings are not junctions.
+flow([(920,120),(920,180)],'Credentials / edits',806,154)
+flow([(1080,180),(1080,120)],'Session / profile',1200,154)
+flow([(1160,225),(1510,225)],'Account changes',1335,210)
+flow([(1510,275),(1160,275)],'Identity / role / status',1335,302)
+# Discovery and shared housing reference data.
+flow([(320,500),(350,500),(350,690),(380,690)],'Search / filters',275,609)
+flow([(380,750),(20,750),(20,520),(40,520)],'Homes / cost estimates',190,734)
+flow([(845,560),(760,560),(760,690),(700,690)],'Published homes / campuses',760,623)
+flow([(845,1050),(780,1050),(780,780),(700,780)],'Public photos',780,902)
+flow([(600,790),(600,930),(120,930),(120,860)],'Coordinates / map query',355,913)
+flow([(320,820),(540,820),(540,790)],'Map / geocoding data',441,849)
+flow([(430,790),(430,960),(390,960),(390,1000)],'Saved listing IDs',498,983)
+flow([(440,1040),(720,1040),(720,750),(700,750)],'Saved homes',570,1026)
+# Landlord listing management, translation and photo storage.
+flow([(1680,550),(1650,550),(1650,690),(1620,690)],'Property details / photos',1625,632)
+flow([(1620,750),(1830,750),(1830,590)],'Saved listing',1780,735)
+flow([(1400,660),(1400,560),(1155,560)],'Listing changes',1275,544)
+flow([(1155,588),(1360,588),(1360,660)],'Listing records',1253,616)
+flow([(1330,790),(1330,960),(1930,960),(1930,910)],'English title / description',1635,947)
+flow([(1690,870),(1470,870),(1470,790)],'Translated text',1560,853)
+flow([(1400,790),(1400,1050),(1155,1050)],'Photograph files',1278,1033)
+flow([(1100,1010),(1100,975),(1250,975),(1250,725),(1300,725)],'Image paths',1245,902)
+# Viewing requests and landlord responses.
+flow([(320,1260),(350,1260),(350,1350),(380,1350)],'Viewing details',220,1310)
+flow([(380,1420),(20,1420),(20,1275),(40,1275)],'Request status',197,1405)
+flow([(845,590),(800,590),(800,1240),(750,1240),(750,1350),(700,1350)],'Listing / owner data',865,1205)
+flow([(825,1640),(750,1640),(750,1400),(700,1400)],'Accept / decline decision',815,1496)
+flow([(580,1450),(580,1560),(940,1560),(940,1600)],'Pending requests',760,1543)
+flow([(450,1450),(450,1620),(370,1620),(370,1670)],'New / updated request',527,1605)
+flow([(190,1670),(190,1500),(380,1500),(380,1450)],'Viewing records',295,1485)
+# Verification and administration use the same persistent data stores.
+flow([(1850,1280),(1850,1360),(1620,1360)],'Review / account decisions',1760,1335)
+flow([(1620,1410),(1880,1410),(1880,1280)],'Queues / activity',1770,1395)
+flow([(1155,1640),(1190,1640),(1190,1400),(1300,1400)],'Identity submission',1110,1517)
+flow([(1300,1440),(1220,1440),(1220,1660),(1155,1660)],'Verification status',1320,1595)
+flow([(1420,1320),(1420,1150),(1155,1150),(1155,1070)],'Private document upload',1295,1135)
+flow([(1040,1090),(1040,1270),(1300,1270),(1300,1320)],'Authorized document data',1168,1253)
+flow([(1520,1450),(1520,1690)],'Review outcome',1417,1615)
+flow([(1710,1690),(1710,1570),(1580,1570),(1580,1450)],'Submissions / reviews',1730,1552)
+flow([(1620,1395),(1980,1395),(1980,245),(1920,245)],'Account actions',1795,1372)
+flow([(1920,280),(1968,280),(1968,1430),(1620,1430)],'Account records',1790,1456)
+flow([(1380,1450),(1380,1860),(1080,1860),(1080,1910)],'Listing moderation',1230,1844)
+flow([(950,1910),(950,1825),(1330,1825),(1330,1450)],'Listing records',1160,1812)
+flow([(440,1710),(480,1710),(480,2050),(1360,2050),(1360,1450)],'Viewing activity',900,2034)
+# All node symbols are drawn above the flows for clear text and boundaries.
+external(840,40,320,'E1–E3','All users')
+external(40,460,280,'E1','Visitor / student')
+external(1680,510,280,'E2','Landlord')
+external(40,780,280,'E4','Google Maps')
+external(1690,830,270,'E5','Cloud Translation')
+external(40,1220,280,'E1','Student')
+external(825,1600,330,'E2','Landlord')
+external(1690,1200,270,'E3','Admin')
+process(840,180,'1.0','Manage accounts\nand access')
+process(380,660,'2.0','Discover and\nsave homes')
+process(1300,660,'3.0','Manage property\nlistings')
+process(380,1320,'4.0','Coordinate\nviewing requests')
+process(1300,1320,'5.0','Review and\nmoderate')
+data_store(1510,205,410,'D1','Accounts / profiles')
+data_store(845,520,310,'D2','Listings / campuses')
+data_store(80,1000,360,'D3','Saved homes')
+data_store(845,1010,310,'D6','File storage')
+data_store(80,1670,360,'D4','Viewing requests')
+data_store(1450,1690,450,'D5','Verification / listing reviews')
+data_store(800,1910,340,'D2','Listings / campuses')
+s.text(40,2130,'Rectangles: external entities   ·   Numbered boxes: processes   ·   D1–D6: logical data stores',19,fill=MUTED)
+s.text(40,2170,'Repeated identifiers refer to the same entity/store. Crossing lines are not connections unless an endpoint is shown.',18,fill=MUTED)
+add('02-dfd-level-1','System data flows','DFD · Level 1','Five connected processes show the movement of requests, records, files and service data.',s,[
+ 'Gane–Sarson notation: external entities are rectangles, processes have a numbered header and a transformation name, and data stores have an identifier compartment. Every arrow is a named data flow.',
+ 'D1 = Supabase Auth and profiles; D2 = listings and universities; D3 = saved_listings; D4 = viewing_requests; D5 = verification_requests and listing_reviews; D6 = Storage. Repeated identifiers refer to the same logical entity or store.',
+ 'The system boundary includes the app and Supabase. Google Maps and optional Cloud Translation are external services. Cost estimates are calculated locally, not persisted as a separate data store.',
+ 'Review and moderate combines identity review, property review, account moderation and viewing reports. Listing identity verification and property approval remain separate results.',
+ 'Authentication, row-level policies and server checks protect writes. Private documents use authorized access; public listing images do not. Storage cleanup is handled through its API.'
 ],['supabase/migrations/','src/views/SearchPage.jsx','src/views/RequestViewingPage.jsx','src/views/LandlordAppointmentsPage.jsx','src/components/ListingForm.jsx','src/app/api/admin/users/route.js','src/app/api/translate/route.js'],True)
 
 # 3. Domain class diagram — no fictional JavaScript inheritance.
@@ -371,10 +390,10 @@ mobile_options=''.join(f'<option value="{i}">{i+1:02d} · {escape(d["title"])}</
 html='''<!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>HousingFinder · System diagrams</title>
 <style>
-:root{color-scheme:light;--ink:#20242a;--muted:#626b75;--line:#dedfe2;--accent:#a72f49}*{box-sizing:border-box}body{margin:0;background:#fff;color:var(--ink);font:15px/1.6 ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}button,a{touch-action:manipulation}button{font:inherit;cursor:pointer}button:disabled{cursor:not-allowed;opacity:.4}a{color:inherit}button:focus-visible,a:focus-visible,summary:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--accent);outline-offset:4px}button{min-height:34px;font-size:12px;border:1px solid var(--line);border-radius:6px;background:#fff;color:var(--ink);padding:5px 10px}button:hover{background:#f5f6f7}.primary{background:var(--ink);border-color:var(--ink);color:#fff}.primary:hover{background:#343941}button[aria-pressed=true]{border-color:var(--ink);background:#f5f6f7}.skip{position:absolute;left:20px;top:-80px;background:#fff;padding:12px;z-index:10}.skip:focus{top:12px}.shell{display:grid;grid-template-columns:264px minmax(0,1fr);min-height:100vh}.sidebar{position:sticky;top:0;height:100vh;padding:32px 22px;display:flex;flex-direction:column;border-right:1px solid var(--line);overflow-y:auto}.brand{font-size:20px;font-weight:750;letter-spacing:-.04em;text-decoration:none}.subtitle{font-size:13px;color:var(--muted);margin:4px 0 30px}.sidebar nav{display:grid;gap:5px}.sidebar nav a{display:flex;align-items:center;gap:12px;min-height:48px;padding:8px 9px;border-radius:5px;text-decoration:none;font-size:14px;line-height:1.35}.sidebar nav a span{font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}.sidebar nav a:hover{background:#f5f6f7}.sidebar nav a[aria-current=page]{font-weight:650;background:#f5f6f7;box-shadow:inset 2px 0 var(--accent)}.sidebar-foot{margin-top:auto;padding-top:36px;font-size:12px;color:var(--muted)}main{min-width:0;padding:22px clamp(20px,2.8vw,44px) 32px}.topline{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px}.topline h1{font-size:14px;font-weight:500;color:var(--muted);margin:0}.topline .exports{display:flex;flex-wrap:wrap;gap:8px}.eyebrow{text-transform:uppercase;letter-spacing:.1em;font-size:10px;font-weight:600;color:var(--accent);margin:0 0 6px}.page-heading h2{font-size:clamp(19px,1.6vw,23px);font-weight:650;letter-spacing:-.045em;line-height:1.2;margin:0}.page-heading>p:last-child{max-width:760px;color:var(--muted);margin:12px 0 0;font-size:15px}.toolbar{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin:12px 0 10px}.zoom,.page-switch{display:flex;align-items:center;gap:8px}.zoom button{min-width:34px}.zoom output{font-size:12px;min-width:42px;text-align:center;font-variant-numeric:tabular-nums}.page-switch span{font-size:12px;color:var(--muted);margin:0 5px}.diagram-frame{width:100%;height:clamp(380px,calc(100vh - 190px),1000px);border:1px solid var(--line);border-radius:7px;overflow:auto;overscroll-behavior:contain;scrollbar-gutter:stable;background:#fff}.diagram-canvas{display:flex;justify-content:center;align-items:flex-start;min-height:100%;padding:20px}.diagram-canvas svg{display:block;height:auto;flex-shrink:0;max-width:none}.diagram-notes{max-width:900px;margin-top:28px}.diagram-notes h3{font-size:15px;font-weight:650;margin:0 0 10px}.diagram-notes ul{margin:0;padding-left:20px;color:var(--muted);font-size:14px}.diagram-notes li+li{margin-top:8px}details{margin-top:22px;font-size:13px}summary{cursor:pointer;min-height:44px;align-content:center;color:var(--ink)}code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;overflow-wrap:anywhere}.status{font-size:12px;color:var(--muted);min-height:20px;margin:8px 0 0}.viewer:fullscreen{padding:24px;background:#fff;overflow:auto}.viewer:fullscreen .diagram-frame{height:calc(100vh - 310px)}.viewer:fullscreen .diagram-notes{display:none}.mobile-label{display:none}[hidden]{display:none!important}
-.mobile-picker,.mobile-navigation{display:none}
-@media(max-width:900px){body{padding-bottom:calc(78px + env(safe-area-inset-bottom))}.mobile-picker{display:block;margin-top:14px}.mobile-picker label{display:block;margin-bottom:5px;font-size:12px;font-weight:600;color:var(--muted)}.mobile-picker select{width:100%;min-height:48px;padding:10px 36px 10px 12px;border:1px solid var(--line);border-radius:6px;background:white;color:var(--ink);font:inherit;font-size:16px}.mobile-picker select:focus-visible{outline:2px solid var(--accent);outline-offset:3px}.mobile-navigation{position:fixed;inset:auto 0 0;z-index:20;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:12px;padding:10px 20px calc(10px + env(safe-area-inset-bottom));border-top:1px solid var(--line);background:white}.mobile-navigation button{display:flex;align-items:center;justify-content:center;gap:8px;min-height:44px;font-size:14px;font-weight:500}.mobile-navigation output{min-width:44px;text-align:center;font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums}.page-switch{display:none}.viewer:fullscreen .page-switch{display:flex}.shell{grid-template-columns:1fr}.sidebar{position:static;height:auto;border:0;padding:24px 20px 0;display:block}.subtitle{display:none}.sidebar nav{display:none}.sidebar nav a{min-height:44px;flex:0 0 auto;max-width:230px;border:1px solid var(--line);font-size:12px;padding:8px 12px}.sidebar nav a[aria-current=page]{box-shadow:none;border-color:var(--ink)}.sidebar-foot{display:none}main{padding:22px 20px 40px}.topline{margin-bottom:14px}.diagram-frame{height:60vh;min-height:340px}.topline h1{display:none}.diagram-canvas{padding:10px}.page-switch span{display:none}button{min-height:44px}.exports button{font-size:12px}.mobile-label{display:inline}.viewer:fullscreen{padding:15px}.viewer:fullscreen .diagram-frame{height:calc(100vh - 300px)}}
-@media print{@page{size:A3 landscape;margin:15mm}@page portrait{size:A3 portrait;margin:14mm}body{font-size:10pt}.shell{display:block}.sidebar,.topline,.toolbar,.status,.skip,.mobile-navigation{display:none!important}main{padding:0}.diagram-page,.diagram-page[hidden]{display:block!important;break-after:page;page-break-after:always}.diagram-page.portrait{page:portrait}.page-heading h2{font-size:23pt}.page-heading p{font-size:10pt;margin:5mm 0}.eyebrow{font-size:8pt}.diagram-frame{height:auto!important;border:0;overflow:visible}.diagram-canvas{padding:0;display:block;min-height:0}.diagram-canvas svg{width:100%!important;height:auto!important;max-height:205mm;object-fit:contain}.portrait .diagram-canvas svg{max-height:290mm}.diagram-notes{margin-top:7mm;max-width:none}.diagram-notes h3{font-size:11pt}.diagram-notes ul{font-size:8pt;line-height:1.4;columns:2;column-gap:9mm}.diagram-notes li{break-inside:avoid}.diagram-notes li+li{margin-top:2mm}details{display:none}.diagram-page:last-child{break-after:auto}body.print-current .diagram-page[hidden]{display:none!important}body.print-current .diagram-page{break-after:auto}.viewer:fullscreen{padding:0;overflow:visible}}
+:root{color-scheme:light;--ink:#20242a;--muted:#626b75;--line:#dedfe2;--accent:#a72f49}*{box-sizing:border-box}body{margin:0;background:#fff;color:var(--ink);font:15px/1.6 ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}button,a{touch-action:manipulation}button{font:inherit;cursor:pointer}button:disabled{cursor:not-allowed;opacity:.4}a{color:inherit}button:focus-visible,a:focus-visible,summary:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--accent);outline-offset:4px}button{min-height:34px;font-size:12px;border:1px solid var(--line);border-radius:6px;background:#fff;color:var(--ink);padding:5px 10px}button:hover{background:#f5f6f7}.primary{background:var(--ink);border-color:var(--ink);color:#fff}.primary:hover{background:#343941}button[aria-pressed=true]{border-color:var(--ink);background:#f5f6f7}.skip{position:absolute;left:20px;top:-80px;background:#fff;padding:12px;z-index:10}.skip:focus{top:12px}.shell{display:grid;grid-template-columns:264px minmax(0,1fr);min-height:100vh}.sidebar{position:sticky;top:0;height:100vh;padding:32px 22px;display:flex;flex-direction:column;border-right:1px solid var(--line);overflow-y:auto}.brand{font-size:20px;font-weight:750;letter-spacing:-.04em;text-decoration:none}.subtitle{font-size:13px;color:var(--muted);margin:4px 0 30px}.sidebar nav{display:grid;gap:5px}.sidebar nav a{display:flex;align-items:center;gap:12px;min-height:48px;padding:8px 9px;border-radius:5px;text-decoration:none;font-size:14px;line-height:1.35}.sidebar nav a span{font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}.sidebar nav a:hover{background:#f5f6f7}.sidebar nav a[aria-current=page]{font-weight:650;background:#f5f6f7;box-shadow:inset 2px 0 var(--accent)}.sidebar-foot{margin-top:auto;padding-top:36px;font-size:12px;color:var(--muted)}main{min-width:0;padding:22px clamp(20px,2.8vw,44px) 32px}.topline{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px}.topline h1{font-size:14px;font-weight:500;color:var(--muted);margin:0}.topline .exports{display:flex;flex-wrap:wrap;gap:8px}.eyebrow{text-transform:uppercase;letter-spacing:.1em;font-size:10px;font-weight:600;color:var(--accent);margin:0 0 6px}.page-heading h2{font-size:clamp(19px,1.6vw,23px);font-weight:650;letter-spacing:-.045em;line-height:1.2;margin:0}.page-heading>p:last-child{max-width:760px;color:var(--muted);margin:12px 0 0;font-size:15px}.toolbar{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin:12px 0 10px}.zoom,.page-switch{display:flex;align-items:center;gap:8px}.zoom button{min-width:34px}.zoom output{font-size:12px;min-width:42px;text-align:center;font-variant-numeric:tabular-nums}.page-switch span{font-size:12px;color:var(--muted);margin:0 5px}.diagram-frame{width:100%;height:clamp(380px,calc(100vh - 190px),1000px);border:1px solid var(--line);border-radius:7px;overflow:auto;overscroll-behavior:contain;scrollbar-gutter:stable;background:#fff}.diagram-canvas{display:flex;justify-content:center;align-items:flex-start;min-height:100%;padding:20px}.diagram-canvas svg{display:block;height:auto;flex-shrink:0;max-width:none}.diagram-notes{max-width:900px;margin-top:28px}.diagram-notes h3{font-size:15px;font-weight:650;margin:0 0 10px}.diagram-notes ul{margin:0;padding-left:20px;color:var(--muted);font-size:14px}.diagram-notes li+li{margin-top:8px}details{margin-top:22px;font-size:13px}summary{cursor:pointer;min-height:44px;align-content:center;color:var(--ink)}code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;overflow-wrap:anywhere}.status{font-size:12px;color:var(--muted);min-height:20px;margin:8px 0 0}.viewer:is(:fullscreen,.is-expanded){width:100%;height:100dvh;padding:16px;background:#fff;overflow:hidden}.viewer:is(:fullscreen,.is-expanded) #pages,.viewer:is(:fullscreen,.is-expanded) .diagram-page:not([hidden]){height:100%;min-height:0}.viewer:is(:fullscreen,.is-expanded) .diagram-page:not([hidden]){display:flex;flex-direction:column}.viewer:is(:fullscreen,.is-expanded) .page-heading,.viewer:is(:fullscreen,.is-expanded) .toolbar{flex-shrink:0}.viewer:is(:fullscreen,.is-expanded) .diagram-frame{flex:1;min-height:0;height:auto}.viewer:is(:fullscreen,.is-expanded) .diagram-canvas{align-items:center}.viewer:is(:fullscreen,.is-expanded) .diagram-notes{display:none}.mobile-label{display:none}[hidden]{display:none!important}
+.viewer.is-expanded{position:fixed;inset:0;z-index:100}.mobile-picker,.mobile-navigation{display:none}
+@media(max-width:900px){body{padding-bottom:calc(78px + env(safe-area-inset-bottom))}.mobile-picker{display:block;margin-top:14px}.mobile-picker label{display:block;margin-bottom:5px;font-size:12px;font-weight:600;color:var(--muted)}.mobile-picker select{width:100%;min-height:48px;padding:10px 36px 10px 12px;border:1px solid var(--line);border-radius:6px;background:white;color:var(--ink);font:inherit;font-size:16px}.mobile-picker select:focus-visible{outline:2px solid var(--accent);outline-offset:3px}.mobile-navigation{position:fixed;inset:auto 0 0;z-index:20;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:12px;padding:10px 20px calc(10px + env(safe-area-inset-bottom));border-top:1px solid var(--line);background:white}.mobile-navigation button{display:flex;align-items:center;justify-content:center;gap:8px;min-height:44px;font-size:14px;font-weight:500}.mobile-navigation output{min-width:44px;text-align:center;font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums}.page-switch{display:none}.viewer:is(:fullscreen,.is-expanded) .page-switch{display:flex}.shell{grid-template-columns:1fr}.sidebar{position:static;height:auto;border:0;padding:24px 20px 0;display:block}.subtitle{display:none}.sidebar nav{display:none}.sidebar nav a{min-height:44px;flex:0 0 auto;max-width:230px;border:1px solid var(--line);font-size:12px;padding:8px 12px}.sidebar nav a[aria-current=page]{box-shadow:none;border-color:var(--ink)}.sidebar-foot{display:none}main{padding:22px 20px 40px}.topline{margin-bottom:14px}.diagram-frame{height:60vh;min-height:340px}.topline h1{display:none}.diagram-canvas{padding:10px}.page-switch span{display:none}button{min-height:44px}.exports button{font-size:12px}.mobile-label{display:inline}.viewer:is(:fullscreen,.is-expanded){padding:12px}}
+@media print{@page{size:A3 landscape;margin:15mm}@page portrait{size:A3 portrait;margin:14mm}body{font-size:10pt}.shell{display:block}.sidebar,.topline,.toolbar,.status,.skip,.mobile-navigation{display:none!important}main{padding:0}.diagram-page,.diagram-page[hidden]{display:block!important;break-after:page;page-break-after:always}.diagram-page.portrait{page:portrait}.page-heading h2{font-size:23pt}.page-heading p{font-size:10pt;margin:5mm 0}.eyebrow{font-size:8pt}.diagram-frame{height:auto!important;border:0;overflow:visible}.diagram-canvas{padding:0;display:block;min-height:0}.diagram-canvas svg{width:100%!important;height:auto!important;max-height:205mm;object-fit:contain}.portrait .diagram-canvas svg{max-height:290mm}.diagram-notes{margin-top:7mm;max-width:none}.diagram-notes h3{font-size:11pt}.diagram-notes ul{font-size:8pt;line-height:1.4;columns:2;column-gap:9mm}.diagram-notes li{break-inside:avoid}.diagram-notes li+li{margin-top:2mm}details{display:none}.diagram-page:last-child{break-after:auto}body.print-current .diagram-page[hidden]{display:none!important}body.print-current .diagram-page{break-after:auto}.viewer:is(:fullscreen,.is-expanded){padding:0;overflow:visible}}
 @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
 </style></head><body><a class="skip" href="#main">Skip to diagram</a><div class="shell"><aside class="sidebar"><a class="brand" href="#01-structure-chart">HousingFinder.</a><p class="subtitle">System models · presentation pack</p><nav aria-label="Diagrams">NAV</nav><div class="mobile-picker"><label for="diagram-select">Diagram</label><select id="diagram-select">MOBILE_OPTIONS</select></div><p class="sidebar-foot">Seven diagrams based on the current implementation.<br>Offline · editable SVG · print ready</p></aside><main id="main"><div class="topline"><h1>Software engineering / system documentation</h1><div class="exports"><button id="svg-download">Save SVG</button><button id="png-download">Save PNG</button><button id="print-current">Print diagram</button><button id="print-all" class="primary">Print all / PDF</button></div></div><div class="viewer"><div id="pages">SECTIONS</div></div><p class="status" role="status" id="status" aria-live="polite"></p></main></div><nav class="mobile-navigation" aria-label="Diagram navigation"><button id="mobile-previous" aria-label="Previous diagram">← Previous</button><output id="mobile-page-number" aria-live="polite">1 / 7</output><button id="mobile-next" aria-label="Next diagram">Next →</button></nav>
 <script>
@@ -390,10 +409,11 @@ function fit(){
  const page=pages[current],frame=page.querySelector('.diagram-frame'),svg=page.querySelector('svg');
  const [,,w,h]=svg.getAttribute('viewBox').split(' ').map(Number);
  const pad=innerWidth<=900?20:40;
- const factor=zoom??Math.min(1,(frame.clientWidth-pad)/w);
+ const fullscreen=isExpanded();
+ const factor=zoom??Math.min(1,(frame.clientWidth-pad)/w,...(fullscreen?[(frame.clientHeight-pad)/h]:[]));
  svg.style.width=Math.round(w*factor)+'px';
  page.querySelector('.diagram-canvas').style.minWidth=zoom?Math.max(frame.clientWidth,w*factor+pad)+'px':'';
- document.getElementById('zoom-output').value=zoom?Math.round(factor*100)+'%':'Width';
+ document.getElementById('zoom-output').value=zoom?Math.round(factor*100)+'%':fullscreen?'Fit':'Width';
  document.getElementById('zoom-out').disabled=zoom!==null&&zoom<=.2;
  document.getElementById('zoom-in').disabled=zoom!==null&&zoom>=3;
 }
@@ -413,15 +433,29 @@ function zoomBy(delta){
  const svg=pages[current].querySelector('svg');const w=svg.viewBox.baseVal.width;
  zoom=Math.min(3,Math.max(.2,(zoom??svg.getBoundingClientRect().width/w)+delta));fit();
 }
-document.getElementById('zoom-in').addEventListener('click',()=>zoomBy(.15));document.getElementById('zoom-out').addEventListener('click',()=>zoomBy(-.15));document.getElementById('zoom-fit').addEventListener('click',()=>{zoom=null;fit()});
+document.getElementById('zoom-in').addEventListener('click',()=>zoomBy(.15));document.getElementById('zoom-out').addEventListener('click',()=>zoomBy(-.15));document.getElementById('zoom-fit').addEventListener('click',()=>{zoom=null;fit();pages[current].querySelector('.diagram-frame').scrollTo(0,0)});
 document.getElementById('previous').addEventListener('click',()=>change(current-1));document.getElementById('next').addEventListener('click',()=>change(current+1));
 document.getElementById('mobile-previous').addEventListener('click',()=>change(current-1));
 document.getElementById('mobile-next').addEventListener('click',()=>change(current+1));
 document.getElementById('diagram-select').addEventListener('change',event=>change(Number(event.target.value)));
 links.forEach((link,index)=>link.addEventListener('click',event=>{event.preventDefault();change(index)}));
 window.addEventListener('hashchange',fromHash);window.addEventListener('resize',fit);
-document.getElementById('fullscreen').addEventListener('click',async()=>{try{if(document.fullscreenElement)await document.exitFullscreen();else await document.querySelector('.viewer').requestFullscreen()}catch{announce('Full screen is unavailable in this browser. Use zoom to inspect the diagram.')}});
-document.addEventListener('fullscreenchange',()=>{zoom=null;document.getElementById('fullscreen').textContent=document.fullscreenElement?'Exit full screen':'Full screen';fit()});
+const viewer=document.querySelector('.viewer');
+function isExpanded(){return Boolean(document.fullscreenElement)||viewer.classList.contains('is-expanded')}
+function syncExpanded(){
+ zoom=null;const expanded=isExpanded();
+ document.getElementById('zoom-fit').textContent=expanded?'Fit diagram':'Fit width';
+ document.getElementById('fullscreen').textContent=expanded?'Exit full screen':'Full screen';
+ document.body.style.overflow=viewer.classList.contains('is-expanded')?'hidden':'';
+ requestAnimationFrame(()=>{fit();pages[current].querySelector('.diagram-frame').scrollTo(0,0)});
+}
+document.getElementById('fullscreen').addEventListener('click',async()=>{
+ if(document.fullscreenElement){await document.exitFullscreen();return}
+ if(viewer.classList.contains('is-expanded')){viewer.classList.remove('is-expanded');syncExpanded();return}
+ try{await viewer.requestFullscreen()}catch{viewer.classList.add('is-expanded');syncExpanded()}
+});
+document.addEventListener('fullscreenchange',syncExpanded);
+document.addEventListener('keydown',event=>{if(event.key==='Escape'&&viewer.classList.contains('is-expanded')){viewer.classList.remove('is-expanded');syncExpanded()}});
 function exportSvg(){const svg=pages[current].querySelector('svg').cloneNode(true);svg.removeAttribute('style');return new XMLSerializer().serializeToString(svg)}
 function download(blob,filename){const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=filename;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000)}
 document.getElementById('svg-download').addEventListener('click',()=>{download(new Blob([exportSvg()],{type:'image/svg+xml;charset=utf-8'}),pages[current].id+'.svg');announce('SVG downloaded. It stays sharp at any size.');});
