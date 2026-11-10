@@ -20,13 +20,13 @@ export function Picker({ heading, value, onChange, items, placeholder, variant, 
   const block = variant === "block" || plain;
 
   useLayoutEffect(() => {
-    if (!open || !plain || !panelRef.current) return;
+    if (!open || !panelRef.current) return;
     const trigger = rootRef.current.getBoundingClientRect();
     const menuHeight = panelRef.current.offsetHeight;
     const navigation = document.querySelector("[data-mobile-navigation]")?.getBoundingClientRect();
     const bottom = navigation?.height ? Math.min(window.innerHeight, navigation.top) : window.innerHeight;
     setOpenAbove(trigger.bottom + menuHeight + 16 > bottom && trigger.top > menuHeight + 16);
-  }, [open, plain, items]);
+  }, [open, items]);
 
   useEffect(() => {
     if (!open) return;
@@ -59,8 +59,8 @@ export function Picker({ heading, value, onChange, items, placeholder, variant, 
       {block ? <span className="truncate">{selected?.label || placeholder}</span> : <span className="min-w-0 flex-1"><span className="block text-xs font-medium text-muted">{heading}</span><span className={`mt-0.5 block truncate text-sm ${!selected?.value && mutedPlaceholder ? "text-muted" : "text-ink"}`}>{selected?.value ? selected.label : placeholder}</span></span>}
       <Chevron className={`text-muted transition-transform ${open ? "rotate-180" : ""}`} />
     </button>
-    {open && <div ref={panelRef} id={panelId} role="listbox" aria-label={heading} className={`absolute ${plain && openAbove ? "bottom-[calc(100%+.5rem)]" : "top-[calc(100%+.5rem)]"} z-30 max-h-80 max-w-[calc(100vw-2.5rem)] overflow-y-auto rounded-lg border border-line bg-surface p-1.5 shadow-[var(--shadow)] ${alignRight ? "right-0" : "left-0"}`} style={{ width: panelWidth }}>
-      {items.map((item, index) => <button ref={(node) => { optionsRef.current[index] = node; }} key={item.value} type="button" role="option" tabIndex={-1} aria-selected={value === item.value} onClick={() => { onChange(item.value); close(); }} className={`flex min-h-11 w-full items-center justify-between gap-3 rounded-md px-3 py-2.5 text-left text-ink transition-colors hover:bg-surface-muted focus-visible:-outline-offset-2 ${value === item.value ? "bg-surface-muted" : ""}`}>
+    {open && <div ref={panelRef} id={panelId} role="listbox" aria-label={heading} className={`absolute ${openAbove ? "bottom-[calc(100%+.5rem)]" : "top-[calc(100%+.5rem)]"} z-30 max-h-80 max-w-[calc(100vw-2.5rem)] overflow-y-auto rounded-lg border border-line bg-surface p-1.5 shadow-[var(--shadow)] ${alignRight ? "right-0" : "left-0"}`} style={{ width: panelWidth }}>
+      {items.map((item, index) => <button ref={(node) => { optionsRef.current[index] = node; }} key={item.value} type="button" role="option" tabIndex={-1} aria-selected={value === item.value} onClick={() => { onChange(item.value); close(); }} className={`flex min-h-11 w-full items-center justify-between gap-3 rounded-md px-3 py-2.5 text-left text-ink transition-colors hover:bg-surface-muted focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-ink ${value === item.value ? "bg-surface-muted" : ""}`}>
         <span className="min-w-0"><span className={`block text-sm ${value === item.value ? "font-semibold" : ""}`}>{item.label}</span>{item.sub && <span className="mt-0.5 block text-xs text-muted">{item.sub}</span>}</span>
         {value === item.value && <svg aria-hidden="true" viewBox="0 0 16 12" fill="none" stroke="currentColor" strokeWidth="1.8" className="h-3 w-4 shrink-0"><path d="m1.5 6 4 4 9-9" /></svg>}
       </button>)}

@@ -2,7 +2,10 @@
 import { useEffect, useRef, useState } from "react";
 import { supabase } from "../lib/supabase";
 import { useAdmin } from "../lib/useAdmin";
+import Avatar from "../components/Avatar";
 import { useLocale } from "../lib/i18n/LocaleContext";
+import { publicPageClassName, publicPageHeadingClassName } from "../components/layoutStyles";
+import { primaryButtonClassName, secondaryButtonClassName, quietButtonClassName, inputClassName, statusBadgeClassName } from "../components/uiStyles";
 export default function UsersPage() {
   const { t } = useLocale();
   const admin = useAdmin();
@@ -50,19 +53,39 @@ export default function UsersPage() {
     } catch (cause) { setError(cause.message); }
     finally { await refresh(); setBusy(false); }
   }
-  return <main className="mx-auto max-w-5xl px-5 py-10 sm:px-8"><h1 className="text-2xl font-semibold tracking-tight sm:text-3xl text-ink">{t("users.heading")}</h1><p className="mt-2 text-sm text-muted">{t("users.subheading")}</p>
-    {admin === false && <p className="mt-8 text-muted">{t("common.adminRequired")}</p>}
-    {error && !confirmation && <p role="alert" className="mt-5 text-accent">{error}</p>}
-    <p role="status" className="mt-4 text-sm text-muted">{message}</p>
-    {admin && confirmation && <dialog ref={dialogRef} aria-labelledby="account-action-title" aria-describedby="account-action-description" onCancel={event => { event.preventDefault(); if (!busy) setConfirmation(null); }} onClick={event => { if (event.target === event.currentTarget && !busy) setConfirmation(null); }} className="fixed inset-0 m-auto max-h-[calc(100dvh-2rem)] w-[calc(100%-2rem)] max-w-lg overflow-y-auto rounded-2xl border border-line bg-surface p-0 text-ink shadow-xl backdrop:bg-black/35 backdrop:backdrop-blur-sm">
-      <div className="p-6 sm:p-7">
-      <h2 id="account-action-title" className="text-lg font-semibold text-ink">{t("users.dialogTitle", { action: t(`users.actionLabel.${confirmation.action}`), name: confirmation.user.full_name || t("users.unnamedUser") })}</h2>
-      <p id="account-action-description" className="mt-2 text-sm leading-6 text-muted">{confirmation.action === 'delete' ? t("users.deleteWarning") : confirmation.action === 'suspend' ? t("users.suspendWarning") : t("users.reactivateWarning")}</p>
-      {confirmation.action === 'delete' && <label className="mt-4 block text-sm text-ink">{t("users.typeDeleteConfirm")}<input autoFocus value={typedName} onChange={event => setTypedName(event.target.value)} disabled={busy} className="mt-2 block min-h-11 w-full rounded-xl border border-line bg-canvas px-4" /></label>}
-      {error && <p role="alert" className="mt-4 text-sm text-accent">{error}</p>}
-      <div className="mt-6 flex flex-wrap justify-end gap-3"><button onClick={moderate} disabled={busy || (confirmation.action === 'delete' && typedName !== 'DELETE')} className="min-h-11 rounded-lg bg-ink px-5 text-sm font-semibold text-canvas disabled:opacity-40">{busy ? t("users.processing") : confirmation.action === 'delete' ? t("users.deleteAccount") : confirmation.action === 'suspend' ? t("users.suspendAccount") : t("users.reactivateAccount")}</button><button autoFocus={confirmation.action !== 'delete'} onClick={() => setConfirmation(null)} disabled={busy} className="min-h-11 rounded-full border border-line px-5 text-sm text-ink">{t("profile.cancel")}</button></div>
+  return <main className={`${publicPageClassName} text-ink`}>
+    <h1 className={publicPageHeadingClassName}>{t("users.heading")}</h1>
+    <p className="mt-2 max-w-xl text-sm leading-6 text-muted">{t("users.subheading")}</p>
+    {admin === false && <p className="mt-8 text-sm text-muted">{t("common.adminRequired")}</p>}
+    {error && !confirmation && <p role="alert" className="mt-5 text-sm text-accent">{error}</p>}
+    <p role="status" className={message ? "mt-4 text-sm text-muted" : "sr-only"}>{message}</p>
+    {admin && confirmation && <dialog ref={dialogRef} aria-labelledby="account-action-title" aria-describedby="account-action-description" onCancel={event => { event.preventDefault(); if (!busy) setConfirmation(null); }} onClick={event => { if (event.target === event.currentTarget && !busy) setConfirmation(null); }} className="fixed inset-0 m-auto max-h-[calc(100dvh-2rem)] w-[calc(100%-2rem)] max-w-lg overflow-y-auto rounded-xl bg-canvas p-0 text-ink shadow-xl backdrop:bg-black/30">
+      <div className="p-5 sm:p-7">
+        <h2 id="account-action-title" className="text-lg font-semibold leading-7 break-words">{t("users.dialogTitle", { action: t(`users.actionLabel.${confirmation.action}`), name: confirmation.user.full_name || t("users.unnamedUser") })}</h2>
+        <p id="account-action-description" className="mt-2 text-sm leading-6 text-muted">{confirmation.action === 'delete' ? t("users.deleteWarning") : confirmation.action === 'suspend' ? t("users.suspendWarning") : t("users.reactivateWarning")}</p>
+        {confirmation.action === 'delete' && <label className="mt-5 block text-xs font-medium text-muted">{t("users.typeDeleteConfirm")}<input autoFocus value={typedName} onChange={event => setTypedName(event.target.value)} disabled={busy} className={`mt-2 ${inputClassName}`} /></label>}
+        {error && <p role="alert" className="mt-4 text-sm text-accent">{error}</p>}
+        <div className="mt-6 flex flex-wrap justify-end gap-2">
+          <button type="button" autoFocus={confirmation.action !== 'delete'} onClick={() => setConfirmation(null)} disabled={busy} className={secondaryButtonClassName}>{t("profile.cancel")}</button>
+          <button type="button" onClick={moderate} disabled={busy || (confirmation.action === 'delete' && typedName !== 'DELETE')} className={primaryButtonClassName}>{busy ? t("users.processing") : confirmation.action === 'delete' ? t("users.deleteAccount") : confirmation.action === 'suspend' ? t("users.suspendAccount") : t("users.reactivateAccount")}</button>
+        </div>
       </div>
     </dialog>}
-    {admin && <div className="mt-8 border-t border-line">{loading ? <p className="py-8 text-muted">{t("users.loadingUsers")}</p> : users.length === 0 && !error ? <p className="py-8 text-muted">{t("users.noneYet")}</p> : null}{users.map(user => <div key={user.id} className="flex flex-wrap items-center justify-between gap-4 border-b border-line py-5"><div><strong className="text-ink">{user.full_name || t("users.unnamedUser")}</strong><p className="mt-1 text-xs text-muted">{t("users.joined", { date: new Date(user.created_at).toLocaleDateString() })}</p><p className="mt-2 text-xs font-semibold text-accent">{t(`common.role.${user.role}`)} · {t(`common.accountStatus.${user.account_status}`)}</p></div>{user.role !== 'admin' && <div className="flex gap-3"><button disabled={busy} onClick={() => ask(user, user.account_status === 'suspended' ? 'reactivate' : 'suspend')} className="min-h-11 rounded-full border border-line px-4 text-sm font-semibold text-ink transition-colors hover:bg-surface-muted disabled:opacity-40">{user.account_status === 'suspended' ? t("users.reactivate") : t("users.suspend")}</button><button disabled={busy} onClick={() => ask(user, 'delete')} className="min-h-11 rounded-full border border-line px-4 text-sm font-semibold text-ink transition-colors hover:bg-surface-muted disabled:opacity-40">{t("users.delete")}</button></div>}</div>)}</div>}
+    {(admin === null || (admin && loading)) && <p role="status" className="mt-8 text-sm text-muted">{t("users.loadingUsers")}</p>}
+    {admin && !loading && <ul className="mt-8 space-y-2">
+      {users.length === 0 && !error && <li className="py-6 text-sm text-muted">{t("users.noneYet")}</li>}
+      {users.map(user => <li key={user.id} className="flex min-w-0 flex-wrap items-start gap-3 py-4 sm:gap-4">
+        <Avatar className="size-10" />
+        <div className="min-w-0 flex-1">
+          <h2 className="text-sm font-semibold leading-6 break-words">{user.full_name || t("users.unnamedUser")}</h2>
+          <p className="mt-1 text-xs leading-5 text-muted">{t("users.joined", { date: new Date(user.created_at).toLocaleDateString() })}</p>
+          <div className="mt-2 flex flex-wrap items-center gap-2"><span className="text-xs text-muted">{t(`common.role.${user.role}`)}</span><span className={statusBadgeClassName}>{t(`common.accountStatus.${user.account_status}`)}</span></div>
+        </div>
+        {user.role !== 'admin' && <div className="flex w-full flex-wrap gap-2 pl-[52px] sm:w-auto sm:pl-0">
+          <button type="button" disabled={busy} onClick={() => ask(user, user.account_status === 'suspended' ? 'reactivate' : 'suspend')} className={secondaryButtonClassName}>{user.account_status === 'suspended' ? t("users.reactivate") : t("users.suspend")}</button>
+          <button type="button" disabled={busy} onClick={() => ask(user, 'delete')} className={quietButtonClassName}>{t("users.delete")}</button>
+        </div>}
+      </li>)}
+    </ul>}
   </main>;
 }

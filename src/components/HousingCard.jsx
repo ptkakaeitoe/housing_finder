@@ -2,14 +2,15 @@
 
 import Link from "next/link";
 import { listingImageUrl } from "../lib/supabase";
+import { money } from "../lib/listingCosts";
 import { listingUniversity } from "../lib/universities";
 import { getLocalizedTitle } from "../lib/listingFields";
 import { useLocale } from "../lib/i18n/LocaleContext";
 
 function HeartIcon({ filled }) {
   return (
-    <svg viewBox="0 0 24 24" className="h-[18px] w-[18px]" fill={filled ? "currentColor" : "none"} stroke="currentColor" strokeWidth={filled ? 0 : 2}>
-      <path strokeLinecap="round" strokeLinejoin="round" d="M12 21s-7.9-4.87-10.35-9.5C.15 8.2 1.6 4.3 5.6 4.3c2.2 0 3.9 1.2 6.4 3.75 2.5-2.55 4.2-3.75 6.4-3.75 4 0 5.45 3.9 3.95 7.2C19.9 16.13 12 21 12 21z" />
+    <svg aria-hidden="true" viewBox="0 0 24 24" className="size-[18px]" fill={filled ? "currentColor" : "none"} stroke="currentColor" strokeWidth="1.5">
+      <path strokeLinecap="round" strokeLinejoin="round" d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8Z" />
     </svg>
   );
 }
@@ -19,6 +20,11 @@ export default function HousingCard({ listing, saved = false, onToggleSave, acti
   const nearest = listingUniversity(listing);
   const canSave = Boolean(onToggleSave) && !isOwner;
   const title = getLocalizedTitle(listing, locale);
+  const details = [
+    isOwner ? t("listingCard.listedByYou") : null,
+    t(`common.propertyType.${listing.property_type}`),
+    nearest ? t("listingCard.distanceFromUniversity", { distance: nearest.distanceKm.toFixed(1), university: nearest.university.shortName }) : listing.address,
+  ].filter(Boolean).join(" · ");
 
   function handleHeart(event) {
     event.preventDefault();
@@ -27,20 +33,14 @@ export default function HousingCard({ listing, saved = false, onToggleSave, acti
   }
 
   return <article className="group relative flex h-full min-w-0 flex-col text-ink">
-    <Link href={`/rooms/${listing.id}`} className="flex flex-1 flex-col rounded-lg focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent">
-      <div className="relative aspect-[4/3] overflow-hidden rounded-lg bg-surface-muted">
-        <img src={listingImageUrl(listing.image_path)} alt={title} loading="lazy" className="h-full w-full object-cover transition-transform duration-300 ease-out group-hover:scale-[1.025] motion-reduce:transform-none" />
-        <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/15 via-transparent to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
-        <div className="absolute left-3 top-3 flex flex-col items-start gap-1.5">
-          {isOwner && <span className="rounded-md bg-ink px-2.5 py-1 text-xs font-medium text-canvas">{t("listingCard.listedByYou")}</span>}
-        </div>
-
+    <Link href={`/rooms/${listing.id}`} className="flex flex-1 flex-col rounded-lg focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ink">
+      <div className="relative aspect-[3/2] shrink-0 overflow-hidden rounded-lg bg-surface-muted">
+        <img src={listingImageUrl(listing.image_path)} alt="" loading="lazy" className="h-full w-full object-cover transition-transform duration-300 ease-out group-hover:scale-[1.025] motion-reduce:transform-none" />
       </div>
-      <div className="flex flex-1 flex-col pt-4">
-        <p className="mb-1.5 text-xs text-muted">{t(`common.propertyType.${listing.property_type}`)}</p>
-        <h3 className="text-base font-semibold leading-6 tracking-tight text-ink group-hover:underline group-hover:underline-offset-4">{title}</h3>
-        <p className="mt-1 text-sm leading-5 text-muted">{nearest ? t("listingCard.distanceFromUniversity", { distance: nearest.distanceKm.toFixed(1), university: nearest.university.shortName }) : listing.address}</p>
-        <p className="mt-3 text-sm text-ink"><span className="text-base font-semibold tabular-nums">฿{Number(listing.monthly_rent).toLocaleString()}</span> <span className="text-muted">{t("listingCard.perMonth")}</span></p>
+      <div className="flex flex-1 flex-col pt-3">
+        <h3 className="line-clamp-2 text-[15px] font-semibold leading-6 tracking-tight break-words text-ink group-hover:underline group-hover:underline-offset-4">{title}</h3>
+        <p className="mt-1 truncate text-xs leading-5 text-muted" title={details}>{details}</p>
+        <p className="mt-2 text-sm text-ink"><span className="font-semibold tabular-nums">{money(listing.monthly_rent, locale)}</span> <span className="text-xs text-muted">{t("listingCard.perMonth")}</span></p>
       </div>
     </Link>
         {canSave && <button
@@ -48,10 +48,10 @@ export default function HousingCard({ listing, saved = false, onToggleSave, acti
           onClick={handleHeart}
           aria-label={saved ? t("listingCard.removeSaved") : t("listingCard.save")}
           aria-pressed={saved}
-          className="absolute right-3 top-3 flex size-11 items-center justify-center rounded-full bg-white/95 text-[#171b20] transition-colors hover:bg-white"
+          className="absolute right-2 top-2 flex size-11 items-center justify-center rounded-full bg-white/95 text-[#171b20] transition-colors hover:bg-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink"
         >
-          <span className={saved ? "text-accent" : "text-[#171b20]"}><HeartIcon filled={saved} /></span>
+          <HeartIcon filled={saved} />
         </button>}
-    {action && <div className="mt-3 py-2">{action}</div>}
+    {action && <div className="mt-4">{action}</div>}
   </article>;
 }

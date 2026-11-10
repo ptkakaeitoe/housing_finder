@@ -5,6 +5,8 @@ import { useRouter } from "next/navigation";
 import { supabase } from "../lib/supabase";
 import { useAdmin } from "../lib/useAdmin";
 import { useLocale } from "../lib/i18n/LocaleContext";
+import { publicPageClassName, publicPageHeadingClassName } from "../components/layoutStyles";
+import { quietButtonClassName } from "../components/uiStyles";
 export default function AdminDashboardPage() {
   const { t } = useLocale();
   const admin = useAdmin();
@@ -55,19 +57,20 @@ export default function AdminDashboardPage() {
     }
   }
 
-  return <main className="mx-auto max-w-7xl px-5 py-10 sm:px-8 lg:px-12">
+  return <main className={`${publicPageClassName} text-ink`}>
     <div className="flex flex-wrap items-center justify-between gap-4">
-      <h1 className="text-2xl font-semibold tracking-tight sm:text-3xl text-ink">{t("adminDashboard.heading")}</h1>
-      {admin && <button type="button" onClick={signOut} disabled={signingOut} className="min-h-11 rounded-full border border-line px-5 text-sm font-semibold text-ink hover:border-accent hover:text-accent disabled:opacity-50">{t(signingOut ? "profile.signingOut" : "profile.signOut")}</button>}
+      <h1 className={publicPageHeadingClassName}>{t("adminDashboard.heading")}</h1>
+      {admin && <button type="button" onClick={signOut} disabled={signingOut} className={quietButtonClassName}>{t(signingOut ? "profile.signingOut" : "profile.signOut")}</button>}
     </div>
-    {signOutError && <p role="alert" className="mt-5 text-accent">{signOutError}</p>}
-    {admin === false && <p className="mt-8 text-muted">{t("common.adminRequired")}</p>}
-    {admin && <div className="mt-8 grid gap-x-8 gap-y-4 border-t border-line sm:grid-cols-2 lg:grid-cols-4">
-      {sections.map((section) => <Link href={section.href} key={section.href} className="border-b border-line py-6 transition-colors hover:text-accent">
-        <p className="text-sm text-muted">{t(section.key)}</p>
-        <p className="mt-3 text-4xl font-extrabold text-ink">{counts[section.table] ?? "—"}</p>
-        {errors[section.table] && <p role="alert" className="mt-3 text-sm text-accent">{t("adminDashboard.countError")}</p>}
-        <span className="mt-4 block text-sm font-semibold text-accent">{t("adminDashboard.view")}</span>
+    {signOutError && <p role="alert" className="mt-5 text-sm text-accent">{signOutError}</p>}
+    {admin === null && <p role="status" className="mt-8 text-sm text-muted">{t("common.loading")}</p>}
+    {admin === false && <p className="mt-8 text-sm text-muted">{t("common.adminRequired")}</p>}
+    {admin && <div className="mt-8 grid grid-cols-2 gap-x-8 gap-y-6 lg:grid-cols-4">
+      {sections.map((section) => <Link href={section.href} key={section.href} className="group flex min-w-0 flex-col items-start rounded-lg py-5 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ink">
+        <p className="text-sm leading-6 text-muted">{t(section.key)}</p>
+        <p className="mt-3 text-3xl font-semibold tracking-tight tabular-nums">{counts[section.table] ?? "—"}</p>
+        {errors[section.table] && <p role="alert" className="mt-3 text-xs text-accent">{t("adminDashboard.countError")}</p>}
+        <span className="mt-4 inline-flex items-center gap-2 text-sm font-medium text-muted group-hover:text-ink group-hover:underline group-hover:underline-offset-4">{t("adminDashboard.view")}</span>
       </Link>)}
     </div>}
   </main>;

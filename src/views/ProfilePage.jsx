@@ -7,6 +7,7 @@ import { supabase, requireSupabase } from "../lib/supabase";
 import { publicPageClassName, publicPageHeadingClassName } from "../components/layoutStyles";
 import LandlordVerificationSection from "../components/LandlordVerificationSection";
 import { Picker } from "../components/Picker";
+import Avatar from "../components/Avatar";
 import { LOCALES, LOCALE_LABELS } from "../lib/i18n/config";
 import { useLocale } from "../lib/i18n/LocaleContext";
 
@@ -75,7 +76,6 @@ export default function ProfilePage() {
     } catch (cause) { setError(cause.message); setBusy(""); }
   }
 
-  const initials = savedName.trim().split(/\s+/).filter(Boolean).slice(0, 2).map((part) => part[0]).join("").toUpperCase() || user?.email?.[0]?.toUpperCase() || "?";
   const changed = name.trim() !== savedName;
 
   return <main className={`${publicPageClassName} text-ink`}>
@@ -88,7 +88,7 @@ export default function ProfilePage() {
       <Link href="/login" className="mt-6 inline-flex min-h-12 items-center justify-center rounded-lg bg-ink px-6 text-sm font-medium text-canvas hover:opacity-80 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ink">{t("common.signIn")}</Link>
     </section> : <section aria-label={t("profile.accountDetailsAria")} className="mt-8 grid min-w-0 gap-8 sm:mt-10 lg:max-w-5xl lg:grid-cols-[240px_minmax(0,1fr)] lg:gap-16">
       <div className="flex min-w-0 items-center gap-4 self-start lg:flex-col lg:items-start lg:gap-5">
-        <div aria-hidden="true" className="flex size-14 shrink-0 items-center justify-center rounded-full bg-surface-muted text-lg font-semibold sm:size-16 sm:text-xl">{initials}</div>
+        <Avatar className="size-14 sm:size-16" />
         <div className="min-w-0">
           <h2 className="text-lg font-semibold leading-7 break-words">{savedName || t("profile.yourProfileFallback")}</h2>
           <p className="mt-1 text-sm leading-5 text-muted">{role ? t(`common.role.${role}`) : t("profile.unavailable")}</p>

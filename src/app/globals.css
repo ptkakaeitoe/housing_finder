@@ -96,6 +96,11 @@ html:has([data-auth-layout]) {
 @keyframes auth-fade-in {
   from { opacity: 0; }
 }
+
+/* Animate panel content without freezing the live, interactive map. */
+@keyframes map-panel-in {
+  from { opacity: 0; transform: translateX(10px); }
+}
 @media (prefers-reduced-motion: reduce) {
   :root:has([data-auth-layout])::view-transition-group(*),
   :root:has([data-auth-layout])::view-transition-old(*),
@@ -124,11 +129,7 @@ body {
   button, input, select, textarea { font-family: inherit; }
   button { cursor: pointer; }
   button:disabled { cursor: not-allowed; }
-}
-
-img {
-  display: block;
-  max-width: 100%;
+  img { display: block; max-width: 100%; }
 }
 
 
@@ -2092,10 +2093,10 @@ img {
   }
 }
 body { background: var(--navy); color: var(--ink); font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; line-height: 1.5; }
-::selection { background: var(--pink-soft); color: var(--ink); }
+::selection { background: var(--dark-border); color: var(--ink); }
 /* Base keyboard focus remains available; component utilities can customize it. */
 @layer base {
-  :focus-visible { outline: 3px solid var(--pink); outline-offset: 3px; }
+  :focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
 }
 .sidebar-logo { background: var(--ink); color: var(--navy); box-shadow: none; border-radius: 13px; }
 .sidebar-title span, .sidebar-links a { color: var(--ink); }

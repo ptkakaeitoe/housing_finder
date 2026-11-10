@@ -26,7 +26,7 @@ export default function AppointmentsPage() {
     <h1 className={publicPageHeadingClassName}>{t("appointments.heading")}</h1>
     {error ? <p role="alert" className="mt-10 py-8 text-sm text-accent">{error}</p>
     : loading ? <p role="status" className="mt-10 text-sm text-muted">{t("appointments.loading")}</p>
-    : !signedIn ? <p className="mt-10 py-10 text-base text-muted"><Link href="/login" className="font-medium text-ink underline decoration-line underline-offset-4 hover:text-accent">{t("common.signIn")}</Link> {t("appointments.signInSuffix")}</p>
+    : !signedIn ? <p className="mt-10 py-10 text-base text-muted"><Link href="/login" className="font-medium text-ink underline decoration-line underline-offset-4 hover:text-ink">{t("common.signIn")}</Link> {t("appointments.signInSuffix")}</p>
     : requests.length ? <div className="mt-10 grid gap-x-6 gap-y-12 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">{requests.map((request) => <ViewingRequestCard key={request.id} request={request} />)}</div>
     : <p role="status" className="mt-10 py-10 text-base text-muted">{t("appointments.noneYet")}</p>}
   </main>;

@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { listingImageUrl } from "../lib/supabase";
+import { money } from "../lib/listingCosts";
 import { listingUniversity } from "../lib/universities";
 import { getLocalizedTitle } from "../lib/listingFields";
 import { useLocale } from "../lib/i18n/LocaleContext";
@@ -19,7 +20,7 @@ export default function MapListingCard({ listing, saved, onToggleSave, isOwner, 
       <div className="min-w-0 flex-1">
         <p className="text-xs leading-4 text-muted">{isOwner ? t("listingCard.listedByYou") : t(`common.propertyType.${listing.property_type}`)}</p>
         <h3 className="mt-1 line-clamp-2 text-sm font-semibold leading-5 break-words group-hover:underline group-hover:underline-offset-4">{title}</h3>
-        <p className="mt-1.5 text-xs leading-5 text-muted"><span className="text-sm font-semibold text-ink tabular-nums">฿{Number(listing.monthly_rent).toLocaleString()}</span> {t("listingCard.perMonth")}</p>
+        <p className="mt-1.5 text-xs leading-5 text-muted"><span className="text-sm font-semibold text-ink tabular-nums">{money(listing.monthly_rent, locale)}</span> {t("listingCard.perMonth")}</p>
       </div>
     </Link>
     <p className="mt-2 line-clamp-2 text-xs leading-5 break-words text-muted">{nearest ? t("listingCard.distanceFromUniversity", { distance: nearest.distanceKm.toFixed(1), university: nearest.university.shortName }) : listing.address}</p>

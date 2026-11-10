@@ -2,6 +2,8 @@
 import { useEffect, useState, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import ViewingDateTimePicker from "../components/ViewingDateTimePicker";
+import { publicPageLinkClassName } from "../components/layoutStyles";
+import { primaryButtonClassName, inputClassName, fieldLabelClassName } from "../components/uiStyles";
 import Link from "next/link";
 import { supabase, requireSupabase } from "../lib/supabase";
 import { getLocalizedTitle } from "../lib/listingFields";
@@ -33,8 +35,8 @@ function RequestForm() {
       router.push("/appointments");
     } catch (cause) { setError(cause.message); } finally { setBusy(false); }
   }
-  return <><main className="mx-auto max-w-2xl px-5 py-10 sm:px-8"><Link href={id ? `/rooms/${id}` : "/explore"} className="text-sm font-semibold text-accent">{t("requestViewing.back")}</Link><h1 className="mt-6 text-2xl font-semibold tracking-tight text-ink sm:text-3xl">{t("requestViewing.heading")}</h1><p className="mt-2 text-muted">{listing ? t("requestViewing.listingSummary", { title: getLocalizedTitle(listing, locale), address: listing.address }) : t("requestViewing.chooseHomeFirst")}</p>
-    {listing && <form onSubmit={submit} className="mt-8 grid gap-5 border-t border-line pt-6"><ViewingDateTimePicker date={date} time={time} onDateChange={setDate} onTimeChange={setTime} disabled={busy} /><label className="text-sm font-semibold text-ink">{t("requestViewing.message")}<textarea name="message" maxLength="1000" placeholder={t("requestViewing.messagePlaceholder")} className="mt-2 min-h-28 w-full rounded-xl border border-line bg-canvas p-4 text-base" /></label>{error && <p role="alert" className="text-sm text-accent">{error}</p>}<button disabled={busy || !date || !time} className="min-h-12 rounded-lg bg-ink font-bold text-canvas disabled:opacity-50">{busy ? t("requestViewing.sending") : t("requestViewing.send")}</button></form>}
+  return <><main className="mx-auto max-w-2xl px-5 py-10 sm:px-8"><Link href={id ? `/rooms/${id}` : "/explore"} className={publicPageLinkClassName}>{t("requestViewing.back")}</Link><h1 className="mt-6 text-2xl font-semibold tracking-tight text-ink sm:text-3xl">{t("requestViewing.heading")}</h1><p className="mt-2 text-muted">{listing ? t("requestViewing.listingSummary", { title: getLocalizedTitle(listing, locale), address: listing.address }) : t("requestViewing.chooseHomeFirst")}</p>
+    {listing && <form onSubmit={submit} className="mt-8 grid gap-5"><ViewingDateTimePicker date={date} time={time} onDateChange={setDate} onTimeChange={setTime} disabled={busy} /><label className={fieldLabelClassName}>{t("requestViewing.message")}<textarea name="message" maxLength="1000" placeholder={t("requestViewing.messagePlaceholder")} className={`mt-2 min-h-28 ${inputClassName}`} /></label>{error && <p role="alert" className="text-sm text-accent">{error}</p>}<button disabled={busy || !date || !time} className={`min-h-12 ${primaryButtonClassName}`}>{busy ? t("requestViewing.sending") : t("requestViewing.send")}</button></form>}
   </main></>;
 }
 export default function RequestViewingPage() {

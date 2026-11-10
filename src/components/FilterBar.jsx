@@ -60,7 +60,6 @@ export default function FilterBar({
   leaseMax, setLeaseMax,
   maxDistanceKm, setMaxDistanceKm,
   trailing,
-  compact = false,
 }) {
   const { t } = useLocale();
   const searchRef = useRef(null);
@@ -108,7 +107,7 @@ export default function FilterBar({
   }
 
   return (
-    <div className={compact ? "mt-4" : "mt-8"}>
+    <div className="mt-8">
       <div className="flex items-stretch gap-2 rounded-lg border border-line bg-transparent p-1.5 sm:gap-0 sm:divide-x sm:divide-line">
         <div onClick={() => searchRef.current?.focus()} className="flex min-w-0 flex-1 flex-col items-start rounded-md px-3 py-2.5 sm:px-5 transition-colors hover:bg-surface-muted focus-within:bg-surface-muted focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-ink">
           <span className="text-xs font-medium text-ink">{t("filters.search")}</span>
@@ -153,7 +152,7 @@ export default function FilterBar({
         </div>
       </div>
 
-      <div className={`${compact ? "mt-3" : "mt-4"} flex flex-wrap items-center gap-2.5`}>
+      <div className="mt-4 flex flex-wrap items-center gap-2.5">
         <div ref={filtersRef} onBlur={(event) => { if (!event.currentTarget.contains(event.relatedTarget)) setFiltersOpen(false); }} className="relative">
           <Chip selected={activeFilterCount > 0 || filtersOpen} aria-expanded={filtersOpen} onClick={() => setFiltersOpen((v) => !v)}>
             <span className="inline-flex items-center gap-1.5"><SlidersIcon />{t("filters.filtersChip")}{activeFilterCount > 0 && <span className="ml-0.5 rounded bg-canvas/15 px-1.5 py-0.5 text-xs font-medium">{activeFilterCount}</span>}</span>
@@ -162,12 +161,12 @@ export default function FilterBar({
             <div>
               <span className="text-xs font-semibold text-ink">{t("filters.costPerMonth")}</span>
               <div className="mt-2 flex items-center gap-2">
-                <span className="flex min-w-0 flex-1 items-center gap-1.5 rounded-xl border border-line px-3 py-2 transition-colors focus-within:border-accent focus-within:bg-surface-muted">
+                <span className="flex min-w-0 flex-1 items-center gap-1.5 rounded-md border border-line px-3 py-2 transition-colors focus-within:border-ink focus-within:bg-surface-muted">
                   <span className="text-xs font-semibold text-muted">฿</span>
                   <input type="number" aria-label={t("filters.min")} min="0" inputMode="numeric" value={minRent} onChange={(e) => setMinRent(e.target.value)} placeholder={t("filters.min")} className="w-full min-w-0 min-h-7 bg-transparent text-base text-ink outline-none placeholder:text-muted sm:text-sm" />
                 </span>
                 <span className="text-xs text-muted">–</span>
-                <span className="flex min-w-0 flex-1 items-center gap-1.5 rounded-xl border border-line px-3 py-2 transition-colors focus-within:border-accent focus-within:bg-surface-muted">
+                <span className="flex min-w-0 flex-1 items-center gap-1.5 rounded-md border border-line px-3 py-2 transition-colors focus-within:border-ink focus-within:bg-surface-muted">
                   <span className="text-xs font-semibold text-muted">฿</span>
                   <input type="number" aria-label={t("filters.max")} min="0" inputMode="numeric" value={maxRent} onChange={(e) => setMaxRent(e.target.value)} placeholder={t("filters.max")} className="w-full min-w-0 min-h-7 bg-transparent text-base text-ink outline-none placeholder:text-muted sm:text-sm" />
                 </span>
@@ -188,11 +187,11 @@ export default function FilterBar({
               </div>
             </div>
 
-            <button type="button" onClick={() => { setFiltersOpen(false); filtersRef.current?.querySelector("button")?.focus(); }} className="mt-5 min-h-11 w-full rounded-lg bg-ink text-canvas"><span className="text-sm font-bold">{t("filters.showResults")}</span></button>
+            <button type="button" onClick={() => { setFiltersOpen(false); filtersRef.current?.querySelector("button")?.focus(); }} className="mt-5 min-h-11 w-full rounded-lg bg-ink text-canvas"><span className="text-sm font-medium">{t("filters.showResults")}</span></button>
           </div>}
         </div>
 
-        {hasFilters && <button type="button" onClick={clearAll} className="min-h-11 px-2 text-muted underline decoration-line underline-offset-4 hover:text-accent"><span className="text-sm font-semibold">{t("filters.clearAll")}</span></button>}
+        {hasFilters && <button type="button" onClick={clearAll} className="min-h-11 px-2 text-muted underline decoration-line underline-offset-4 hover:text-ink"><span className="text-sm font-semibold">{t("filters.clearAll")}</span></button>}
         {trailing}
       </div>
     </div>

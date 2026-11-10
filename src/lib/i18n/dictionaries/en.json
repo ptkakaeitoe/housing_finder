@@ -16,7 +16,7 @@
     "deposit": "Security deposit:",
     "depositNote": "Not included in monthly total.",
     "reset": "Reset estimates"
-},
+  },
   "language": {
     "label": "Language",
     "en": "English",
@@ -291,6 +291,9 @@
     "viewingRequests": "Viewing requests",
     "view": "View →"
   },
+  "listingDeletion": {
+    "description": "“{{title}}” and its related viewing and saved records will be permanently removed. This cannot be undone."
+  },
   "myListings": {
     "heading": "My listings",
     "loadingTotal": "Loading total…",
@@ -563,7 +566,7 @@
     "mapOfHomes": "Map of matching homes",
     "mapUnavailable": "Map unavailable",
     "loadingMap": "Loading the map…",
-    "mapUnavailableHint": "You can still browse matching homes and open their details below.",
+    "mapUnavailableHint": "Use Browse homes to explore matching homes and read their details.",
     "mapLoadingHint": "Your matching homes will appear here shortly.",
     "matchingHomes": "Matching homes",
     "distanceDot": "{{distance}} km · {{university}}",
@@ -578,7 +581,15 @@
     "viewHome": "View home →",
     "geoUnsupported": "Your browser doesn't support geolocation.",
     "geoFailed": "Couldn't get your location. Check your browser's location permission.",
-    "yourLocation": "Your location"
+    "yourLocation": "Your location",
+    "browseHomes": "Browse homes",
+    "closePanel": "Close home panel",
+    "homeDetails": "Home details",
+    "expandDetails": "Full details",
+    "collapseDetails": "Show map",
+    "zoomIn": "Zoom in",
+    "zoomOut": "Zoom out",
+    "backToHomes": "All homes"
   },
   "roomDetails": {
     "backToListings": "← Back to My Listings",
@@ -606,7 +617,10 @@
     "securityDeposit": "Security deposit",
     "noDepositRequired": "No deposit required",
     "minimumLeaseInline": "Minimum lease: {{lease}}",
-    "leaseMonths": { "one": "{{count}} month", "other": "{{count}} months" },
+    "leaseMonths": {
+      "one": "{{count}} month",
+      "other": "{{count}} months"
+    },
     "vanServiceHeading": "Campus van service",
     "vanIncluded": "Available · included in rent",
     "vanPaid": "Available · extra charge",
@@ -616,7 +630,10 @@
     "exploreOnMap": "Explore the location on the map ↗",
     "manageAria": "Manage your listing",
     "rentAndViewingAria": "Rent and viewing",
-    "minLeaseSentence": { "one": "Minimum lease of {{count}} month.", "other": "Minimum lease of {{count}} months." },
+    "minLeaseSentence": {
+      "one": "Minimum lease of {{count}} month.",
+      "other": "Minimum lease of {{count}} months."
+    },
     "askAboutLeaseLength": "Ask the landlord about lease length.",
     "loadingAccount": "Loading account…",
     "managePropertyHeading": "Manage your property",

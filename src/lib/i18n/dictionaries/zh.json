@@ -124,10 +124,7 @@
     "heading": "{{university}}附近的房屋",
     "yourUniversity": "你的大学",
     "viewMap": "查看地图↗",
-    "placeCount": {
-      "one": "{{count}} 位置",
-      "other": "{{count}} 地点"
-    },
+    "placeCount": { "one": "{{count}} 位置", "other": "{{count}} 地点" },
     "liveUnavailable": "房源暂时无法显示。",
     "noMatches": "没有找到匹配项。请尝试其他地区或预算。"
   },
@@ -272,14 +269,14 @@
     "viewingRequests": "查看请求",
     "view": "查看 →"
   },
+  "listingDeletion": {
+    "description": "“{{title}}”及其相关看房申请和收藏记录将被永久删除，此操作无法撤销。"
+  },
   "myListings": {
     "heading": "我的房源",
     "loadingTotal": "正在加载总计…",
     "countUnavailable": "房源数量暂无数据",
-    "summary": {
-      "one": "{{count}} 总计 · {{published}} 已发布 · {{drafts}} 草稿",
-      "other": "{{count}} 列表总数 · {{published}} 已发布列表 · {{drafts}} 草稿列表"
-    },
+    "summary": { "one": "{{count}} 总计 · {{published}} 已发布 · {{drafts}} 草稿", "other": "{{count}} 列表总数 · {{published}} 已发布列表 · {{drafts}} 草稿列表" },
     "addListing": "+ 添加列表",
     "loadingListings": "正在加载列表…",
     "editListing": "编辑列表",
@@ -293,10 +290,7 @@
     "signInToSave": "登录即可保存房源。",
     "signInArrow": "登录 →",
     "savedLabel": "已保存",
-    "viewingRequestsSuffix": {
-      "one": "查看请求↗",
-      "other": "查看请求↗"
-    },
+    "viewingRequestsSuffix": { "one": "查看请求↗", "other": "查看请求↗" },
     "nothingSaved": "尚未保存任何内容。",
     "browseHomes": "浏览房屋 →"
   },
@@ -529,10 +523,7 @@
     "noUpcoming": "目前没有已确认的看房安排。",
     "nextSteps": "下一步",
     "loadingListings": "正在加载列表…",
-    "draftsWaiting": {
-      "one": "{{count}} 草稿首页等待发布。",
-      "other": "{{count}} 栋房屋设计稿等待发布。"
-    },
+    "draftsWaiting": { "one": "{{count}} 草稿首页等待发布。", "other": "{{count}} 栋房屋设计稿等待发布。" },
     "continueEditing": "继续编辑 →",
     "addFirstHome": "添加您的第一套房源，以便学生可以在“探索”中找到它。",
     "allPublished": "您的所有房源信息均已发布。请确保照片、价格和库存情况保持最新。",
@@ -547,16 +538,13 @@
     "locating": "正在查找…",
     "mapAndHomes": "地图和匹配房屋",
     "loadingHomes": "加载中……",
-    "homesFound": {
-      "one": "{{count}} 找到家",
-      "other": "找到 {{count}} 处房屋"
-    },
+    "homesFound": { "one": "{{count}} 找到家", "other": "找到 {{count}} 处房屋" },
     "selectHint": "选择房屋即可在地图上找到它。",
     "showAllHomes": "显示所有房源",
     "mapOfHomes": "匹配房屋地图",
     "mapUnavailable": "地图不可用",
     "loadingMap": "正在加载地图……",
-    "mapUnavailableHint": "您仍然可以浏览符合条件的房源，并在下方查看详细信息。",
+    "mapUnavailableHint": "使用“浏览房源”查看匹配的房源及其详情。",
     "mapLoadingHint": "您匹配的房源很快就会显示在这里。",
     "matchingHomes": "匹配房屋",
     "distanceDot": "{{distance}} 公里 · {{university}}",
@@ -571,7 +559,15 @@
     "viewHome": "查看首页 →",
     "geoUnsupported": "您的浏览器不支持地理定位功能。",
     "geoFailed": "无法获取您的位置信息。请检查浏览器的位置权限。",
-    "yourLocation": "您的位置"
+    "yourLocation": "您的位置",
+    "browseHomes": "浏览房源",
+    "closePanel": "关闭房源面板",
+    "homeDetails": "房源详情",
+    "expandDetails": "完整详情",
+    "collapseDetails": "显示地图",
+    "zoomIn": "放大",
+    "zoomOut": "缩小",
+    "backToHomes": "所有房源"
   },
   "roomDetails": {
     "backToListings": "← 返回我的列表",

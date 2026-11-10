@@ -6,8 +6,7 @@ import BrandLogo from "./BrandLogo";
 import ThemeToggle from "./ThemeToggle";
 import LanguageSwitcher from "./LanguageSwitcher";
 import { useLocale } from "../lib/i18n/LocaleContext";
-
-const pageWidth = "mx-auto w-full max-w-[448px] px-5 sm:px-6 lg:max-w-[1040px] lg:px-8";
+import { publicContainerClassName } from "./layoutStyles";
 
 export default function AuthLayout({ mode, title, description, landlord = false, showAccountSwitch = true, children }) {
   const { t } = useLocale();
@@ -19,7 +18,7 @@ export default function AuthLayout({ mode, title, description, landlord = false,
   return (
     <div data-auth-layout className="flex flex-col bg-canvas text-ink [--trail-step:20px] [--pink:var(--ink)] [--pink-hover:var(--text-gray)] sm:[--trail-step:24px] lg:min-h-dvh">
       <ViewTransition name="auth-header" share="auth-header" default="none">
-        <header className={`${pageWidth} flex items-center gap-4 py-3 lg:py-4`}>
+        <header className={`${publicContainerClassName} flex items-center gap-4 py-3 lg:py-4`}>
           <Link href="/" className="inline-flex size-11 shrink-0 items-center justify-start">
             <BrandLogo name={t("nav.brand")} compact />
           </Link>
@@ -30,9 +29,9 @@ export default function AuthLayout({ mode, title, description, landlord = false,
         </header>
       </ViewTransition>
 
-      <main className={`${pageWidth} grid min-w-0 content-start pt-10 pb-[max(1rem,env(safe-area-inset-bottom))] lg:flex-1 lg:grid-cols-[minmax(0,1fr)_400px] lg:content-center lg:items-start lg:gap-x-[72px] lg:pt-8 lg:pb-16`}>
+      <main className={`${publicContainerClassName} grid min-w-0 content-start pt-10 pb-[max(1rem,env(safe-area-inset-bottom))] lg:flex-1 lg:grid-cols-[minmax(0,1fr)_400px] lg:content-center lg:items-start lg:gap-x-[72px] lg:pt-8 lg:pb-16`}>
         <ViewTransition key={mode} name="auth-form" share="auth-form" default="none">
-          <section aria-labelledby="auth-title" className="min-w-0 text-center sm:text-left lg:col-start-2 lg:row-start-1">
+          <section aria-labelledby="auth-title" className="mx-auto w-full min-w-0 max-w-[400px] text-center sm:text-left lg:col-start-2 lg:row-start-1 lg:mx-0">
             <div className="pb-7">
               <h1 id="auth-title" className="text-[28px] font-semibold leading-9 tracking-[-.035em] sm:text-[32px] sm:leading-10">{title}</h1>
               {subtitle && <p className="mt-3 text-sm leading-6 text-muted sm:mt-2">{subtitle}</p>}

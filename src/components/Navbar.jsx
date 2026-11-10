@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import BrandLogo from "./BrandLogo";
+import Avatar from "./Avatar";
 import { publicContainerClassName } from "./layoutStyles";
 import { usePathname } from "next/navigation";
 import { usePendingViewings } from "../lib/usePendingViewings";
@@ -44,13 +45,7 @@ const account = {
   admin: { href: "/admin" },
 };
 
-function initialsFor(name, email, role) {
-  const fromName = name?.trim().split(/\s+/).filter(Boolean).slice(0, 2).map((part) => part[0]).join("").toUpperCase();
-  return fromName || email?.[0]?.toUpperCase() || role?.slice(0, 2).toUpperCase() || "?";
-}
-
 let cachedAccountRole = null;
-let cachedAccountInitials = null;
 
 export default function Navbar() {
   const pathname = usePathname();
@@ -58,7 +53,6 @@ export default function Navbar() {
   const [userId, setUserId] = useState(null);
   const [menuOpen, setMenuOpen] = useState(false);
   const [accountRole, setAccountRole] = useState(cachedAccountRole);
-  const [accountInitials, setAccountInitials] = useState(cachedAccountInitials);
   const headerRef = useRef(null);
   const mobileNavRef = useRef(null);
   const menuButtonRef = useRef(null);
@@ -70,21 +64,18 @@ export default function Navbar() {
       const { data: { user } } = await supabase.auth.getUser();
       if (!active) return;
       setUserId(user?.id ?? null);
-      if (!user) { cachedAccountRole = null; cachedAccountInitials = null; setAccountRole(null); setAccountInitials(null); return; }
-      const { data } = await supabase.from("profiles").select("full_name,role").eq("id", user.id).single();
+      if (!user) { cachedAccountRole = null; setAccountRole(null); return; }
+      const { data } = await supabase.from("profiles").select("role").eq("id", user.id).single();
       if (active) {
         cachedAccountRole = data?.role ?? "student";
-        cachedAccountInitials = initialsFor(data?.full_name, user.email, cachedAccountRole);
         setAccountRole(cachedAccountRole);
-        setAccountInitials(cachedAccountInitials);
       }
     }
     loadAccount();
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event) => {
       if (event === "SIGNED_OUT") {
         cachedAccountRole = null;
-        cachedAccountInitials = null;
-        if (active) { setUserId(null); setAccountRole(null); setAccountInitials(null); }
+        if (active) { setUserId(null); setAccountRole(null); }
       }
     });
     return () => { active = false; subscription.unsubscribe(); };
@@ -138,8 +129,8 @@ export default function Navbar() {
             <ThemeToggle />
             {accountRole && account[accountRole] ? (
               <Link href={account[accountRole].href} aria-label={t("common.account")} onClick={closeMenu}
-                className={`ml-2 ${accountRole === "admin" ? "inline-flex" : "hidden md:inline-flex"} size-11 items-center justify-center rounded-full border border-line text-xs font-semibold transition-colors hover:border-ink`}>
-                {accountInitials}
+                className={`ml-2 ${accountRole === "admin" ? "inline-flex" : "hidden md:inline-flex"} size-11 items-center justify-center rounded-full transition-opacity hover:opacity-80 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink`}>
+                <Avatar className="size-10" />
               </Link>
             ) : (
               <Link href="/login" onClick={closeMenu} className="ml-3 hidden min-h-11 items-center gap-3 rounded-md bg-ink px-4 text-sm font-medium text-canvas transition-opacity hover:opacity-85 md:inline-flex">

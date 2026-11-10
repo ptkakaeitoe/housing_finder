@@ -41,5 +41,5 @@ export default function LocationPicker({ latitude, longitude, onChange }) {
     else markerRef.current = new mapRef.current.AdvancedMarkerElement({ map: mapRef.current.map, position });
   }, [latitude, longitude]);
   if (!mapsKey || !mapId) return <p className="text-sm text-muted">{t("locationPicker.missingKey")}</p>;
-  return <div><p className="mb-2 text-sm text-muted">{t("locationPicker.clickHint")}</p><div ref={container} className="h-72 w-full rounded-2xl border border-line bg-surface-muted" />{error && <p role="alert" className="mt-2 text-sm text-accent">{error}</p>}</div>;
+  return <div><p className="mb-2 text-sm text-muted">{t("locationPicker.clickHint")}</p><div ref={container} className="h-72 w-full rounded-lg bg-surface-muted" />{error && <p role="alert" className="mt-2 text-sm text-accent">{error}</p>}</div>;
 }

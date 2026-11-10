@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import ViewingRequestCard from "../components/ViewingRequestCard";
+import { primaryButtonClassName, secondaryButtonClassName } from "../components/uiStyles";
 import { publicPageClassName, publicPageHeadingClassName } from "../components/layoutStyles";
 import { supabase } from "../lib/supabase";
 import { useLocale } from "../lib/i18n/LocaleContext";
@@ -35,8 +36,8 @@ export default function LandlordAppointmentsPage() {
     {loading ? <p role="status" className="mt-10 text-sm text-muted">{t("appointments.loading")}</p>
     : requests.length ? <div className="mt-10 grid gap-x-6 gap-y-12 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">{requests.map((request) => <ViewingRequestCard key={request.id} request={request}>
       {request.status === "pending" && <div className="flex flex-wrap gap-3">
-        <button type="button" onClick={() => setStatus(request.id, "accepted")} className="min-h-11 rounded-lg bg-ink px-5 text-sm font-medium text-canvas hover:opacity-80">{t("landlordAppointments.accept")}</button>
-        <button type="button" onClick={() => setStatus(request.id, "declined")} className="min-h-11 rounded-lg border border-line px-5 text-sm font-medium text-ink hover:border-ink">{t("landlordAppointments.decline")}</button>
+        <button type="button" onClick={() => setStatus(request.id, "accepted")} className={primaryButtonClassName}>{t("landlordAppointments.accept")}</button>
+        <button type="button" onClick={() => setStatus(request.id, "declined")} className={secondaryButtonClassName}>{t("landlordAppointments.decline")}</button>
       </div>}
     </ViewingRequestCard>)}</div>
     : !error && <p role="status" className="mt-10 py-10 text-base text-muted">{t("landlordAppointments.noneYet")}</p>}

@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import { supabase, requireSupabase } from "../lib/supabase";
 import { useLocale } from "../lib/i18n/LocaleContext";
+import { primaryButtonClassName, statusBadgeClassName } from "./uiStyles";
 
 export default function LandlordVerificationSection() {
   const { t } = useLocale();
@@ -54,7 +55,7 @@ export default function LandlordVerificationSection() {
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" className="size-5"><path d="m12 3 8 3v6c0 5-8 9-8 9s-8-4-8-9V6l8-3Z" /><path d="m8 12 3 3 5-6" /></svg>
         </span>
         <span className="min-w-0 flex-1"><span className="block text-base font-semibold">{t("verification.title")}</span><span className="mt-1 block text-sm font-normal text-muted">{expanded ? t("verification.manageDescription") : t("verification.viewDescription")}</span></span>
-        {requests[0] && <span className="max-w-24 shrink-0 rounded-full bg-surface-muted px-2.5 py-1 text-center text-xs font-medium break-words text-ink">{t(`common.verificationStatus.${requests[0].status}`)}</span>}
+        {requests[0] && <span className={`${statusBadgeClassName} max-w-24 shrink-0 justify-center text-center break-words`}>{t(`common.verificationStatus.${requests[0].status}`)}</span>}
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" className={`size-5 shrink-0 text-muted transition-transform ${expanded ? "rotate-180" : ""}`}><path d="m6 9 6 6 6-6" /></svg>
       </button>
     </h2>
@@ -90,20 +91,20 @@ export default function LandlordVerificationSection() {
         <p className="mt-4"><strong className="text-ink">{t("verification.demoLabel")}</strong> {t("verification.demoHint")}</p>
         <p className="mt-2">{t("verification.reviewNote")}</p>
       </section>
-      <label className="text-sm font-semibold text-ink">{t("verification.legalName")}
+      <label className="min-w-0 text-xs font-medium text-muted">{t("verification.legalName")}
         <input name="full_name" required minLength="2" maxLength="120" autoComplete="name" placeholder={t("verification.legalNamePlaceholder")} className="mt-2 min-h-12 w-full min-w-0 rounded-md border border-line bg-transparent px-3 text-base outline-none focus:border-ink focus:ring-1 focus:ring-ink" />
       </label>
-      <label className="text-sm font-semibold text-ink">{t("verification.phoneNumber")}
+      <label className="min-w-0 text-xs font-medium text-muted">{t("verification.phoneNumber")}
         <input name="phone" type="tel" required minLength="6" maxLength="30" autoComplete="tel" placeholder={t("verification.phoneNumberPlaceholder")} className="mt-2 min-h-12 w-full min-w-0 rounded-md border border-line bg-transparent px-3 text-base outline-none focus:border-ink focus:ring-1 focus:ring-ink" />
       </label>
       <div>
-        <label className="text-sm font-semibold text-ink">{t("verification.identityDocument")}
+        <label className="min-w-0 text-xs font-medium text-muted">{t("verification.identityDocument")}
           <input type="file" required accept="application/pdf,image/jpeg,image/png" aria-describedby="verification-file-help" onChange={(event) => setFile(event.target.files?.[0] ?? null)} className="mt-2 block w-full min-w-0 rounded-md border border-line bg-transparent p-3 text-sm text-muted file:mr-3 file:rounded-md file:border-0 file:bg-surface-muted file:px-3 file:py-2 file:text-xs file:font-medium file:text-ink focus-visible:outline-2 focus-visible:outline-ink" />
         </label>
         <p id="verification-file-help" className="mt-2 text-xs leading-5 text-muted">{t("verification.fileHelp")}</p>
       </div>
       {error && <p role="alert" className="text-sm text-accent">{error}</p>}
-      <button disabled={busy} className="min-h-12 rounded-lg bg-ink px-4 text-sm font-medium text-canvas disabled:opacity-50">{busy ? t("verification.submitting") : t("verification.submitForReview")}</button>
+      <button disabled={busy} className={`${primaryButtonClassName} min-h-12`}>{busy ? t("verification.submitting") : t("verification.submitForReview")}</button>
     </form>
     </div>
   </section>;

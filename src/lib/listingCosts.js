@@ -4,11 +4,11 @@ export const utilities = [
   { key: 'internet', unit: null },
 ];
 export const billingKeys = ['unspecified', 'included', 'metered', 'monthly', 'provider', 'unavailable'];
-export function money(value) { return `฿${Number(value).toLocaleString('en-TH', { maximumFractionDigits: 2 })}`; }
-export function utilitySummary(listing, utility, t) {
+export function money(value, locale = 'en-TH') { return `฿${Number(value).toLocaleString(locale, { maximumFractionDigits: 2 })}`; }
+export function utilitySummary(listing, utility, t, locale = 'en-TH') {
   const billing = listing[`${utility.key}_billing`] || 'unspecified';
   const rate = listing[`${utility.key}_rate`];
-  if (billing === 'metered' || billing === 'monthly') return rate == null ? t("common.rateNotSpecified") : `${money(rate)} / ${billing === 'monthly' ? t("common.month") : utility.unit}`;
+  if (billing === 'metered' || billing === 'monthly') return rate == null ? t("common.rateNotSpecified") : `${money(rate, locale)} / ${billing === 'monthly' ? t("common.month") : utility.unit}`;
   return t(`common.billing.${billing}`) || t("common.notSpecified");
 }
 export function listingCostPayload(form, t) {

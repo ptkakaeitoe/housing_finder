@@ -9,9 +9,11 @@ import LocationPicker from "./LocationPicker";
 import { requireSupabase, supabase, listingImageUrl } from "../lib/supabase";
 import { universities, nearestUniversity } from "../lib/universities";
 import { useLocale } from "../lib/i18n/LocaleContext";
+import { publicPageClassName, publicPageHeadingClassName } from "./layoutStyles";
+import { inputClassName, fieldLabelClassName, primaryButtonClassName, quietButtonClassName } from "./uiStyles";
 
-const inputClass = "mt-2 min-h-12 w-full rounded-xl border border-line bg-canvas px-4 text-base text-ink focus:border-accent focus:outline-none";
-const fieldClass = "text-sm font-semibold text-ink";
+const inputClass = `mt-2 ${inputClassName}`;
+const fieldClass = fieldLabelClassName;
 
 export default function ListingForm({ edit = false }) {
   const router = useRouter();
@@ -124,11 +126,11 @@ export default function ListingForm({ edit = false }) {
     } finally { setBusy(false); }
   }
 
-  return <><main className="mx-auto max-w-4xl px-5 py-10 sm:px-8">
+  return <main className={`${publicPageClassName} text-ink`}>
 
-    <h1 className="text-2xl font-semibold tracking-tight sm:text-3xl text-ink">{edit ? t("listingForm.editHeading") : t("listingForm.addHeading")}</h1>
+    <h1 className={publicPageHeadingClassName}>{edit ? t("listingForm.editHeading") : t("listingForm.addHeading")}</h1>
 
-    {edit && !listing ? <p role={error ? "alert" : "status"} className="mt-8 text-muted">{error || t("listingForm.loadingListing")}</p> : <form key={listing?.id ?? "new"} onSubmit={save} className="mt-8 grid gap-5 border-t border-line pt-6 sm:grid-cols-2">
+    {edit && !listing ? <p role={error ? "alert" : "status"} className="mt-8 text-muted">{error || t("listingForm.loadingListing")}</p> : <form key={listing?.id ?? "new"} onSubmit={save} aria-busy={busy} className="mt-8 grid max-w-4xl gap-x-6 gap-y-5 sm:grid-cols-2">
       <label className={fieldClass}>{t("listingForm.propertyName")}<input className={inputClass} name="title" required minLength="3" defaultValue={listing?.title ?? ""} placeholder={t("listingForm.propertyNamePlaceholder")} /></label>
       <label className={fieldClass}>{t("listingForm.type")}<select className={inputClass} name="property_type" defaultValue={listing?.property_type ?? "room"}><option value="room">{t("common.propertyType.room")}</option><option value="apartment">{t("common.propertyType.apartment")}</option><option value="condo">{t("common.propertyType.condo")}</option></select></label>
       <label className={fieldClass}>{t("listingForm.monthlyRent")}<input className={inputClass} name="monthly_rent" type="number" min="0" step="0.01" required defaultValue={listing?.monthly_rent ?? ""} /></label>
@@ -139,23 +141,23 @@ export default function ListingForm({ edit = false }) {
       <label className={fieldClass}>{t("listingForm.latitude")}<input className={inputClass} type="number" step="any" min="-90" max="90" required value={coords.latitude} onChange={(e) => updateCoords({ ...coords, latitude: e.target.value })} /></label>
       <label className={fieldClass}>{t("listingForm.longitude")}<input className={inputClass} type="number" step="any" min="-180" max="180" required value={coords.longitude} onChange={(e) => updateCoords({ ...coords, longitude: e.target.value })} /></label>
       <div className="sm:col-span-2"><LocationPicker latitude={coords.latitude} longitude={coords.longitude} onChange={updateCoords} /></div>
-      <button type="button" className="justify-self-start text-sm font-semibold text-accent underline sm:col-span-2" onClick={() => navigator.geolocation?.getCurrentPosition((position) => updateCoords({ latitude: position.coords.latitude, longitude: position.coords.longitude }), () => setError(t("listingForm.locationUnavailable")))}>{t("listingForm.useCurrentLocation")}</button>
+      <button type="button" className={`justify-self-start sm:col-span-2 ${quietButtonClassName}`} onClick={() => navigator.geolocation?.getCurrentPosition((position) => updateCoords({ latitude: position.coords.latitude, longitude: position.coords.longitude }), () => setError(t("listingForm.locationUnavailable")))}>{t("listingForm.useCurrentLocation")}</button>
       <label className={`${fieldClass} sm:col-span-2`}>{t("listingForm.nearestUniversity")}<select className={inputClass} value={universityId} onChange={(e) => { setUniversityTouched(true); setUniversityId(e.target.value); }}><option value="">{t("listingForm.noCampus")}</option>{universities.map((u) => <option key={u.id} value={u.id}>{u.name} — {u.city}</option>)}</select></label>
       <label className={`${fieldClass} sm:col-span-2`}>{t("listingForm.description")}<textarea className={`${inputClass} min-h-32 py-3`} name="description" defaultValue={listing?.description ?? ""} placeholder={t("listingForm.descriptionPlaceholder")} /></label>
       <section className="sm:col-span-2" aria-labelledby="photos-heading">
         <h2 id="photos-heading" className={fieldClass}>{t("listingForm.photosHeading")}</h2>
         <p id="photos-help" className="mt-2 text-sm text-muted">{t("listingForm.photosHelp")}</p>
-        <label className="mt-3 block text-sm font-semibold text-ink">{t("listingForm.addPhotos")}
-          <input className={`${inputClass} pt-2`} type="file" multiple disabled={busy} accept="image/jpeg,image/png,image/webp" aria-describedby="photos-help" onChange={addPhotos} />
+        <label className={`mt-3 ${fieldClass}`}>{t("listingForm.addPhotos")}
+          <input className={`${inputClass} file:mr-3 file:rounded-md file:border-0 file:bg-surface-muted file:px-3 file:py-1 file:text-xs file:font-medium file:text-ink`} type="file" multiple disabled={busy} accept="image/jpeg,image/png,image/webp" aria-describedby="photos-help" onChange={addPhotos} />
         </label>
         <div className="mt-4 grid grid-cols-2 gap-4 sm:grid-cols-3">
-          {photos.map((photo, index) => <div key={photo.key} className="overflow-hidden rounded-xl border border-line">
+          {photos.map((photo, index) => <div key={photo.key} className="min-w-0">
             <PhotoPreview photo={photo} index={index} />
-            <div className="space-y-2 p-3 text-xs">
+            <div className="space-y-1 pt-2 text-xs">
               <p className="font-semibold text-ink">{index === 0 ? t("listingForm.coverPhoto") : t("listingForm.photoN", { n: index + 1 })}</p>
               <div className="flex flex-wrap gap-3">
-                {index > 0 && <button type="button" disabled={busy} className="min-h-9 text-accent" onClick={() => setPhotos(current => [current[index], ...current.filter((_, i) => i !== index)])}>{t("listingForm.makeCover")}</button>}
-                <button type="button" disabled={busy} className="min-h-9 text-muted" aria-label={t("listingForm.removePhotoAria", { n: index + 1 })} onClick={() => setPhotos(current => current.filter(item => item.key !== photo.key))}>{t("listingForm.remove")}</button>
+                {index > 0 && <button type="button" disabled={busy} className="min-h-11 text-ink underline-offset-4 hover:underline disabled:opacity-40" onClick={() => setPhotos(current => [current[index], ...current.filter((_, i) => i !== index)])}>{t("listingForm.makeCover")}</button>}
+                <button type="button" disabled={busy} className="min-h-11 text-muted hover:text-ink disabled:opacity-40" aria-label={t("listingForm.removePhotoAria", { n: index + 1 })} onClick={() => setPhotos(current => current.filter(item => item.key !== photo.key))}>{t("listingForm.remove")}</button>
               </div>
             </div>
           </div>)}
@@ -163,9 +165,9 @@ export default function ListingForm({ edit = false }) {
         <p className="mt-2 text-xs text-muted">{t("listingForm.photoCount", { count: photos.length })}</p>
       </section>
       {error && <p role="alert" className="text-sm text-accent sm:col-span-2">{error}</p>}
-      <button type="submit" disabled={busy} className="min-h-12 rounded-lg bg-ink px-7 font-bold text-canvas disabled:opacity-50 sm:col-span-2">{busy ? t("listingForm.saving") : edit ? t("listingForm.saveChanges") : t("listingForm.publishListing")}</button>
+      <button type="submit" disabled={busy} className={`${primaryButtonClassName} min-h-12 sm:col-span-2`}>{busy ? t("listingForm.saving") : edit ? t("listingForm.saveChanges") : t("listingForm.publishListing")}</button>
     </form>}
-  </main></>;
+  </main>;
 }
 
 function PhotoPreview({ photo, index }) {
@@ -178,5 +180,5 @@ function PhotoPreview({ photo, index }) {
     return () => URL.revokeObjectURL(url);
   }, [photo.file]);
   const src = photo.path ? listingImageUrl(photo.path) : preview;
-  return src ? <img src={src} alt={t("listingForm.propertyPhotoAlt", { n: index + 1 })} className="aspect-[4/3] w-full object-cover" /> : <div className="aspect-[4/3] bg-surface-muted" />;
+  return src ? <img src={src} alt={t("listingForm.propertyPhotoAlt", { n: index + 1 })} className="aspect-[3/2] w-full rounded-lg object-cover" /> : <div className="aspect-[3/2] rounded-lg bg-surface-muted" />;
 }

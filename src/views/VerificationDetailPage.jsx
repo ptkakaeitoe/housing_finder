@@ -5,6 +5,8 @@ import Link from "next/link";
 import { supabase } from "../lib/supabase";
 import { useAdmin } from "../lib/useAdmin";
 import { useLocale } from "../lib/i18n/LocaleContext";
+import { publicPageClassName, publicPageHeadingClassName, publicPageLinkClassName } from "../components/layoutStyles";
+import { primaryButtonClassName, secondaryButtonClassName, statusBadgeClassName } from "../components/uiStyles";
 export default function VerificationDetailPage() {
   const { id } = useParams();
   const router = useRouter();
@@ -21,5 +23,24 @@ export default function VerificationDetailPage() {
     const { error: updateError } = await supabase.from("verification_requests").update({ status, reviewed_at: new Date().toISOString() }).eq("id", id);
     if (updateError) setError(updateError.message); else router.push("/admin-verifications");
   }
-  return <><main className="mx-auto max-w-3xl px-5 py-10 sm:px-8"><Link href="/admin-verifications" className="text-sm font-semibold text-accent">{t("verificationDetail.backToQueue")}</Link><h1 className="mt-6 text-2xl font-semibold tracking-tight sm:text-3xl text-ink">{t("verificationDetail.heading")}</h1>{admin === false && <p className="mt-8 text-muted">{t("common.adminRequired")}</p>}{error && <p role="alert" className="mt-5 text-accent">{error}</p>}{request && <div className="mt-8 grid gap-5 border-t border-line pt-6"><p className="text-muted">{t("verificationDetail.name")} <strong className="block text-lg text-ink">{request.full_name}</strong></p><p className="text-muted">{t("verificationDetail.phone")} <strong className="block text-lg text-ink">{request.phone}</strong></p><p className="text-sm text-muted">{t("verificationDetail.submitted", { date: new Date(request.created_at).toLocaleString(), status: t(`common.verificationStatus.${request.status}`) })}</p><button onClick={openDocument} className="justify-self-start text-sm font-bold text-accent underline">{t("verificationDetail.openDocument")}</button>{request.status === "pending" && <div className="flex flex-wrap gap-3"><button onClick={() => review("approved")} className="rounded-lg bg-ink px-6 py-3 font-bold text-canvas">{t("verificationDetail.approve")}</button><button onClick={() => review("rejected")} className="rounded-full border border-line px-6 py-3 font-bold text-ink">{t("verificationDetail.reject")}</button></div>}</div>}</main></>;
+  return <main className={`${publicPageClassName} text-ink`}>
+    <Link href="/admin-verifications" className={publicPageLinkClassName}>{t("verificationDetail.backToQueue")}</Link>
+    <h1 className={`mt-4 ${publicPageHeadingClassName}`}>{t("verificationDetail.heading")}</h1>
+    {admin === false && <p className="mt-8 text-sm text-muted">{t("common.adminRequired")}</p>}
+    {error && <p role="alert" className="mt-5 text-sm text-accent">{error}</p>}
+    {!error && (admin === null || (admin && !request)) && <p role="status" className="mt-8 text-sm text-muted">{t("common.loading")}</p>}
+    {request && <section className="mt-8 max-w-2xl">
+      <span className={statusBadgeClassName}>{t(`common.verificationStatus.${request.status}`)}</span>
+      <dl className="mt-6 grid gap-6 sm:grid-cols-2">
+        <div className="min-w-0"><dt className="text-xs font-medium text-muted">{t("verificationDetail.name")}</dt><dd className="mt-2 text-base font-medium break-words">{request.full_name}</dd></div>
+        <div className="min-w-0"><dt className="text-xs font-medium text-muted">{t("verificationDetail.phone")}</dt><dd className="mt-2 text-base font-medium break-words">{request.phone}</dd></div>
+      </dl>
+      <p className="mt-5 text-xs leading-6 text-muted">{t("verificationDetail.submitted", { date: new Date(request.created_at).toLocaleString(), status: t(`common.verificationStatus.${request.status}`) })}</p>
+      <button type="button" onClick={openDocument} className={`mt-5 ${secondaryButtonClassName}`}>{t("verificationDetail.openDocument")}<span aria-hidden="true">↗</span></button>
+      {request.status === "pending" && <div className="mt-8 flex flex-wrap gap-2">
+        <button type="button" onClick={() => review("approved")} className={primaryButtonClassName}>{t("verificationDetail.approve")}</button>
+        <button type="button" onClick={() => review("rejected")} className={secondaryButtonClassName}>{t("verificationDetail.reject")}</button>
+      </div>}
+    </section>}
+  </main>;
 }
