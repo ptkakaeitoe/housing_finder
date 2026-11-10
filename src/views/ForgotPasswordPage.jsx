@@ -1,20 +1,46 @@
 "use client";
-import { useState } from "react";
+
 import Link from "next/link";
+import { useState } from "react";
+import AuthLayout from "../components/AuthLayout";
+import { AuthField, AuthNotice, AuthSubmit } from "../components/AuthControls";
+import { authSubmitClassName } from "./authStyles";
 import { requireSupabase } from "../lib/supabase";
 import { useLocale } from "../lib/i18n/LocaleContext";
 
 export default function ForgotPasswordPage() {
   const { t } = useLocale();
-  const [message, setMessage] = useState("");
+  const [error, setError] = useState("");
+  const [sent, setSent] = useState(false);
+  const [busy, setBusy] = useState(false);
+
   async function submit(event) {
     event.preventDefault();
+    if (busy) return;
+    const email = new FormData(event.currentTarget).get("email");
+    setError("");
+    setBusy(true);
     try {
-      const email = new FormData(event.currentTarget).get("email");
       const { error } = await requireSupabase().auth.resetPasswordForEmail(email, { redirectTo: `${location.origin}/update-password` });
       if (error) throw error;
-      setMessage(t("forgotPassword.resetLinkSent"));
-    } catch (cause) { setMessage(cause.message); }
+      setSent(true);
+    } catch (cause) {
+      setError(cause.message);
+    } finally {
+      setBusy(false);
+    }
   }
-  return <main className="mx-auto flex min-h-svh max-w-lg flex-col justify-center px-5 py-12"><Link href="/" className="text-sm font-bold text-accent">{t("forgotPassword.backLink")}</Link><h1 className="mt-8 text-4xl font-semibold tracking-tight text-ink">{t("forgotPassword.heading")}</h1><p className="mt-3 text-muted">{t("forgotPassword.subheading")}</p><form onSubmit={submit} className="mt-8 grid gap-5 border-t border-line pt-6"><label className="text-sm font-semibold text-ink">{t("auth.emailAddress")}<input name="email" type="email" required className="mt-2 min-h-12 w-full rounded-xl border border-line bg-canvas px-4 text-base" /></label>{message && <p role="status" className="text-sm text-accent">{message}</p>}<button className="min-h-12 rounded-full bg-ink font-bold text-canvas">{t("forgotPassword.sendResetLink")}</button></form></main>;
+
+  return <AuthLayout mode="reset" title={t("forgotPassword.heading")} description={!sent && t("forgotPassword.subheading")} showAccountSwitch={!sent}>
+    {sent ? <div className="grid gap-6">
+      <AuthNotice success>{t("forgotPassword.resetLinkSent")}</AuthNotice>
+      <Link href="/login" className={authSubmitClassName}>{t("common.signIn")}<span aria-hidden="true">→</span></Link>
+    </div> : <form onSubmit={submit} aria-busy={busy} onInput={() => setError("")}>
+      <fieldset disabled={busy} className="grid gap-5">
+        <AuthNotice>{error}</AuthNotice>
+        <AuthField id="reset-email" name="email" type="email" label={t("auth.emailAddress")} autoComplete="email" required />
+        <AuthSubmit busy={busy}>{t(busy ? "auth.sendingLink" : "forgotPassword.sendResetLink")}</AuthSubmit>
+      </fieldset>
+    </form>}
+  </AuthLayout>;
 }

@@ -7,6 +7,7 @@
     "zh": "中文"
   },
   "common": {
+    "retry": "重试",
     "signIn": "登入",
     "createAccount": "创建账户",
     "loading": "加载中…",
@@ -58,6 +59,9 @@
     "adminRequired": "需要管理员权限。"
   },
   "nav": {
+    "mobileNavigation": "移动导航",
+    "more": "更多",
+    "closeNavigation": "关闭菜单",
     "brand": "住房查找器",
     "explore": "探索",
     "map": "地图",
@@ -115,6 +119,8 @@
     "clearAll": "全部清除"
   },
   "search": {
+    "resultsUnavailable": "无法加载房源",
+    "noHomes": "暂无房源。",
     "heading": "{{university}}附近的房屋",
     "yourUniversity": "你的大学",
     "viewMap": "查看地图↗",
@@ -122,10 +128,35 @@
       "one": "{{count}} 位置",
       "other": "{{count}} 地点"
     },
-    "liveUnavailable": "目前暂无实时房源信息。下方展示的是样板房。",
+    "liveUnavailable": "房源暂时无法显示。",
     "noMatches": "没有找到匹配项。请尝试其他地区或预算。"
   },
   "auth": {
+    "loginTitle": "欢迎回来",
+    "registerTitle": "创建账户",
+    "accountNavigation": "账户登录与注册",
+    "loginFormDescription": "收藏的房源和下次看房安排，都在这里。",
+    "registerFormDescription": "寻找心仪的家，收藏喜欢的房源。",
+    "guideHeading": "寻找校园附近的家。",
+    "guideLandlordHeading": "在这里找到下一位租客。",
+    "guideDescription": "浏览大学附近的房源，比较全部费用，再按自己的时间预约看房。",
+    "guideLandlordDescription": "发布房源，清楚列出费用，并在一处管理看房申请。",
+    "guideExplore": "浏览房源",
+    "guideCompare": "比较每月费用",
+    "guideVisit": "预约看房",
+    "guideList": "发布房源",
+    "guideDetails": "完善房源信息",
+    "guideManage": "管理看房预约",
+    "guideExploreDescription": "选择大学，再按租金和房屋类型筛选房源。",
+    "guideCompareDescription": "决定前，查看租金、水电等费用及押金。",
+    "guideVisitDescription": "选择时间，向房东发送看房申请。",
+    "guideListDescription": "添加照片、地址以及距离房源最近的大学。",
+    "guideDetailsDescription": "填写租金、押金、水电等费用及最短租期。",
+    "guideManageDescription": "查看看房申请，接受或拒绝对方提出的时间。",
+    "sendingLink": "正在发送链接…",
+    "savingPassword": "正在保存密码…",
+    "signingIn": "正在登录…",
+    "creatingAccount": "正在创建账户…",
     "tagline": "寻找您的新家",
     "registerHeadingLine1": "学生公寓",
     "registerHeadingLine2": "制成",

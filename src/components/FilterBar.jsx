@@ -24,18 +24,12 @@ function SlidersIcon() {
   );
 }
 
-// Note: button/input/select/textarea text sizing can't rely on a Tailwind
-// text-* class placed directly on the element — globals.css has an
-// unlayered `button, input, select, textarea { font: inherit }` reset that
-// (per CSS cascade-layer rules) always wins over layered Tailwind utilities,
-// so the element inherits the page's 16px instead. Wrapping the label in a
-// <span> (not targeted by that reset) sidesteps it reliably.
 function Chip({ selected, children, ...props }) {
   return (
     <button
       type="button"
       aria-pressed={selected}
-      className={`min-h-10 shrink-0 whitespace-nowrap rounded-full border px-4 transition-colors ${selected ? "border-ink bg-ink text-canvas" : "border-line bg-surface text-ink hover:border-ink"}`}
+     className={`min-h-11 shrink-0 whitespace-nowrap rounded-lg border px-4 transition-colors ${selected ? "border-ink bg-ink text-canvas" : "border-line bg-surface text-ink hover:border-ink"}`}
       {...props}
     >
       <span className="text-sm font-semibold">{children}</span>
@@ -49,11 +43,10 @@ function MiniChip({ selected, children, ...props }) {
     <button
       type="button"
       aria-pressed={selected}
-      style={{ outline: "none" }}
-      className={`min-h-7 shrink-0 whitespace-nowrap rounded-full border px-2.5 transition-colors ${selected ? "border-ink bg-ink text-canvas" : "border-line bg-surface text-ink hover:border-accent"}`}
+     className={`min-h-11 shrink-0 whitespace-nowrap rounded-md border px-3 transition-colors ${selected ? "border-ink bg-ink text-canvas" : "border-line bg-transparent text-ink hover:border-ink"}`}
       {...props}
     >
-      <span className="text-[11px] font-semibold">{children}</span>
+      <span className="text-xs font-medium">{children}</span>
     </button>
   );
 }
@@ -67,6 +60,7 @@ export default function FilterBar({
   leaseMax, setLeaseMax,
   maxDistanceKm, setMaxDistanceKm,
   trailing,
+  compact = false,
 }) {
   const { t } = useLocale();
   const searchRef = useRef(null);
@@ -99,8 +93,12 @@ export default function FilterBar({
   useEffect(() => {
     if (!filtersOpen) return;
     function onPointerDown(event) { if (!filtersRef.current?.contains(event.target)) setFiltersOpen(false); }
-    document.addEventListener("mousedown", onPointerDown);
-    return () => document.removeEventListener("mousedown", onPointerDown);
+    function onKeyDown(event) {
+      if (event.key === "Escape") { setFiltersOpen(false); filtersRef.current?.querySelector("button")?.focus(); }
+    }
+    document.addEventListener("pointerdown", onPointerDown);
+    document.addEventListener("keydown", onKeyDown);
+    return () => { document.removeEventListener("pointerdown", onPointerDown); document.removeEventListener("keydown", onKeyDown); };
   }, [filtersOpen]);
 
   function clearAll() {
@@ -110,18 +108,17 @@ export default function FilterBar({
   }
 
   return (
-    <div className="mt-6">
-      <div className="flex items-stretch divide-x divide-line rounded-3xl border border-line bg-surface shadow-[var(--shadow)]">
-        <div onClick={() => searchRef.current?.focus()} className="flex min-w-0 flex-1 flex-col items-start rounded-l-3xl px-7 py-3.5 transition-colors hover:bg-surface-muted focus-within:bg-surface-muted">
-          <span className="text-[11px] font-semibold text-ink">{t("filters.search")}</span>
+    <div className={compact ? "mt-4" : "mt-8"}>
+      <div className="flex items-stretch gap-2 rounded-lg border border-line bg-transparent p-1.5 sm:gap-0 sm:divide-x sm:divide-line">
+        <div onClick={() => searchRef.current?.focus()} className="flex min-w-0 flex-1 flex-col items-start rounded-md px-3 py-2.5 sm:px-5 transition-colors hover:bg-surface-muted focus-within:bg-surface-muted focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-ink">
+          <span className="text-xs font-medium text-ink">{t("filters.search")}</span>
           <input
             ref={searchRef}
             aria-label={t("filters.searchAria")}
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder={t("filters.searchPlaceholder")}
-            style={{ outline: "none", fontSize: "0.875rem" }}
-            className="w-full bg-transparent text-sm text-ink placeholder:text-muted"
+           className="min-h-7 w-full bg-transparent text-base text-ink outline-none placeholder:text-muted sm:text-sm"
           />
         </div>
 
@@ -138,41 +135,41 @@ export default function FilterBar({
             type="button"
             onClick={() => searchRef.current?.focus()}
             aria-label={t("filters.searchButtonAria")}
-            className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-accent text-white transition-transform hover:scale-105"
+           className="flex size-11 shrink-0 items-center justify-center rounded-md bg-ink text-canvas transition-opacity hover:opacity-80"
           >
             <SearchIcon />
           </button>
         </div>
       </div>
 
-      <div className="mt-3 grid grid-cols-2 gap-2 sm:hidden">
+      <div className="mt-3 grid grid-cols-1 gap-3 min-[380px]:grid-cols-2 sm:hidden">
         <div className="flex flex-col gap-1">
-          <span className="text-[11px] font-semibold uppercase tracking-[.1em] text-muted">{t("filters.university")}</span>
+          <span className="text-xs font-medium text-muted">{t("filters.university")}</span>
           <Picker heading={t("filters.university")} value={universitySlug} onChange={setUniversitySlug} items={universityItems} placeholder={t("filters.anyUniversity")} variant="block" panelWidth="16rem" />
         </div>
         <div className="flex flex-col gap-1">
-          <span className="text-[11px] font-semibold uppercase tracking-[.1em] text-muted">{t("filters.type")}</span>
+          <span className="text-xs font-medium text-muted">{t("filters.type")}</span>
           <Picker heading={t("filters.type")} value={type} onChange={setType} items={typeItems} placeholder={t("filters.typeAll")} variant="block" panelWidth="11rem" />
         </div>
       </div>
 
-      <div className="mt-4 flex flex-wrap items-center gap-2.5">
-        <div ref={filtersRef} className="relative">
-          <Chip selected={activeFilterCount > 0 || filtersOpen} onClick={() => setFiltersOpen((v) => !v)}>
-            <span className="inline-flex items-center gap-1.5"><SlidersIcon />{t("filters.filtersChip")}{activeFilterCount > 0 && <span className="ml-0.5 rounded-full bg-accent px-1.5 py-0.5 text-[10px] font-bold text-white">{activeFilterCount}</span>}</span>
+      <div className={`${compact ? "mt-3" : "mt-4"} flex flex-wrap items-center gap-2.5`}>
+        <div ref={filtersRef} onBlur={(event) => { if (!event.currentTarget.contains(event.relatedTarget)) setFiltersOpen(false); }} className="relative">
+          <Chip selected={activeFilterCount > 0 || filtersOpen} aria-expanded={filtersOpen} onClick={() => setFiltersOpen((v) => !v)}>
+            <span className="inline-flex items-center gap-1.5"><SlidersIcon />{t("filters.filtersChip")}{activeFilterCount > 0 && <span className="ml-0.5 rounded bg-canvas/15 px-1.5 py-0.5 text-xs font-medium">{activeFilterCount}</span>}</span>
           </Chip>
-          {filtersOpen && <div className="absolute left-0 top-[calc(100%+.5rem)] z-10 w-[19rem] rounded-2xl border border-line bg-surface p-5 shadow-[var(--shadow)]">
+          {filtersOpen && <div className="absolute left-0 top-[calc(100%+.5rem)] z-10 w-[min(22rem,calc(100vw-2.5rem))] rounded-lg border border-line bg-surface p-5 shadow-[var(--shadow)]">
             <div>
               <span className="text-xs font-semibold text-ink">{t("filters.costPerMonth")}</span>
               <div className="mt-2 flex items-center gap-2">
                 <span className="flex min-w-0 flex-1 items-center gap-1.5 rounded-xl border border-line px-3 py-2 transition-colors focus-within:border-accent focus-within:bg-surface-muted">
                   <span className="text-xs font-semibold text-muted">฿</span>
-                  <input type="number" min="0" inputMode="numeric" value={minRent} onChange={(e) => setMinRent(e.target.value)} placeholder={t("filters.min")} style={{ outline: "none", fontSize: "0.75rem" }} className="w-full min-w-0 bg-transparent text-xs font-semibold text-ink placeholder:font-normal placeholder:text-muted" />
+                  <input type="number" aria-label={t("filters.min")} min="0" inputMode="numeric" value={minRent} onChange={(e) => setMinRent(e.target.value)} placeholder={t("filters.min")} className="w-full min-w-0 min-h-7 bg-transparent text-base text-ink outline-none placeholder:text-muted sm:text-sm" />
                 </span>
                 <span className="text-xs text-muted">–</span>
                 <span className="flex min-w-0 flex-1 items-center gap-1.5 rounded-xl border border-line px-3 py-2 transition-colors focus-within:border-accent focus-within:bg-surface-muted">
                   <span className="text-xs font-semibold text-muted">฿</span>
-                  <input type="number" min="0" inputMode="numeric" value={maxRent} onChange={(e) => setMaxRent(e.target.value)} placeholder={t("filters.max")} style={{ outline: "none", fontSize: "0.75rem" }} className="w-full min-w-0 bg-transparent text-xs font-semibold text-ink placeholder:font-normal placeholder:text-muted" />
+                  <input type="number" aria-label={t("filters.max")} min="0" inputMode="numeric" value={maxRent} onChange={(e) => setMaxRent(e.target.value)} placeholder={t("filters.max")} className="w-full min-w-0 min-h-7 bg-transparent text-base text-ink outline-none placeholder:text-muted sm:text-sm" />
                 </span>
               </div>
             </div>
@@ -191,11 +188,11 @@ export default function FilterBar({
               </div>
             </div>
 
-            <button type="button" onClick={() => setFiltersOpen(false)} className="mt-5 min-h-10 w-full rounded-full bg-ink text-canvas"><span className="text-sm font-bold">{t("filters.showResults")}</span></button>
+            <button type="button" onClick={() => { setFiltersOpen(false); filtersRef.current?.querySelector("button")?.focus(); }} className="mt-5 min-h-11 w-full rounded-lg bg-ink text-canvas"><span className="text-sm font-bold">{t("filters.showResults")}</span></button>
           </div>}
         </div>
 
-        {hasFilters && <button type="button" onClick={clearAll} className="text-muted underline decoration-line underline-offset-4 hover:text-accent"><span className="text-sm font-semibold">{t("filters.clearAll")}</span></button>}
+        {hasFilters && <button type="button" onClick={clearAll} className="min-h-11 px-2 text-muted underline decoration-line underline-offset-4 hover:text-accent"><span className="text-sm font-semibold">{t("filters.clearAll")}</span></button>}
         {trailing}
       </div>
     </div>

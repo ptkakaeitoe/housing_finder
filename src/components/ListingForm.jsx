@@ -126,7 +126,7 @@ export default function ListingForm({ edit = false }) {
 
   return <><main className="mx-auto max-w-4xl px-5 py-10 sm:px-8">
 
-    <h1 className="text-4xl font-semibold tracking-tight text-ink">{edit ? t("listingForm.editHeading") : t("listingForm.addHeading")}</h1>
+    <h1 className="text-2xl font-semibold tracking-tight sm:text-3xl text-ink">{edit ? t("listingForm.editHeading") : t("listingForm.addHeading")}</h1>
 
     {edit && !listing ? <p role={error ? "alert" : "status"} className="mt-8 text-muted">{error || t("listingForm.loadingListing")}</p> : <form key={listing?.id ?? "new"} onSubmit={save} className="mt-8 grid gap-5 border-t border-line pt-6 sm:grid-cols-2">
       <label className={fieldClass}>{t("listingForm.propertyName")}<input className={inputClass} name="title" required minLength="3" defaultValue={listing?.title ?? ""} placeholder={t("listingForm.propertyNamePlaceholder")} /></label>
@@ -163,7 +163,7 @@ export default function ListingForm({ edit = false }) {
         <p className="mt-2 text-xs text-muted">{t("listingForm.photoCount", { count: photos.length })}</p>
       </section>
       {error && <p role="alert" className="text-sm text-accent sm:col-span-2">{error}</p>}
-      <button type="submit" disabled={busy} className="min-h-12 rounded-full bg-ink px-7 font-bold text-canvas disabled:opacity-50 sm:col-span-2">{busy ? t("listingForm.saving") : edit ? t("listingForm.saveChanges") : t("listingForm.publishListing")}</button>
+      <button type="submit" disabled={busy} className="min-h-12 rounded-lg bg-ink px-7 font-bold text-canvas disabled:opacity-50 sm:col-span-2">{busy ? t("listingForm.saving") : edit ? t("listingForm.saveChanges") : t("listingForm.publishListing")}</button>
     </form>}
   </main></>;
 }

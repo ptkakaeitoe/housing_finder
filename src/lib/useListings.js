@@ -10,6 +10,7 @@ export function useListings({ owner = false } = {}) {
   async function refresh() {
     if (!supabase) return;
     setLoading(true);
+    setError("");
     let query = supabase.from("listings").select("*").order("created_at", { ascending: false });
     if (owner) {
       const { data: { user } } = await supabase.auth.getUser();

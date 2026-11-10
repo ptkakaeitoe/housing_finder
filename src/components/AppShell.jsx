@@ -8,9 +8,10 @@ const standalonePages = new Set(["/login", "/register", "/forgot-password", "/up
 
 export default function AppShell({ children }) {
   const pathname = usePathname();
+  const standalone = standalonePages.has(pathname);
 
   return <LocaleProvider>
-    {!standalonePages.has(pathname) && <Navbar />}
-    {children}
+    {!standalone && <Navbar />}
+    {standalone ? children : <div className="pb-[calc(6rem+env(safe-area-inset-bottom))] md:pb-0">{children}</div>}
   </LocaleProvider>;
 }

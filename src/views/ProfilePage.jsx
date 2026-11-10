@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { supabase, requireSupabase } from "../lib/supabase";
-import { publicContainerClassName } from "../components/layoutStyles";
+import { publicPageClassName, publicPageHeadingClassName } from "../components/layoutStyles";
 import LandlordVerificationSection from "../components/LandlordVerificationSection";
 import { Picker } from "../components/Picker";
 import { LOCALES, LOCALE_LABELS } from "../lib/i18n/config";
@@ -78,72 +78,62 @@ export default function ProfilePage() {
   const initials = savedName.trim().split(/\s+/).filter(Boolean).slice(0, 2).map((part) => part[0]).join("").toUpperCase() || user?.email?.[0]?.toUpperCase() || "?";
   const changed = name.trim() !== savedName;
 
-  return <main className={`${publicContainerClassName} py-8 pb-32 text-ink sm:py-12 sm:pb-40`}>
-    <div className="mx-auto max-w-3xl">
-      {error && <p role="alert" className="mb-5 rounded-xl border border-accent/30 bg-accent/5 p-4 text-sm text-accent">{error}</p>}
-      {loading ? <div className="rounded-2xl border border-line bg-surface">
-        <div className="p-5 sm:p-7">
-          <p className="text-xs font-semibold uppercase tracking-[.12em] text-muted">{t("profile.yourAccount")}</p>
-          <h1 className="mt-2 text-3xl font-semibold tracking-tight sm:text-4xl">{t("profile.heading")}</h1>
+  return <main className={`${publicPageClassName} text-ink`}>
+    <h1 className={publicPageHeadingClassName}>{t("profile.heading")}</h1>
+    {error && <p role="alert" className="mt-6 max-w-2xl text-sm leading-6 break-words text-accent">{error}</p>}
+    {loading ? <p role="status" className="mt-10 text-sm text-muted">{t("profile.loadingProfile")}</p>
+    : !user ? <section className="mt-10 max-w-md">
+      <h2 className="text-lg font-semibold">{t("profile.signInHeading")}</h2>
+      <p className="mt-2 text-sm leading-6 text-muted">{t("profile.signInBody")}</p>
+      <Link href="/login" className="mt-6 inline-flex min-h-12 items-center justify-center rounded-lg bg-ink px-6 text-sm font-medium text-canvas hover:opacity-80 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ink">{t("common.signIn")}</Link>
+    </section> : <section aria-label={t("profile.accountDetailsAria")} className="mt-8 grid min-w-0 gap-8 sm:mt-10 lg:max-w-5xl lg:grid-cols-[240px_minmax(0,1fr)] lg:gap-16">
+      <div className="flex min-w-0 items-center gap-4 self-start lg:flex-col lg:items-start lg:gap-5">
+        <div aria-hidden="true" className="flex size-14 shrink-0 items-center justify-center rounded-full bg-surface-muted text-lg font-semibold sm:size-16 sm:text-xl">{initials}</div>
+        <div className="min-w-0">
+          <h2 className="text-lg font-semibold leading-7 break-words">{savedName || t("profile.yourProfileFallback")}</h2>
+          <p className="mt-1 text-sm leading-5 text-muted">{role ? t(`common.role.${role}`) : t("profile.unavailable")}</p>
         </div>
-        <div role="status" className="border-t border-line p-5 text-sm text-muted sm:p-7">{t("profile.loadingProfile")}</div>
-      </div> : !user ? <section className="rounded-2xl border border-line bg-surface">
-        <div className="p-5 sm:p-7">
-          <p className="text-xs font-semibold uppercase tracking-[.12em] text-muted">{t("profile.yourAccount")}</p>
-          <h1 className="mt-2 text-3xl font-semibold tracking-tight sm:text-4xl">{t("profile.heading")}</h1>
-        </div>
-        <div className="border-t border-line p-5 sm:p-7">
-          <h2 className="text-xl font-semibold">{t("profile.signInHeading")}</h2>
-          <p className="mt-2 text-sm text-muted">{t("profile.signInBody")}</p>
-          <Link href="/login" className="mt-6 inline-flex min-h-11 items-center justify-center rounded-full bg-ink px-6 text-sm font-semibold text-canvas hover:bg-accent">{t("common.signIn")}</Link>
-        </div>
-      </section> : <section aria-label={t("profile.accountDetailsAria")} className="rounded-2xl border border-line bg-surface">
-        <div className="p-5 sm:p-7">
-          <p className="text-xs font-semibold uppercase tracking-[.12em] text-muted">{t("profile.yourAccount")}</p>
-          <h1 className="mt-2 text-3xl font-semibold tracking-tight sm:text-4xl">{t("profile.heading")}</h1>
-        </div>
-        <div className="flex items-center gap-4 border-t border-b border-line p-5 sm:p-7">
-          <div aria-hidden="true" className="flex size-14 shrink-0 items-center justify-center rounded-full bg-surface-muted text-lg font-semibold">{initials}</div>
-          <div className="min-w-0">
-            <h2 className="break-words text-lg font-semibold">{savedName || t("profile.yourProfileFallback")}</h2>
-          </div>
-        </div>
-        <form onSubmit={save} className="p-5 sm:p-7">
-          <div className="flex items-center justify-between gap-3">
-            <h3 className="text-base font-semibold">{t("profile.personalDetails")}</h3>
-            {!editingName && <button type="button" disabled={!profileLoaded || Boolean(busy)} onClick={() => { setName(savedName); setEditingName(true); setError(""); setMessage(""); }} className="inline-flex min-h-11 items-center gap-2 rounded-full border border-line px-4 text-sm font-semibold hover:border-accent hover:text-accent disabled:opacity-50">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" className="size-4" aria-hidden="true"><path d="m16 3 5 5M4 15 15 4a2 2 0 0 1 3 0l2 2a2 2 0 0 1 0 3L9 20l-6 1 1-6Z" /></svg>
+      </div>
+      <div className="min-w-0">
+        <form onSubmit={save} aria-labelledby="personal-details-heading" className="pb-6">
+          <div className="flex min-h-11 items-center justify-between gap-3">
+            <h2 id="personal-details-heading" className="text-base font-semibold">{t("profile.personalDetails")}</h2>
+            {!editingName && <button type="button" disabled={!profileLoaded || Boolean(busy)} onClick={() => { setName(savedName); setEditingName(true); setError(""); setMessage(""); }} className="inline-flex min-h-11 shrink-0 items-center gap-2 rounded-md px-2 text-sm font-medium text-muted underline-offset-4 hover:text-ink hover:underline focus-visible:outline-2 focus-visible:outline-ink disabled:opacity-50">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="size-4" aria-hidden="true"><path d="m16 3 5 5M4 15 15 4a2 2 0 0 1 3 0l2 2a2 2 0 0 1 0 3L9 20l-6 1 1-6Z" /></svg>
               {t("profile.edit")}
             </button>}
           </div>
           <div className="mt-5">
             {editingName ? <>
-            <label htmlFor="profile-name" className="mb-2 block text-sm font-semibold">{t("profile.fullName")}</label>
-            <input id="profile-name" autoFocus name="fullName" autoComplete="name" required disabled={!profileLoaded || Boolean(busy)} value={name} onChange={(event) => { setName(event.target.value); setMessage(""); }} className="min-h-12 w-full rounded-xl border border-line bg-canvas px-4 text-ink outline-none transition focus:border-accent focus:ring-2 focus:ring-accent/15 disabled:opacity-60" />
-            </> : <dl><dt className="text-sm font-semibold">{t("profile.fullName")}</dt><dd className="mt-2 break-words text-sm text-muted">{savedName || t("common.notSpecified")}</dd></dl>}
+              <label htmlFor="profile-name" className="mb-2 block text-xs font-medium text-muted">{t("profile.fullName")}</label>
+              <input id="profile-name" autoFocus name="fullName" autoComplete="name" required disabled={!profileLoaded || Boolean(busy)} value={name} onChange={(event) => { setName(event.target.value); setMessage(""); }} className="min-h-12 w-full min-w-0 rounded-md border border-line bg-transparent px-3 py-2.5 text-left text-base text-ink transition-colors outline-none focus:border-ink focus:ring-1 focus:ring-ink disabled:opacity-60" />
+            </> : <dl><dt className="text-xs font-medium text-muted">{t("profile.fullName")}</dt><dd className="mt-2 text-sm leading-6 break-words">{savedName || t("common.notSpecified")}</dd></dl>}
           </div>
-          <dl className="mt-5 grid gap-5 sm:grid-cols-2">
-            <div><dt className="text-sm font-semibold">{t("auth.emailAddress")}</dt><dd className="mt-2 break-all text-sm text-muted">{user.email}</dd></div>
-            <div><dt className="text-sm font-semibold">{t("profile.accountType")}</dt><dd className="mt-2 text-sm text-muted">{role ? t(`common.role.${role}`) : t("profile.unavailable")}</dd></div>
+          <dl className="mt-5 grid min-w-0 gap-5 sm:grid-cols-2">
+            <div className="min-w-0"><dt className="text-xs font-medium text-muted">{t("auth.emailAddress")}</dt><dd className="mt-2 text-sm leading-6 [overflow-wrap:anywhere]">{user.email}</dd></div>
+            <div className="min-w-0"><dt className="text-xs font-medium text-muted">{t("profile.accountType")}</dt><dd className="mt-2 text-sm leading-6">{role ? t(`common.role.${role}`) : t("profile.unavailable")}</dd></div>
           </dl>
-          {editingName && <div className="mt-7 flex flex-wrap items-center gap-3 border-t border-line pt-5">
-            <button type="submit" disabled={!profileLoaded || !changed || !name.trim() || Boolean(busy)} className="min-h-11 rounded-full bg-ink px-6 text-canvas transition-colors enabled:hover:bg-accent disabled:cursor-not-allowed disabled:opacity-40"><span className="text-sm font-semibold">{busy === "save" ? t("profile.saving") : t("profile.saveChanges")}</span></button>
-            <button type="button" disabled={Boolean(busy)} onClick={() => { setName(savedName); setEditingName(false); setError(""); setMessage(""); }} className="min-h-11 rounded-full px-4 text-muted hover:bg-surface-muted disabled:opacity-50"><span className="text-sm font-semibold">{t("profile.cancel")}</span></button>
+          {editingName && <div className="mt-6 flex flex-wrap items-center gap-2">
+            <button type="submit" disabled={!profileLoaded || !changed || !name.trim() || Boolean(busy)} className="min-h-12 rounded-lg bg-ink px-5 py-2 text-sm font-medium text-canvas enabled:hover:opacity-80 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ink disabled:cursor-not-allowed disabled:opacity-40">{busy === "save" ? t("profile.saving") : t("profile.saveChanges")}</button>
+            <button type="button" disabled={Boolean(busy)} onClick={() => { setName(savedName); setEditingName(false); setError(""); setMessage(""); }} className="min-h-12 rounded-lg px-4 text-sm font-medium text-muted hover:bg-surface-muted hover:text-ink focus-visible:outline-2 focus-visible:outline-ink disabled:opacity-50">{t("profile.cancel")}</button>
           </div>}
-          <p role="status" className={message ? "mt-4 text-sm text-muted" : "sr-only"}>{message}</p>
+          <p role="status" className={message ? "mt-4 text-sm leading-6 text-muted" : "sr-only"}>{message}</p>
         </form>
         {profileLoaded && role === "landlord" && <LandlordVerificationSection />}
-        <div className="border-t border-line p-5 sm:p-7">
-          <h3 className="text-base font-semibold">{t("profile.preferences")}</h3>
-          <div className="mt-5 max-w-xs">
-            <span className="mb-2 block text-sm font-semibold">{t("profile.language")}</span>
-            <Picker heading={t("profile.language")} value={locale} onChange={setLocale} items={languageItems} placeholder={LOCALE_LABELS.en} variant="block" panelWidth="14rem" />
+        <section aria-labelledby="profile-preferences-heading" className="pt-2 pb-6">
+          <h2 id="profile-preferences-heading" className="text-base font-semibold">{t("profile.preferences")}</h2>
+          <div className="mt-5 w-full max-w-xs">
+            <span className="mb-2 block text-xs font-medium text-muted">{t("profile.language")}</span>
+            <Picker heading={t("profile.language")} value={locale} onChange={setLocale} items={languageItems} placeholder={LOCALE_LABELS.en} variant="plain" panelWidth="14rem" />
           </div>
+        </section>
+        <div className="pt-2">
+          <button type="button" onClick={signOut} disabled={Boolean(busy)} className="inline-flex min-h-12 items-center gap-2.5 rounded-md pr-4 text-sm font-medium text-muted hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ink disabled:opacity-50">
+            <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="size-5"><path d="M9 5H5v14h4m7-11 4 4-4 4M9 12h11" /></svg>
+            {busy === "signout" ? t("profile.signingOut") : t("profile.signOut")}
+          </button>
         </div>
-        <div className="flex items-center justify-end gap-4 rounded-b-2xl border-t border-line bg-canvas/50 px-5 py-4 sm:px-7">
-          <button type="button" onClick={signOut} disabled={Boolean(busy)} className="min-h-11 rounded-full border border-line px-5 text-ink hover:border-accent hover:text-accent disabled:opacity-50"><span className="text-sm font-semibold">{busy === "signout" ? t("profile.signingOut") : t("profile.signOut")}</span></button>
-        </div>
-      </section>}
-    </div>
+      </div>
+    </section>}
   </main>;
 }

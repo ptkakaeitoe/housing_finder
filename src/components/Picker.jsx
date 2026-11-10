@@ -1,86 +1,69 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useId, useLayoutEffect, useRef, useState } from "react";
 
 function Chevron({ className = "" }) {
-  return (
-    <svg aria-hidden viewBox="0 0 10 6" className={`h-1.5 w-2.5 fill-none stroke-current ${className}`}>
-      <path d="M1 1L5 5L9 1" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-  );
+  return <svg aria-hidden="true" viewBox="0 0 10 6" className={`h-1.5 w-2.5 shrink-0 fill-none stroke-current ${className}`}><path d="M1 1L5 5L9 1" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" /></svg>;
 }
 
-function CheckIcon() {
-  return (
-    <svg aria-hidden viewBox="0 0 16 12" className="h-3 w-3.5 shrink-0 fill-none stroke-current text-accent">
-      <path d="M1.5 6L5.5 10L14.5 1.5" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-  );
-}
-
-// A custom-styled combobox replacing the native <select> — the browser's
-// own dropdown can't be restyled, and this keeps the same rounded-card
-// look (with an optional secondary line per option) as the rest of the app.
 export function Picker({ heading, value, onChange, items, placeholder, variant, panelWidth = "16rem", mutedPlaceholder = false }) {
   const [open, setOpen] = useState(false);
   const rootRef = useRef(null);
-  const selected = items.find((i) => i.value === value) ?? null;
+  const triggerRef = useRef(null);
+  const panelRef = useRef(null);
+  const [alignRight, setAlignRight] = useState(false);
+  const [openAbove, setOpenAbove] = useState(false);
+  const optionsRef = useRef([]);
+  const panelId = useId();
+  const selected = items.find((item) => item.value === value);
+  const plain = variant === "plain";
+  const block = variant === "block" || plain;
+
+  useLayoutEffect(() => {
+    if (!open || !plain || !panelRef.current) return;
+    const trigger = rootRef.current.getBoundingClientRect();
+    const menuHeight = panelRef.current.offsetHeight;
+    const navigation = document.querySelector("[data-mobile-navigation]")?.getBoundingClientRect();
+    const bottom = navigation?.height ? Math.min(window.innerHeight, navigation.top) : window.innerHeight;
+    setOpenAbove(trigger.bottom + menuHeight + 16 > bottom && trigger.top > menuHeight + 16);
+  }, [open, plain, items]);
 
   useEffect(() => {
     if (!open) return;
+    const index = Math.max(0, items.findIndex((item) => item.value === value));
+    optionsRef.current[index]?.focus({ preventScroll: plain });
+    if (panelRef.current && !alignRight && panelRef.current.getBoundingClientRect().right > window.innerWidth - 20) setAlignRight(true);
     function onPointerDown(event) { if (!rootRef.current?.contains(event.target)) setOpen(false); }
-    function onKeyDown(event) { if (event.key === "Escape") setOpen(false); }
-    document.addEventListener("mousedown", onPointerDown);
-    document.addEventListener("keydown", onKeyDown);
-    return () => { document.removeEventListener("mousedown", onPointerDown); document.removeEventListener("keydown", onKeyDown); };
-  }, [open]);
+    document.addEventListener("pointerdown", onPointerDown);
+    return () => document.removeEventListener("pointerdown", onPointerDown);
+  }, [open, value, items, plain]);
 
-  function choose(val) { onChange(val); setOpen(false); }
-
-  const panel = open && (
-    <div role="listbox" aria-label={heading} className="absolute left-0 top-[calc(100%+.5rem)] z-20 max-h-80 overflow-y-auto rounded-2xl border border-line bg-surface p-2 shadow-[var(--shadow)]" style={{ width: panelWidth }}>
-      {items.map((item) => (
-        <button key={item.value} type="button" role="option" aria-selected={value === item.value} onClick={() => choose(item.value)} className={`flex w-full items-center justify-between gap-3 rounded-xl px-3 py-2.5 text-left transition-colors hover:bg-surface-muted ${value === item.value ? "bg-surface-muted" : ""}`}>
-          <span className="min-w-0">
-            <span className={`block truncate text-sm ${value === item.value ? "font-semibold text-ink" : "text-ink"}`}>{item.label}</span>
-            {item.sub && <span className="block truncate text-xs text-muted">{item.sub}</span>}
-          </span>
-          {value === item.value && <CheckIcon />}
-        </button>
-      ))}
-    </div>
-  );
-
-  if (variant === "block") {
-    return (
-      <div ref={rootRef} className="relative">
-        <button
-          type="button"
-          onClick={() => setOpen((v) => !v)}
-          style={{ outline: "none" }}
-          className={`flex min-h-11 w-full items-center justify-between gap-2 rounded-xl border px-4 text-left text-sm font-semibold text-ink transition-colors ${open ? "border-accent bg-surface-muted" : "border-line bg-surface"}`}
-        >
-          <span className="truncate">{selected ? selected.label : placeholder}</span>
-          <Chevron className={`shrink-0 text-muted transition-transform ${open ? "rotate-180" : ""}`} />
-        </button>
-        {panel}
-      </div>
-    );
+  function close() { setOpen(false); triggerRef.current?.focus(); }
+  function handleKeyDown(event) {
+    if (event.key === "Escape" && open) { event.preventDefault(); event.stopPropagation(); close(); }
+    if (!["ArrowDown", "ArrowUp", "Home", "End"].includes(event.key)) return;
+    event.preventDefault();
+    if (!open) { setOpen(true); return; }
+    const current = optionsRef.current.indexOf(document.activeElement);
+    const next = event.key === "Home" ? 0 : event.key === "End" ? items.length - 1 : (current + (event.key === "ArrowDown" ? 1 : -1) + items.length) % items.length;
+    optionsRef.current[next]?.focus();
   }
 
-  return (
-    <div ref={rootRef} className="relative min-w-0 flex-1">
-      <button
-        type="button"
-        onClick={() => setOpen((v) => !v)}
-        style={{ outline: "none" }}
-        className={`flex w-full min-w-0 flex-col items-start px-7 py-3.5 text-left transition-colors hover:bg-surface-muted ${open ? "bg-surface-muted" : ""}`}
-      >
-        <span className="text-[11px] font-semibold text-ink">{heading}</span>
-        <span className="w-full truncate text-sm text-ink">{selected && selected.value ? selected.label : mutedPlaceholder ? <span className="text-muted">{placeholder}</span> : placeholder}</span>
-      </button>
-      <Chevron className={`pointer-events-none absolute bottom-4 right-7 text-muted transition-transform ${open ? "rotate-180" : ""}`} />
-      {panel}
-    </div>
-  );
+  return <div ref={rootRef} onKeyDown={handleKeyDown} onBlur={(event) => { if (!event.currentTarget.contains(event.relatedTarget)) setOpen(false); }} className={`relative min-w-0 ${block ? "" : "flex-1"}`}>
+    <button ref={triggerRef} type="button" aria-label={heading} aria-haspopup="listbox" aria-expanded={open} aria-controls={open ? panelId : undefined} onClick={() => setOpen((current) => !current)}
+      className={plain
+        ? "flex min-h-11 w-full items-center justify-between gap-2 rounded-md bg-transparent text-left text-sm text-muted transition-colors hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ink"
+        : block
+        ? `flex min-h-11 w-full items-center justify-between gap-2 rounded-lg border px-3 text-left text-sm text-ink transition-colors hover:bg-surface-muted ${open ? "border-ink" : "border-line"}`
+        : `flex min-h-16 w-full min-w-0 items-center justify-between gap-3 rounded-md px-5 py-2.5 text-left transition-colors hover:bg-surface-muted ${open ? "bg-surface-muted" : ""}`}>
+      {block ? <span className="truncate">{selected?.label || placeholder}</span> : <span className="min-w-0 flex-1"><span className="block text-xs font-medium text-muted">{heading}</span><span className={`mt-0.5 block truncate text-sm ${!selected?.value && mutedPlaceholder ? "text-muted" : "text-ink"}`}>{selected?.value ? selected.label : placeholder}</span></span>}
+      <Chevron className={`text-muted transition-transform ${open ? "rotate-180" : ""}`} />
+    </button>
+    {open && <div ref={panelRef} id={panelId} role="listbox" aria-label={heading} className={`absolute ${plain && openAbove ? "bottom-[calc(100%+.5rem)]" : "top-[calc(100%+.5rem)]"} z-30 max-h-80 max-w-[calc(100vw-2.5rem)] overflow-y-auto rounded-lg border border-line bg-surface p-1.5 shadow-[var(--shadow)] ${alignRight ? "right-0" : "left-0"}`} style={{ width: panelWidth }}>
+      {items.map((item, index) => <button ref={(node) => { optionsRef.current[index] = node; }} key={item.value} type="button" role="option" tabIndex={-1} aria-selected={value === item.value} onClick={() => { onChange(item.value); close(); }} className={`flex min-h-11 w-full items-center justify-between gap-3 rounded-md px-3 py-2.5 text-left text-ink transition-colors hover:bg-surface-muted focus-visible:-outline-offset-2 ${value === item.value ? "bg-surface-muted" : ""}`}>
+        <span className="min-w-0"><span className={`block text-sm ${value === item.value ? "font-semibold" : ""}`}>{item.label}</span>{item.sub && <span className="mt-0.5 block text-xs text-muted">{item.sub}</span>}</span>
+        {value === item.value && <svg aria-hidden="true" viewBox="0 0 16 12" fill="none" stroke="currentColor" strokeWidth="1.8" className="h-3 w-4 shrink-0"><path d="m1.5 6 4 4 9-9" /></svg>}
+      </button>)}
+    </div>}
+  </div>;
 }

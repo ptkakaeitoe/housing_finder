@@ -57,7 +57,7 @@ export default function AdminDashboardPage() {
 
   return <main className="mx-auto max-w-7xl px-5 py-10 sm:px-8 lg:px-12">
     <div className="flex flex-wrap items-center justify-between gap-4">
-      <h1 className="text-4xl font-semibold tracking-tight text-ink">{t("adminDashboard.heading")}</h1>
+      <h1 className="text-2xl font-semibold tracking-tight sm:text-3xl text-ink">{t("adminDashboard.heading")}</h1>
       {admin && <button type="button" onClick={signOut} disabled={signingOut} className="min-h-11 rounded-full border border-line px-5 text-sm font-semibold text-ink hover:border-accent hover:text-accent disabled:opacity-50">{t(signingOut ? "profile.signingOut" : "profile.signOut")}</button>}
     </div>
     {signOutError && <p role="alert" className="mt-5 text-accent">{signOutError}</p>}

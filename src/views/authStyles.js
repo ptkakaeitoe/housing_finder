@@ -1,9 +1,4 @@
-// Shared Tailwind styles keep sign-in and registration visually consistent.
-export const authHeadingClassName = "mb-[13px] text-[clamp(35px,3vw,48px)] font-normal leading-normal tracking-[-1.5px] text-[#171b20] max-[600px]:mb-2 max-[600px]:text-[clamp(1.75rem,7vw,2.15rem)] max-[600px]:leading-[1.15] max-[600px]:tracking-[-.04em]";
-
-// Tertiary "leave the form" action: sits apart from the primary flow, so it
-// gets generous space above it and a quieter weight than the switch link.
-export const authGuestRowClassName = "mt-8 text-center max-[600px]:mt-6";
-export const authGuestLinkClassName = "inline-flex items-center gap-1.5 text-[13px] font-semibold tracking-[.02em] text-[#7b8794] transition-colors hover:text-[#171b20]";
-
-export const authInputClassName = "flex min-h-11 items-center rounded-xl border border-[#e1e5e4] bg-[#fafbfc] scheme-light transition focus-within:border-accent focus-within:ring-2 focus-within:ring-accent/10 [&>input]:min-w-0 [&>input]:flex-1 [&>input]:border-0 [&>input]:bg-transparent [&>input]:py-2.5 [&>input]:pr-3 [&>input]:text-sm [&>input]:outline-none [&>input]:text-[#171b20] [&>input]:caret-[#171b20] [&>input:is(:autofill,:-webkit-autofill)]:[box-shadow:inset_0_0_0_1000px_#fafbfc] [&>input:is(:autofill,:-webkit-autofill)]:[-webkit-text-fill-color:#171b20] [&>input]:placeholder:text-[13px] [&>input]:placeholder:text-[#647078]";
+// Shared auth controls sit directly on the continuous page canvas.
+export const authLabelClassName = "mb-2 block text-left text-xs font-medium leading-4 text-ink sm:text-[13px] sm:leading-5";
+export const authInputClassName = "min-h-12 w-full min-w-0 rounded-md border border-line bg-transparent py-2.5 text-left text-base leading-5 text-ink caret-ink transition-colors placeholder:text-muted hover:border-muted focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent disabled:cursor-wait disabled:opacity-60 aria-invalid:border-accent [&:is(:autofill,:-webkit-autofill)]:[box-shadow:inset_0_0_0_1000px_var(--navy)] [&:is(:autofill,:-webkit-autofill)]:[-webkit-text-fill-color:var(--ink)]";
+export const authSubmitClassName = "inline-flex min-h-12 w-full items-center justify-center gap-3 rounded-md bg-ink px-4 py-3 text-sm font-semibold leading-5 text-canvas transition-opacity hover:opacity-85 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent disabled:cursor-wait disabled:opacity-50";
