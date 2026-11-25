@@ -23,9 +23,17 @@ export async function POST(request) {
   if (!apiKey) return Response.json({ error: 'GOOGLE_TRANSLATE_API_KEY is not set.' }, { status: 503 });
   const token = request.headers.get('authorization')?.match(/^Bearer (.+)$/)?.[1];
   if (!token) return Response.json({ error: 'Sign in to translate listings.' }, { status: 401 });
-  const client = createClient(url, anonKey, { auth: { persistSession: false, autoRefreshToken: false } });
+  const client = createClient(url, anonKey, {
+    auth: { persistSession: false, autoRefreshToken: false },
+    global: { headers: { Authorization: `Bearer ${token}` } },
+  });
   const { data: auth, error: authError } = await client.auth.getUser(token);
   if (authError || !auth.user) return Response.json({ error: 'Your session is invalid. Sign in again.' }, { status: 401 });
+  // Translation is billed per character, so only accounts that can save listings may use it.
+  const { data: profile } = await client.from('profiles').select('role,account_status').eq('id', auth.user.id).single();
+  if (!profile || !['landlord', 'admin'].includes(profile.role) || profile.account_status !== 'active') {
+    return Response.json({ error: 'Only landlords can translate listings.' }, { status: 403 });
+  }
   let body;
   try { body = await request.json(); } catch { return Response.json({ error: 'Invalid request.' }, { status: 400 }); }
   const title = String(body?.title ?? '');

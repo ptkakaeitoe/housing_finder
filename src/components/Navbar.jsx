@@ -21,6 +21,7 @@ const navigation = {
   student: [
     { key: "nav.explore", href: "/" },
     { key: "nav.map", href: "/map" },
+    { key: "nav.saved", href: "/saved" },
     { key: "nav.appointments", href: "/appointments" },
   ],
   landlord: [
@@ -234,6 +235,7 @@ function NavigationIcon({ name, className = "size-[18px] shrink-0" }) {
   const paths = {
     "nav.explore": <><circle cx="12" cy="12" r="9" /><path d="m16 8-2.5 5.5L8 16l2.5-5.5L16 8Z" /></>,
     "nav.map": <><path d="m3 6 6-3 6 3 6-3v15l-6 3-6-3-6 3V6Z" /><path d="M9 3v15m6-12v15" /></>,
+    "nav.saved": <path d="M12 20s-7.5-4.6-7.5-10.2A4.3 4.3 0 0 1 12 7.4a4.3 4.3 0 0 1 7.5 2.4C19.5 15.4 12 20 12 20Z" />,
     "nav.appointments": <><rect x="3" y="5" width="18" height="16" rx="2" /><path d="M7 3v4m10-4v4M3 10h18m-13 5 3 3 5-5" /></>,
     "nav.dashboard": <><rect x="3" y="3" width="7" height="7" rx="1" /><rect x="14" y="3" width="7" height="7" rx="1" /><rect x="3" y="14" width="7" height="7" rx="1" /><rect x="14" y="14" width="7" height="7" rx="1" /></>,
     "nav.myListings": <><path d="m3 10 9-7 9 7M5 9v11h14V9m-9 11v-7h4v7" /></>,
