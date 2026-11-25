@@ -10,9 +10,10 @@ import { requireSupabase, supabase, listingImageUrl } from "../lib/supabase";
 import { universities, nearestUniversity } from "../lib/universities";
 import { useLocale } from "../lib/i18n/LocaleContext";
 import { publicPageClassName, publicPageHeadingClassName } from "./layoutStyles";
-import { inputClassName, fieldLabelClassName, primaryButtonClassName, quietButtonClassName } from "./uiStyles";
+import { inputClassName, selectClassName, fieldLabelClassName, primaryButtonClassName, quietButtonClassName } from "./uiStyles";
 
 const inputClass = `mt-2 ${inputClassName}`;
+const selectClass = `mt-2 ${selectClassName}`;
 const fieldClass = fieldLabelClassName;
 
 export default function ListingForm({ edit = false }) {
@@ -132,17 +133,17 @@ export default function ListingForm({ edit = false }) {
 
     {edit && !listing ? <p role={error ? "alert" : "status"} className="mt-8 text-muted">{error || t("listingForm.loadingListing")}</p> : <form key={listing?.id ?? "new"} onSubmit={save} aria-busy={busy} className="mt-8 grid max-w-4xl gap-x-6 gap-y-5 sm:grid-cols-2">
       <label className={fieldClass}>{t("listingForm.propertyName")}<input className={inputClass} name="title" required minLength="3" defaultValue={listing?.title ?? ""} placeholder={t("listingForm.propertyNamePlaceholder")} /></label>
-      <label className={fieldClass}>{t("listingForm.type")}<select className={inputClass} name="property_type" defaultValue={listing?.property_type ?? "room"}><option value="room">{t("common.propertyType.room")}</option><option value="apartment">{t("common.propertyType.apartment")}</option><option value="condo">{t("common.propertyType.condo")}</option></select></label>
+      <label className={fieldClass}>{t("listingForm.type")}<select className={selectClass} name="property_type" defaultValue={listing?.property_type ?? "room"}><option value="room">{t("common.propertyType.room")}</option><option value="apartment">{t("common.propertyType.apartment")}</option><option value="condo">{t("common.propertyType.condo")}</option></select></label>
       <label className={fieldClass}>{t("listingForm.monthlyRent")}<input className={inputClass} name="monthly_rent" type="number" min="0" step="0.01" required defaultValue={listing?.monthly_rent ?? ""} /></label>
-      <label className={fieldClass}>{t("listingForm.visibility")}<select className={inputClass} name="status" defaultValue={listing?.status ?? "published"}><option value="published">{t("common.listingStatus.published")}</option><option value="draft">{t("common.listingStatus.draft")}</option></select></label>
-      <label className={`${fieldClass} sm:col-span-2`}>{t("listingForm.minimumLease")}<select className={inputClass} name="lease_duration_months" defaultValue={listing?.lease_duration_months ?? ""}><option value="">{t("listingForm.noMinimum")}</option><option value="1">{t("roomDetails.leaseMonths", { count: 1 })}</option><option value="3">{t("roomDetails.leaseMonths", { count: 3 })}</option><option value="6">{t("roomDetails.leaseMonths", { count: 6 })}</option><option value="12">{t("roomDetails.leaseMonths", { count: 12 })}</option></select></label>
+      <label className={fieldClass}>{t("listingForm.visibility")}<select className={selectClass} name="status" defaultValue={listing?.status ?? "published"}><option value="published">{t("common.listingStatus.published")}</option><option value="draft">{t("common.listingStatus.draft")}</option></select></label>
+      <label className={`${fieldClass} sm:col-span-2`}>{t("listingForm.minimumLease")}<select className={selectClass} name="lease_duration_months" defaultValue={listing?.lease_duration_months ?? ""}><option value="">{t("listingForm.noMinimum")}</option><option value="1">{t("roomDetails.leaseMonths", { count: 1 })}</option><option value="3">{t("roomDetails.leaseMonths", { count: 3 })}</option><option value="6">{t("roomDetails.leaseMonths", { count: 6 })}</option><option value="12">{t("roomDetails.leaseMonths", { count: 12 })}</option></select></label>
       <ListingCostsForm key={listing?.id ?? "new-costs"} listing={listing} />
       <label className={`${fieldClass} sm:col-span-2`}>{t("listingForm.address")}<input className={inputClass} name="address" required defaultValue={listing?.address ?? ""} placeholder={t("listingForm.addressPlaceholder")} /></label>
       <label className={fieldClass}>{t("listingForm.latitude")}<input className={inputClass} type="number" step="any" min="-90" max="90" required value={coords.latitude} onChange={(e) => updateCoords({ ...coords, latitude: e.target.value })} /></label>
       <label className={fieldClass}>{t("listingForm.longitude")}<input className={inputClass} type="number" step="any" min="-180" max="180" required value={coords.longitude} onChange={(e) => updateCoords({ ...coords, longitude: e.target.value })} /></label>
       <div className="sm:col-span-2"><LocationPicker latitude={coords.latitude} longitude={coords.longitude} onChange={updateCoords} /></div>
       <button type="button" className={`justify-self-start sm:col-span-2 ${quietButtonClassName}`} onClick={() => navigator.geolocation?.getCurrentPosition((position) => updateCoords({ latitude: position.coords.latitude, longitude: position.coords.longitude }), () => setError(t("listingForm.locationUnavailable")))}>{t("listingForm.useCurrentLocation")}</button>
-      <label className={`${fieldClass} sm:col-span-2`}>{t("listingForm.nearestUniversity")}<select className={inputClass} value={universityId} onChange={(e) => { setUniversityTouched(true); setUniversityId(e.target.value); }}><option value="">{t("listingForm.noCampus")}</option>{universities.map((u) => <option key={u.id} value={u.id}>{u.name} — {u.city}</option>)}</select></label>
+      <label className={`${fieldClass} sm:col-span-2`}>{t("listingForm.nearestUniversity")}<select className={selectClass} value={universityId} onChange={(e) => { setUniversityTouched(true); setUniversityId(e.target.value); }}><option value="">{t("listingForm.noCampus")}</option>{universities.map((u) => <option key={u.id} value={u.id}>{u.name} — {u.city}</option>)}</select></label>
       <label className={`${fieldClass} sm:col-span-2`}>{t("listingForm.description")}<textarea className={`${inputClass} min-h-32 py-3`} name="description" defaultValue={listing?.description ?? ""} placeholder={t("listingForm.descriptionPlaceholder")} /></label>
       <section className="sm:col-span-2" aria-labelledby="photos-heading">
         <h2 id="photos-heading" className={fieldClass}>{t("listingForm.photosHeading")}</h2>

@@ -5,5 +5,7 @@ export const primaryButtonClassName = `${buttonBase} bg-ink text-canvas hover:op
 export const secondaryButtonClassName = `${buttonBase} bg-surface-muted text-ink hover:bg-line disabled:hover:bg-surface-muted`;
 export const quietButtonClassName = `${buttonBase} text-muted hover:bg-surface-muted hover:text-ink`;
 export const inputClassName = "min-h-12 w-full min-w-0 rounded-md border border-line bg-transparent px-3 py-2.5 text-base text-ink transition-colors outline-none placeholder:text-muted hover:border-muted focus:border-ink focus:ring-1 focus:ring-ink disabled:opacity-50";
+// Native option lists do not use the field's transparent background, so they need the theme colours to stay readable in dark mode.
+export const selectClassName = `${inputClassName} [&_option]:bg-surface [&_option]:text-ink`;
 export const fieldLabelClassName = "block min-w-0 text-xs font-medium leading-5 text-muted";
 export const statusBadgeClassName = "inline-flex max-w-full items-center rounded-md bg-surface-muted px-2.5 py-1 text-xs font-medium leading-5 text-muted";
